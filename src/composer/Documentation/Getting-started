@@ -1,0 +1,3 @@
+Part flute = new Part("Flute", FLUTE, 0);
+Part trumpet = new Part("Trumpet", TRUMPET, 1);
+Part clarinet = new Part("Clarinet", CLARINET, 2);

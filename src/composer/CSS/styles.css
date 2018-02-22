@@ -1,0 +1,221 @@
+/*
+    Description:    CSS-declarations for UI-Elements.
+    Author:         Philipp Barnickel
+    Version:        1.0
+    Date:           02.02.2018
+*/
+
+.root {
+    display: block;
+    -fx-background-image: url(../Media/bg.jpg);
+    -fx-background-size: cover;
+    -fx-text-fill: #202020;
+}
+
+/********************************** Button ************************************/
+
+.btn {
+    -fx-background-color: rgba(50,50,50,0.8);
+    -fx-text-fill: #EAEAEA;
+    -fx-font-size: 20px;
+    -fx-background-radius: 3;
+    -fx-cursor: hand;
+}
+
+.btn:hover {
+    -fx-background-color: rgba(20,20,20,0.8);
+}
+
+/********************************** Text-Element ************************************/
+
+.txt {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-padding: 20 50;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+}
+
+/********************************** Toggle-Button ************************************/
+
+.tgl {
+    -fx-pref-height: 47px;
+    -fx-pref-width: 50px;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+    -fx-background-color: #FF9999;
+    -fx-background-radius: 5 0 0 5;
+    -fx-border-color: rgba(0,0,0,0.15);
+    /*-fx-border-width: 1 1 3 3;
+    -fx-border-style: solid;
+    -fx-border-radius: 5 0 0 5;*/
+}
+
+.tgl:selected {
+    -fx-background-color: #88AA88;
+    /*-fx-border-width: 0;*/
+}
+
+.tgl-switch {
+    -fx-padding: 9;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 20px;
+}
+
+.tgl-switch:selected {
+    -fx-background-color: #88AA88;
+}
+
+.tgl-lbl {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-background-radius: 0 5 5 0;
+    -fx-padding: 0 50;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+}
+
+/********************************** Label ************************************/
+
+.lbl {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-padding: 9;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+}
+
+/********************************** Text-Field ************************************/
+
+.edt {
+    -fx-padding: 9;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+    -fx-background-radius: 0;
+}
+
+/********************************** Choice-Box ************************************/
+
+.chb {
+    -fx-background-color: rgba(255,255,255,0.5);
+    -fx-text-fill: #EAEAEA;
+    -fx-font-size: 20px;
+    -fx-padding: 1.5;
+    -fx-cursor: hand;
+}
+
+.chb .context-menu {
+    -fx-padding: 0;
+    -fx-pref-width: 245;
+}
+
+.chb .menu-item:hover {
+    -fx-cursor: hand;
+}
+
+/********************************** Header ************************************/
+
+.hdr {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-padding: 20 50;
+    -fx-margin: 1000;
+    -fx-text-fill: #202020;
+}
+
+/********************************** Message-Box ************************************/
+
+.out {
+    -fx-background-color: rgba(255,255,255,0.8);
+    -fx-text-fill: #202020;
+    -fx-pref-height: 47px;
+    -fx-padding: 0 20;
+    -fx-font-size: 20px;
+}
+
+.msg_i {
+}
+
+.msg_w {
+    -fx-text-fill: rgba(150,150,0,1);
+    -fx-font-weight: 900;
+}
+
+.msg_e {
+    -fx-text-fill: rgba(150,0,0,1);
+    -fx-font-weight: 900;
+}
+
+.msg_s {
+    -fx-text-fill: rgba(0,150,0,1);
+    -fx-font-weight: 900;
+}
+
+/********************************** Tab-Pane ************************************/
+
+.tab-pane {
+    -fx-background-color: rgba(255,255,255,0.5);
+    /*-fx-border-style: solid;
+    -fx-border-color: rgba(50,50,50,0.8);
+    -fx-border-width: 1;*/
+}
+
+/********************************** Tab ************************************/
+
+.tab {
+    -fx-background-color: rgba(50,50,50,0.8);
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+    -fx-padding: 5px 10px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab:hover {
+    -fx-background-color: rgba(20,20,20,0.8);
+}
+
+.tab .tab-label {
+    -fx-text-fill: #D0D0D0;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: rgba(50,50,50,0.2);
+    /*-fx-border-style: solid;
+    -fx-border-color: rgba(50,50,50,0.2);
+    -fx-border-width: 2;*/
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected, .tab:selected {
+    -fx-background-color: rgba(20,20,20,0.8);
+}
+
+/********************************** Table-View ***********************************/
+
+.col_disable {
+    -fx-opacity: 0.5;
+}
+
+.text-field-table-cell .text-field {
+    -fx-padding: 0;
+}
+
+.choice-box-table-cell .choice-box {
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.choice-box-table-cell .choice-box .label {
+    -fx-text-fill: #FFFFFF;
+}
+
+.choice-box-table-cell .choice-box .context-menu {
+    -fx-padding: 0;
+    -fx-pref-width: 245;
+}
+
+.choice-box-table-cell .choice-box .menu-item:hover {
+    -fx-cursor: hand;
+}
+
+.choice-box-table-cell .choice-box .menu-item .label {
+    -fx-text-fill: #202020;
+}

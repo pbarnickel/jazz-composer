@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Description:    GUI for the Test-Composer.
+    Author:         Philipp Barnickel
+    Version:        1.0
+    Date:           02.02.2018
+-->
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="858.0" prefWidth="1328.0" styleClass="root" stylesheets="@../CSS/styles.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="composer.ControllerClasses.sub.TestController">
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="468.0" layoutY="98.0" prefHeight="110.0" prefWidth="241.0" styleClass="hdr" text="JMusic Test" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <font>
+                    <Font size="48.0" />
+                </font>
+            </Label>
+            <Button layoutX="21.0" layoutY="686.0" mnemonicParsing="false" onAction="#gotoMenu" prefHeight="47.0" prefWidth="59.0" styleClass="btn" text="←" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
+            <Button layoutX="50.0" layoutY="150.0" mnemonicParsing="false" onAction="#onDotsAndDashes" styleClass="btn" text="Dots and Dashes" />
+            <Button layoutX="237.0" layoutY="150.0" mnemonicParsing="false" onAction="#onArpeggio" styleClass="btn" text="Arpeggio" />
+            <Button layoutX="358.0" layoutY="150.0" mnemonicParsing="false" onAction="#onCreateDrumBeat" styleClass="btn" text="Create Drum Beat" />
+            <Button layoutX="554.0" layoutY="150.0" mnemonicParsing="false" onAction="#onBasicGame" styleClass="btn" text="Basic Game" />
+            <Button layoutX="691.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStochastic" styleClass="btn" text="Stochastic" />
+            <Button layoutX="816.0" layoutY="150.0" mnemonicParsing="false" onAction="#onCleanComposing" styleClass="btn" text="Clean composing" />
+            <Label fx:id="lblOut" layoutX="119.0" layoutY="650.0" prefWidth="1159.0" styleClass="out" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" />
+        </AnchorPane>
+    </children>
+</VBox>

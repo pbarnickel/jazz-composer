@@ -1,0 +1,52 @@
+/*
+    Description:    Data-model-class for MusicStructureGroups like Chordgroups or Scalegroups.
+    Author:         Philipp Barnickel
+    Version:        1.0
+    Date:           22.02.2018
+ */
+
+package composer.DataClasses;
+
+import java.util.ArrayList;
+
+public class MusicStructureGroup {
+
+    private String name;
+    private ArrayList<MusicStructure> musicStructures;
+
+    public MusicStructureGroup(){
+        this.name = "";
+        this.musicStructures = new ArrayList<MusicStructure>();
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public ArrayList<MusicStructure> getMusicStructures() {
+        return musicStructures;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void addMusicStructure(MusicStructure musicStructure){
+        musicStructures.add(musicStructure);
+    }
+
+    public void delMusicStructure(MusicStructure musicStructure){
+        this.musicStructures.remove(musicStructure);
+    }
+
+    public int getNrOfMusicStructures(){
+        return musicStructures.size();
+    }
+
+    public void changeMusicStructureGroupInMusicStructures(){
+        int length = musicStructures.size();
+        for(int i=0; i<length; i++){
+            musicStructures.get(i).setGroup(this.name);
+        }
+    }
+}

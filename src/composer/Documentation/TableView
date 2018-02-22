@@ -1,0 +1,15 @@
+
+    final ObservableList<Chord> chords = FXCollections.observableArrayList(
+        new Chord("Major", new ArrayList<Integer>(Arrays.asList(0,4,7))),
+        new Chord("Minor", new ArrayList<Integer>(Arrays.asList(0,3,7)))
+    );
+    colChordsName.setCellValueFactory(
+            new PropertyValueFactory<Chord,String>("name")
+    );
+    colChordsUsage.setCellValueFactory(
+            new PropertyValueFactory<Chord,int[]>("usage")
+    );
+    colChordsGroup.setCellValueFactory(
+            new PropertyValueFactory<Chord,String>("chordgroup")
+    );
+    tblChords.setItems(chords);

@@ -1,0 +1,56 @@
+{
+  "default_location":"D:\\IntelliJ\\Projects\\bjc\\midi",
+  "chordgroups":[
+    {
+      "name": "Basic",
+      "chords": [
+        {
+          "name": "Major",
+          "usage": [0,4,7],
+          "group": "Basic"
+        },
+        {
+          "name": "Minor",
+          "usage": [0,3,7],
+          "group": "Basic"
+        }
+      ]
+    }],
+  "chordcomplexities":[
+    {
+      "term": "Simple",
+      "min": 0,
+      "max": 2
+    },
+    {
+      "term": "Medium",
+      "min": 2,
+      "max": 3
+    },
+    {
+      "term": "High",
+      "min": 3,
+      "max": 4
+    },
+    {
+      "term": "Full",
+      "min": 4,
+      "max": 12
+    }
+  ],
+  "scalegroups": [
+    {
+      "name": "Basic",
+      "scales": [
+        {
+          "name": "Major",
+          "usage": [0,2,4,5,7,9,11,12]
+        },
+        {
+          "name": "Minor",
+          "usage": [0,2,3,5,7,8,10,12]
+        }
+      ]
+    }
+  ]
+}

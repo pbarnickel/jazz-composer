@@ -1,0 +1,17 @@
+Wiederholen, Umkehren und Kopieren voin Musik geht über die Mod Class.
+
+import jm.music.tools.*;
+
+Mod-Methoden können meißtens auf die zentralen Datentypen angewandt werden.
+
+    loop()
+
+    transpose()
+
+    inversion()
+
+    shuffle()           zufällige Reihenfolge der Noten
+
+    fadeIn()
+
+    fadeOut()
