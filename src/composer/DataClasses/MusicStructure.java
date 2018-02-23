@@ -75,7 +75,7 @@ public class MusicStructure implements JMC{
             if(asChord){
                 notes[i] = C4 + usage.get(i).intValue();
             } else {
-                Note note = new Note(C4 + usage.get(i),CROTCHET);
+                Note note = new Note(C4 + usage.get(i),SIXTEENTH_NOTE);
                 scale.addNote(note);
             }
         }

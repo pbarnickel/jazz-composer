@@ -12,7 +12,6 @@ import composer.DataClasses.Chordcomplexity;
 import composer.DataClasses.MusicStructure;
 import composer.DataClasses.MusicStructureGroup;
 import composer.DataClasses.Settings;
-import composer.Interfaces.Chords;
 import composer.Interfaces.Tempo;
 import jm.JMC;
 import jm.music.data.*;
@@ -26,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class Composer implements JMC, Chords, Tempo {
+public class Composer implements JMC, Tempo {
 
     protected Score score = new Score();
     protected Settings settings = new Settings();
