@@ -279,6 +279,12 @@ public class SettingsController extends Controller {
         }
     }
 
+    public void onChordsPlay(ActionEvent actionEvent) {
+        MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
+        if(chord != null)chord.play(true);
+        else msg("No chord selected",MSG_E);
+    }
+
     /********************************************CHORDGROUPS***********************************************************/
 
     @FXML
@@ -507,6 +513,12 @@ public class SettingsController extends Controller {
         } else {
             msg("No scale selected.", MSG_E);
         }
+    }
+
+    public void onScalesPlay(ActionEvent actionEvent) {
+        MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
+        if(scale != null)scale.play(false);
+        else msg("No scale selected",MSG_E);
     }
 
     /********************************************SCALEGROUPS***********************************************************/

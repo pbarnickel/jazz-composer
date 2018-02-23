@@ -7,9 +7,14 @@
 
 package composer.DataClasses;
 
+import javafx.scene.transform.Scale;
+import jm.JMC;
+import jm.music.data.*;
+import jm.util.Play;
+
 import java.util.ArrayList;
 
-public class MusicStructure {
+public class MusicStructure implements JMC{
 
     private String name;
     private ArrayList<Integer> usage;
@@ -60,4 +65,26 @@ public class MusicStructure {
         this.group = group;
     }
 
+    public void play(boolean asChord){
+        Part piano = new Part("Piano", PIANO, 0);
+        CPhrase chord = new CPhrase();
+        Phrase scale = new Phrase();
+        int length = usage.size();
+        int notes[] = new int[length];
+        for(int i=0; i<length; i++){
+            if(asChord){
+                notes[i] = C4 + usage.get(i).intValue();
+            } else {
+                Note note = new Note(C4 + usage.get(i),CROTCHET);
+                scale.addNote(note);
+            }
+        }
+        if(asChord){
+            chord.addChord(notes,CROTCHET);
+            piano.addCPhrase(chord);
+        } else {
+            piano.addPhrase(scale);
+        }
+        Play.midi(piano);
+    }
 }

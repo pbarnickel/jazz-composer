@@ -55,6 +55,7 @@
                            <Button fx:id="btnChordsDelete" layoutX="840.0" layoutY="250.0" mnemonicParsing="false" onAction="#onChordsDelete" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
                            <ChoiceBox fx:id="chbChordsGroup" layoutX="967.0" layoutY="134.0" prefHeight="34.0" prefWidth="245.0" styleClass="chb" AnchorPane.rightAnchor="16.0" />
                            <Label layoutX="839.0" layoutY="134.0" prefHeight="48.0" prefWidth="128.0" styleClass="lbl" text="Chordgroup" />
+                           <Button fx:id="btnChordsPlay" layoutX="839.0" layoutY="304.0" mnemonicParsing="false" onAction="#onChordsPlay" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="🎶" AnchorPane.rightAnchor="15.0" />
                         </children>
                      </AnchorPane>
                </content>
@@ -119,6 +120,7 @@
                            <ChoiceBox fx:id="chbScalesGroup" layoutX="1009.0" layoutY="128.0" prefHeight="48.0" prefWidth="256.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnScalesAdd" layoutX="840.0" layoutY="190.0" mnemonicParsing="false" onAction="#onScalesAdd" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnScalesDelete" layoutX="840.0" layoutY="246.0" mnemonicParsing="false" onAction="#onScalesDelete" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnScalesPlay" layoutX="840.0" layoutY="299.0" mnemonicParsing="false" onAction="#onScalesPlay" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="🎶" AnchorPane.rightAnchor="15.0" />
                         </children></AnchorPane>
                  </content>
                </Tab>
