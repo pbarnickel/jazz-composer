@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import jm.music.data.*;
 
+import static composer.Main.d;
+
 public class BackingtrackController extends Controller {
 
     private Backingtrack bt = new Backingtrack();
@@ -48,6 +50,28 @@ public class BackingtrackController extends Controller {
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
         chbChordgroups.setItems(getAllChordgroupsAsString());
         chbChordcomplexity.setItems(getAllChordcomplexitiesAsString());
+
+        //load default inputs
+        defaultInputs();
+    }
+
+    @Override
+    public void defaultInputs(){
+        tglPiano.setSelected(true);
+        edtTempo.setText("120");
+        edtTone.setText("C");
+        edtPattern.setText("0-2-7");
+        edtPattern.setDisable(true);
+        edtRepeat.setText("3");
+        tglGrpMode.selectToggle(tglGrpMode.getToggles().get(0));
+        int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(),"Basic");
+        int indexOfComplexity = settings.getIndexOfComplexity("Medium");
+        if(indexOfGroup>-1) {
+            chbChordgroups.setValue(allChordgroupsAsString.get(indexOfGroup));
+        }
+        if(indexOfComplexity>-1) {
+            chbChordcomplexity.setValue(allChordcomplexitiesAsString.get(indexOfComplexity));
+        }
     }
 
     @Override

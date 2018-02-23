@@ -15,12 +15,11 @@ import java.io.IOException;
 public class AboutController extends Controller{
 
     @FXML
-    public void gotoMenu(ActionEvent actionEvent) throws IOException {
-        changeScene("menu", actionEvent);
-    }
+    public void gotoMenu(ActionEvent actionEvent) throws IOException {changeScene("menu", actionEvent);}
 
     @Override
-    public void msg(String message, int type) {
+    public void msg(String message, int type) {}
 
-    }
+    @Override
+    public void defaultInputs() {}
 }

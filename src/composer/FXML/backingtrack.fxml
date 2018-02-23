@@ -32,7 +32,7 @@
          <Button layoutX="98.0" layoutY="148.0" mnemonicParsing="false" onAction="#onSave" styleClass="btn" text="💾" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="150.0" />
          <Label fx:id="lblOut" layoutX="119.0" layoutY="650.0" prefWidth="1159.0" styleClass="out" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" />
          <Button layoutX="1230.0" layoutY="148.0" mnemonicParsing="false" onAction="#onView" styleClass="btn" text="🎼" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" />
-         <ToggleButton fx:id="tglPiano" layoutX="50.0" layoutY="225.0" mnemonicParsing="false" onAction="#onPiano" selected="true" styleClass="tgl" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="225.0" />
+         <ToggleButton fx:id="tglPiano" layoutX="50.0" layoutY="225.0" mnemonicParsing="false" onAction="#onPiano" styleClass="tgl" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="225.0" />
          <Label layoutX="98.0" layoutY="225.0" prefHeight="47.0" prefWidth="270.0" styleClass="tgl-lbl" text="Piano" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="225.0" />
          <Button layoutX="1182.0" layoutY="148.0" mnemonicParsing="false" onAction="#onPlay" styleClass="btn" text="🎶" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="150.0" />
          <ToggleButton fx:id="tglBass" layoutX="50.0" layoutY="279.0" mnemonicParsing="false" onAction="#onBass" styleClass="tgl" AnchorPane.leftAnchor="50.0" />
@@ -48,7 +48,7 @@
          <TextField fx:id="edtPattern" layoutX="130.0" layoutY="512.0" onAction="#onPattern" styleClass="edt" AnchorPane.leftAnchor="130.0" />
          <Label layoutX="50.0" layoutY="568.0" styleClass="lbl" text="Repeat" AnchorPane.leftAnchor="50.0" />
          <TextField fx:id="edtRepeat" layoutX="130.0" layoutY="568.0" onAction="#onRepeat" styleClass="edt" AnchorPane.leftAnchor="130.0" />
-         <ToggleButton layoutX="392.0" layoutY="625.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="123.0" selected="true" styleClass="tgl-switch" text="Major" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="625.0">
+         <ToggleButton layoutX="392.0" layoutY="625.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="123.0" styleClass="tgl-switch" text="Major" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="625.0">
             <toggleGroup>
                <ToggleGroup fx:id="tglGrpMode" />
             </toggleGroup>

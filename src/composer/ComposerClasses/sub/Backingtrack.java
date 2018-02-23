@@ -87,16 +87,22 @@ public class Backingtrack extends Composer {
 
     public void createBackingtrack(Boolean instruments[], int tempo, String tone, String pattern, int repeat, int mode,
                                    MusicStructureGroup chordgroup, Chordcomplexity chordcomplexity){
+        //transfer input data into data model
         this.tempo = tempo;
-        this.repeat = repeat;
         this.tone = interpretTone(tone);
         this.pattern = interpretPattern(pattern);
+        this.repeat = repeat;
         this.mode = mode;
         this.chordgroup = chordgroup;
         this.chordcomplexity = chordcomplexity;
 
+        //filtering the chords, taking into account the complexity
         this.chordgroup = filterComplexity();
-        generatePianoPart();
+
+        //generate Parts
+        if(instruments[0])generatePianoPart();
+        if(instruments[1])generateBassPart();
+        if(instruments[2])generateDrumsPart();
     }
 
     public MusicStructureGroup filterComplexity(){
@@ -143,6 +149,10 @@ public class Backingtrack extends Composer {
     }
 
     public void generateBassPart(){
+
+    }
+
+    public void generateDrumsPart(){
 
     }
 

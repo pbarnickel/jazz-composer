@@ -63,4 +63,7 @@ public class TestController extends Controller {
     public void msg(String message, int type) {
         this.r = new Response(message, type, lblOut);
     }
+
+    @Override
+    public void defaultInputs(){}
 }

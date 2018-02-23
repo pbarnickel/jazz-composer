@@ -128,6 +128,9 @@ public class SettingsController extends Controller {
         this.r = new Response(message, type, lblOut);
     }
 
+    @Override
+    public void defaultInputs(){}
+
     //Back to Menu
     @FXML
     public void gotoMenu(ActionEvent actionEvent) throws IOException {

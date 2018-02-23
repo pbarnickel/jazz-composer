@@ -43,6 +43,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected ObservableList<String> allChordcomplexitiesAsString;
 
     public abstract void msg(String message, int type);
+    public abstract void defaultInputs();
 
     public String getUsageAsString(ArrayList<Integer> usage){
         String usageAsString = "";
