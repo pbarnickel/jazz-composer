@@ -1,0 +1,23 @@
+
+    Auswahl Backingtrack:
+
+    [X| ]       Piano
+    [X| ]       Bass
+    [X| ]       Drums
+    [0-180]     Tempo
+    [C-B]       Tone
+    [0-100]     Repeat
+    [Swing]     Rhythm
+    [4/4]       Tact
+    [0-30]      Nr of Pattern-elements
+
+    Pattern-element:
+
+    [...]       Chordgroup
+    [...]       Chord
+    [...]       Chordcomplexity
+    [0-24]      Transpose of tone       //Tone gibt Grundtonart an, bsp: C
+                                        //Dann wäre die Akkordfolge: C-D-G
+                                        //                           0-2-7
+
+    Extra Reiter um das Pattern zu designen
