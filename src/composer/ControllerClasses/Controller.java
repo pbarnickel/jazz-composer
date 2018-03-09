@@ -14,7 +14,6 @@ import composer.DataClasses.Settings;
 import composer.Interfaces.MessageTypes;
 import composer.Interfaces.Regex;
 import composer.DataClasses.Response;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;

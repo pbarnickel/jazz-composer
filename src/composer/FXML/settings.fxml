@@ -45,7 +45,7 @@
                                <TableColumn fx:id="colChordsName" onEditCommit="#changeChordsNameCellEvent" prefWidth="196.0" text="Name" />
                                <TableColumn fx:id="colChordsUsage" onEditCommit="#changeChordsUsageCellEvent" prefWidth="197.0" text="Usage" />
                                  <TableColumn fx:id="colChordsGroup" minWidth="0.0" onEditCommit="#changeChordsGroupCellEvent" prefWidth="230.0" text="Chordgroup" />
-                                 <TableColumn fx:id="colChordsMode" prefWidth="174.0" styleClass="col_disable" text="Mode" />
+                                 <TableColumn fx:id="colChordsMode" prefWidth="171.0" styleClass="col_disable" text="Mode" />
                              </columns>
                            </TableView>
                            <Label layoutX="840.0" layoutY="16.0" prefHeight="48.0" prefWidth="123.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
@@ -110,7 +110,8 @@
                              <columns>
                                <TableColumn fx:id="colScalesName" onEditCommit="#changeScalesNameCellEvent" prefWidth="194.0" text="Name" />
                                <TableColumn fx:id="colScalesUsage" onEditCommit="#changeScalesUsageCellEvent" prefWidth="198.0" text="Usage" />
-                                 <TableColumn fx:id="colScalesGroup" onEditCommit="#changeScalesGroupCellEvent" prefWidth="400.0" text="Scalegroup" />
+                                 <TableColumn fx:id="colScalesGroup" onEditCommit="#changeScalesGroupCellEvent" prefWidth="235.0" text="Scalegroup" />
+                                 <TableColumn fx:id="colScalesMode" prefWidth="164.0" styleClass="col_disable" text="Mode" />
                              </columns>
                            </TableView>
                            <Label layoutX="838.0" layoutY="15.0" prefHeight="48.0" prefWidth="119.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />

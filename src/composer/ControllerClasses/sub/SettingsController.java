@@ -8,7 +8,7 @@
 package composer.ControllerClasses.sub;
 
 import composer.ControllerClasses.Controller;
-import composer.ConverterClasses.MusicStructureGroupConverter;
+import composer.ConverterClasses.MusicElementConverter;
 import composer.DataClasses.*;
 import composer.DataClasses.Response;
 
@@ -22,7 +22,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,12 +41,12 @@ public class SettingsController extends Controller {
     @FXML private TableColumn<MusicStructure, String> colChordsMode;
     @FXML private TextField edtChordsName;
     @FXML private TextField edtChordsUsage;
+    @FXML private ChoiceBox chbChordsGroup;
 
     //Chordgroups
     @FXML private TableView<MusicStructureGroup> tblChordgroups;
     @FXML private TableColumn<MusicStructureGroup, String> colChordgroupsName;
     @FXML private TableColumn<MusicStructureGroup, Integer> colChordgroupsNr;
-    @FXML private ChoiceBox<MusicStructureGroup> chbChordsGroup;
     @FXML private TextField edtChordgroupsName;
 
     //Chordcomplexity
@@ -66,12 +65,12 @@ public class SettingsController extends Controller {
     @FXML private TableColumn<MusicStructure, String> colScalesGroup;
     @FXML private TextField edtScalesName;
     @FXML private TextField edtScalesUsage;
+    @FXML private ChoiceBox chbScalesGroup;
 
     //Scalegroups
     @FXML private TableView<MusicStructureGroup> tblScalegroups;
     @FXML private TableColumn<MusicStructureGroup, String> colScalegroupsName;
     @FXML private TableColumn<MusicStructureGroup, Integer> colScalegroupsNr;
-    @FXML private ChoiceBox<MusicStructureGroup> chbScalesGroup;
     @FXML private TextField edtScalegroupsName;
 
     private String callSave = " Please save the settings.";
@@ -107,9 +106,9 @@ public class SettingsController extends Controller {
         allScalegroups = FXCollections.observableArrayList(getAllScalegroups());
         tblChords.setItems(allChords);
         tblScales.setItems(allScales);
-        chbChordsGroup.setConverter(new MusicStructureGroupConverter());
+        chbChordsGroup.setConverter(new MusicElementConverter());
         chbChordsGroup.setItems(allChordgroups);
-        chbScalesGroup.setConverter(new MusicStructureGroupConverter());
+        chbScalesGroup.setConverter(new MusicElementConverter());
         chbScalesGroup.setItems(allScalegroups);
         tblChordgroups.setItems(allChordgroups);
         tblScalegroups.setItems(allScalegroups);
@@ -253,7 +252,7 @@ public class SettingsController extends Controller {
         String error = "Chord could not be added. ";
         String name = edtChordsName.getText();
         String usageText = edtChordsUsage.getText();
-        String group = chbChordsGroup.getValue().getName();
+        String group = chbChordsGroup.getValue().toString();
         int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), group);
         if(name.matches(REG_CHORD_NAME)){
             if(settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)) {
@@ -488,7 +487,7 @@ public class SettingsController extends Controller {
         String error = "Scale could not be added. ";
         String name = edtScalesName.getText();
         String usageText = edtScalesUsage.getText();
-        String group = chbScalesGroup.getValue().getName();
+        String group = chbScalesGroup.getValue().toString();
         int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), group);
         if(name.matches(REG_CHORD_NAME)){
             if(settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)) {

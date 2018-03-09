@@ -9,8 +9,7 @@ package composer.ControllerClasses.sub;
 
 import composer.ComposerClasses.sub.Backingtrack;
 import composer.ControllerClasses.Controller;
-import composer.ConverterClasses.MusicStructureConverter;
-import composer.ConverterClasses.MusicStructureGroupConverter;
+import composer.ConverterClasses.MusicElementConverter;
 import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,10 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.scene.control.cell.PropertyValueFactory;
 import jm.music.data.*;
-
-import static composer.Main.d;
 
 public class BackingtrackController extends Controller {
 
@@ -63,7 +59,7 @@ public class BackingtrackController extends Controller {
         //init choice-boxes
         //allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
-        chbPatternChordgroups.setConverter(new MusicStructureGroupConverter());
+        chbPatternChordgroups.setConverter(new MusicElementConverter());
         chbPatternChordgroups.setItems(getAllChordgroups());
         chbPatternChordcomplexity.setItems(getAllChordcomplexitiesAsString());
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -71,7 +67,7 @@ public class BackingtrackController extends Controller {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 //loadChords(newValue, chbPatternChord);
                 chords = FXCollections.observableArrayList(getChordsOfChordgroup((MusicStructureGroup) newValue));
-                chbPatternChord.setConverter(new MusicStructureConverter());
+                chbPatternChord.setConverter(new MusicElementConverter());
                 chbPatternChord.setItems(chords);
             }
         });
