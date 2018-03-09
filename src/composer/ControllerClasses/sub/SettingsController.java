@@ -52,10 +52,10 @@ public class SettingsController extends Controller {
 
     //Chordcomplexity
     @FXML private TableView<Chordcomplexity> tblChordcomplexity;
-    @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityTerm;
+    @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityName;
     @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityMin;
     @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityMax;
-    @FXML private TextField edtChordcomplexityTerm;
+    @FXML private TextField edtChordcomplexityName;
     @FXML private TextField edtChordcomplexityMin;
     @FXML private TextField edtChordcomplexityMax;
 
@@ -87,7 +87,7 @@ public class SettingsController extends Controller {
         colChordsMode.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("mode"));
         colChordgroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
         colChordgroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
-        colChordcomplexityTerm.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("term"));
+        colChordcomplexityName.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("name"));
         colChordcomplexityMin.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("minAsString"));
         colChordcomplexityMax.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("maxAsString"));
         colScalesName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
@@ -123,7 +123,7 @@ public class SettingsController extends Controller {
         tblChordgroups.setEditable(true);
         colChordgroupsName.setCellFactory(TextFieldTableCell.forTableColumn());
         tblChordcomplexity.setEditable(true);
-        colChordcomplexityTerm.setCellFactory(TextFieldTableCell.forTableColumn());
+        colChordcomplexityName.setCellFactory(TextFieldTableCell.forTableColumn());
         colChordcomplexityMin.setCellFactory(TextFieldTableCell.forTableColumn());
         colChordcomplexityMax.setCellFactory(TextFieldTableCell.forTableColumn());
         tblScales.setEditable(true);
@@ -350,12 +350,12 @@ public class SettingsController extends Controller {
     /********************************************CHORDCOMPLEXITY*******************************************************/
 
     @FXML
-    public void changeChordcomplexityTermCellEvent(TableColumn.CellEditEvent cellEdited) {
-        String newTerm = cellEdited.getNewValue().toString();
+    public void changeChordcomplexityNameCellEvent(TableColumn.CellEditEvent cellEdited) {
+        String newName = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
-        if(settings.isComplexityUnique(newTerm)) {
-            if (newTerm.matches(REG_NAME)) {
-                chordcomplexitySelected.setTerm(newTerm);
+        if(settings.isComplexityUnique(newName)) {
+            if (newName.matches(REG_NAME)) {
+                chordcomplexitySelected.setName(newName);
                 msg("Value changed." + callSave, MSG_W);
             } else {
                 tblChordcomplexity.refresh();
@@ -363,7 +363,7 @@ public class SettingsController extends Controller {
             }
         } else {
             tblChordcomplexity.refresh();
-            msg(newTerm + " exists already.", MSG_E);
+            msg(newName + " exists already.", MSG_E);
         }
     }
 
@@ -396,24 +396,24 @@ public class SettingsController extends Controller {
     @FXML
     public void onChordcomplexityAdd(ActionEvent actionEvent) {
         String error = "Chordcomplexity could not be added. ";
-        String term = edtChordcomplexityTerm.getText();
+        String name = edtChordcomplexityName.getText();
         String min = edtChordcomplexityMin.getText();
         String max = edtChordcomplexityMax.getText();
-        if(term.matches(REG_NAME)){
-            if(settings.isComplexityUnique(term)){
+        if(name.matches(REG_NAME)){
+            if(settings.isComplexityUnique(name)){
                 if(min.matches(REG_NUMBER)){
                     if(max.matches(REG_NUMBER)){
-                        Chordcomplexity chordcomplexity = new Chordcomplexity(term, Integer.parseInt(min), Integer.parseInt(max));
+                        Chordcomplexity chordcomplexity = new Chordcomplexity(name, Integer.parseInt(min), Integer.parseInt(max));
                         settings.getChordcomplexities().add(chordcomplexity);
                         allChordcomplexities.add(chordcomplexity);
-                        edtChordcomplexityTerm.clear();
+                        edtChordcomplexityName.clear();
                         edtChordcomplexityMin.clear();
                         edtChordcomplexityMax.clear();
                         msg("Chordcomplexity added." + callSave, MSG_W);
                     } else {msg(error + max + "is not a valid number.",MSG_E);}
                 } else {msg(error + min + "is not a valid number.",MSG_E);}
-            } else {msg(error + term + " exists already.", MSG_E);}
-        } else {msg(error + term + " is not a valid term.",MSG_E);}
+            } else {msg(error + name + " exists already.", MSG_E);}
+        } else {msg(error + name + " is not a valid name.",MSG_E);}
     }
 
     @FXML

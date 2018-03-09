@@ -9,9 +9,8 @@ package composer.DataClasses;
 
 import java.util.ArrayList;
 
-public class MusicStructureGroup {
+public class MusicStructureGroup extends MusicElement {
 
-    private String name;
     private ArrayList<MusicStructure> musicStructures;
 
     public MusicStructureGroup(){

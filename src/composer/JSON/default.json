@@ -163,19 +163,19 @@
   "chordcomplexities": [{
     "min": 0,
     "max": 2,
-    "term": "Simple"
+    "name": "Simple"
   }, {
     "min": 2,
     "max": 3,
-    "term": "Medium"
+    "name": "Medium"
   }, {
     "min": 3,
     "max": 4,
-    "term": "High"
+    "name": "High"
   }, {
     "min": 4,
     "max": 12,
-    "term": "Full"
+    "name": "Full"
   }],
   "scalegroups": [{
     "scales": [{

@@ -9,23 +9,14 @@
 
 package composer.DataClasses;
 
-public class Chordcomplexity {
-    private String term;
+public class Chordcomplexity extends MusicElement {
     private int min;
     private int max;
 
-    public Chordcomplexity(String term, int min, int max){
-        this.term = term;
+    public Chordcomplexity(String name, int min, int max){
+        this.name = name;
         this.min = min;
         this.max = max;
-    }
-
-    public String getTerm() {
-        return term;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
     }
 
     public int getMin() {

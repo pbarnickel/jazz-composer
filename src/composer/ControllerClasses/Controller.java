@@ -190,7 +190,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         ObservableList<String> allComplexities = FXCollections.observableArrayList();
         int lengthComplexities = settings.getChordcomplexities().size();
         for(int i=0; i<lengthComplexities; i++){
-            allComplexities.add(settings.getChordcomplexities().get(i).getTerm());
+            allComplexities.add(settings.getChordcomplexities().get(i).getName());
         }
         return allComplexities;
     }

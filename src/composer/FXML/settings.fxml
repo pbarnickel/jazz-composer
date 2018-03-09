@@ -85,17 +85,17 @@
                         <children>
                            <TableView fx:id="tblChordcomplexity" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="15.0">
                              <columns>
-                               <TableColumn fx:id="colChordcomplexityTerm" onEditCommit="#changeChordcomplexityTermCellEvent" prefWidth="546.0" text="Term" />
+                               <TableColumn fx:id="colChordcomplexityName" onEditCommit="#changeChordcomplexityNameCellEvent" prefWidth="546.0" text="Name" />
                                <TableColumn fx:id="colChordcomplexityMin" minWidth="0.0" onEditCommit="#changeChordcomplexityMinCellEvent" prefWidth="128.0" text="Min" />
                                  <TableColumn fx:id="colChordcomplexityMax" onEditCommit="#changeChordcomplexityMaxCellEvent" prefWidth="120.0" text="Max" />
                              </columns>
                            </TableView>
-                           <Label layoutX="836.0" layoutY="15.0" styleClass="lbl" text="Term" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="836.0" layoutY="73.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl" text="Min" />
-                           <Label layoutX="835.0" layoutY="130.0" prefHeight="48.0" prefWidth="65.0" styleClass="lbl" text="Max" />
-                           <TextField fx:id="edtChordcomplexityTerm" layoutX="900.0" layoutY="14.0" prefHeight="48.0" prefWidth="315.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           <TextField fx:id="edtChordcomplexityMin" layoutX="891.0" layoutY="73.0" prefHeight="48.0" prefWidth="315.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
-                           <TextField fx:id="edtChordcomplexityMax" layoutX="890.0" layoutY="130.0" prefHeight="48.0" prefWidth="313.0" styleClass="edt" AnchorPane.rightAnchor="17.0" />
+                           <Label layoutX="836.0" layoutY="15.0" prefHeight="48.0" prefWidth="83.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="836.0" layoutY="73.0" prefHeight="48.0" prefWidth="82.0" styleClass="lbl" text="Min" />
+                           <Label layoutX="835.0" layoutY="130.0" prefHeight="48.0" prefWidth="81.0" styleClass="lbl" text="Max" />
+                           <TextField fx:id="edtChordcomplexityName" layoutX="900.0" layoutY="14.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <TextField fx:id="edtChordcomplexityMin" layoutX="891.0" layoutY="73.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
+                           <TextField fx:id="edtChordcomplexityMax" layoutX="890.0" layoutY="130.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="17.0" />
                            <Button fx:id="btnChordcomplexityAdd" layoutX="835.0" layoutY="190.0" mnemonicParsing="false" onAction="#onChordcomplexityAdd" prefHeight="44.0" prefWidth="379.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnChordcomplexityDelete" layoutX="834.0" layoutY="243.0" mnemonicParsing="false" onAction="#onChordcomplexityDelete" prefHeight="44.0" prefWidth="380.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="14.0" />
                         </children>

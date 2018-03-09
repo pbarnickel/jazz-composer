@@ -65,10 +65,10 @@ public class Settings {
         return -1;
     }
 
-    public int getIndexOfComplexity(String term){
+    public int getIndexOfComplexity(String name){
         int length = chordcomplexities.size();
         for(int i=0; i<length; i++){
-            if(chordcomplexities.get(i).getTerm().equals(term)){
+            if(chordcomplexities.get(i).getName().equals(name)){
                 return i;
             }
         }
@@ -95,10 +95,10 @@ public class Settings {
         return true;
     }
 
-    public boolean isComplexityUnique(String term){
+    public boolean isComplexityUnique(String name){
         int length = chordcomplexities.size();
         for(int i=0; i<length; i++){
-            if(chordcomplexities.get(i).getTerm().equals(term)){
+            if(chordcomplexities.get(i).getName().equals(name)){
                 return false;
             }
         }
@@ -133,10 +133,10 @@ public class Settings {
             int lengthJSONArrayChordcomplexities = jsonArrayChordcomplexities.size();
             for(int i=0; i<lengthJSONArrayChordcomplexities; i++){
                 JSONObject jsonObjectChordcomplexity = (JSONObject) jsonArrayChordcomplexities.get(i);
-                String chordcomplexityTerm = jsonObjectChordcomplexity.get("term").toString();
+                String chordcomplexityName = jsonObjectChordcomplexity.get("name").toString();
                 int chordcomplexityMin = Integer.parseInt(jsonObjectChordcomplexity.get("min").toString());
                 int chordcomplexityMax = Integer.parseInt(jsonObjectChordcomplexity.get("max").toString());
-                Chordcomplexity chordcomplexity = new Chordcomplexity(chordcomplexityTerm, chordcomplexityMin, chordcomplexityMax);
+                Chordcomplexity chordcomplexity = new Chordcomplexity(chordcomplexityName, chordcomplexityMin, chordcomplexityMax);
                 chordcomplexities.add(chordcomplexity);
             }
 
@@ -203,7 +203,7 @@ public class Settings {
         int lengthChordcomplexities = chordcomplexities.size();
         for(int i=0; i<lengthChordcomplexities; i++){
             JSONObject jsonObjectChordcomplexity = new JSONObject();
-            jsonObjectChordcomplexity.put("term", chordcomplexities.get(i).getTerm());
+            jsonObjectChordcomplexity.put("name", chordcomplexities.get(i).getName());
             jsonObjectChordcomplexity.put("min", chordcomplexities.get(i).getMin());
             jsonObjectChordcomplexity.put("max", chordcomplexities.get(i).getMax());
             jsonArrayChordcomplexities.add(jsonObjectChordcomplexity);

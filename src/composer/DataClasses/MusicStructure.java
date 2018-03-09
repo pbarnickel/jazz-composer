@@ -14,9 +14,8 @@ import jm.util.Play;
 
 import java.util.ArrayList;
 
-public class MusicStructure implements JMC{
+public class MusicStructure extends MusicElement implements JMC {
 
-    private String name;
     private ArrayList<Integer> usage;
     private String group;
     private String mode;
