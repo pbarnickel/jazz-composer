@@ -8,6 +8,7 @@
 package composer.ControllerClasses.sub;
 
 import composer.ControllerClasses.Controller;
+import composer.ConverterClasses.MusicStructureGroupConverter;
 import composer.DataClasses.*;
 import composer.DataClasses.Response;
 
@@ -21,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,43 +30,49 @@ import java.util.ArrayList;
 
 public class SettingsController extends Controller {
 
+    //Common
     @FXML private Label lblOut;
     @FXML private TextField edtDefaultLocation;
-    @FXML private TabPane tbpSettings;
-    @FXML private Tab tabChords;
-    @FXML private Tab tabChordgroups;
-    @FXML private Tab tabChordComplexity;
-    @FXML private Tab tabScales;
-    @FXML private Tab tabScalegroups;
+
+    //Chords
     @FXML private TableView<MusicStructure> tblChords;
-    @FXML private TableView<MusicStructureGroup> tblChordgroups;
-    @FXML private TableView<Chordcomplexity> tblChordcomplexity;
-    @FXML private TableView<MusicStructure> tblScales;
-    @FXML private TableView<MusicStructureGroup> tblScalegroups;
     @FXML private TableColumn<MusicStructure, String> colChordsName;
     @FXML private TableColumn<MusicStructure, String> colChordsUsage;
     @FXML private TableColumn<MusicStructure, String> colChordsGroup;
+    @FXML private TableColumn<MusicStructure, String> colChordsMode;
+    @FXML private TextField edtChordsName;
+    @FXML private TextField edtChordsUsage;
+
+    //Chordgroups
+    @FXML private TableView<MusicStructureGroup> tblChordgroups;
     @FXML private TableColumn<MusicStructureGroup, String> colChordgroupsName;
     @FXML private TableColumn<MusicStructureGroup, Integer> colChordgroupsNr;
+    @FXML private ChoiceBox<MusicStructureGroup> chbChordsGroup;
+    @FXML private TextField edtChordgroupsName;
+
+    //Chordcomplexity
+    @FXML private TableView<Chordcomplexity> tblChordcomplexity;
     @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityTerm;
     @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityMin;
     @FXML private TableColumn<Chordcomplexity, String> colChordcomplexityMax;
-    @FXML private TableColumn<MusicStructure, String> colScalesName;
-    @FXML private TableColumn<MusicStructure, String> colScalesUsage;
-    @FXML private TableColumn<MusicStructure, String> colScalesGroup;
-    @FXML private TableColumn<MusicStructureGroup, String> colScalegroupsName;
-    @FXML private TableColumn<MusicStructureGroup, Integer> colScalegroupsNr;
-    @FXML private ChoiceBox<String> chbChordsGroup;
-    @FXML private ChoiceBox<String> chbScalesGroup;
-    @FXML private TextField edtChordsName;
-    @FXML private TextField edtChordsUsage;
-    @FXML private TextField edtScalesName;
-    @FXML private TextField edtScalesUsage;
-    @FXML private TextField edtChordgroupsName;
-    @FXML private TextField edtScalegroupsName;
     @FXML private TextField edtChordcomplexityTerm;
     @FXML private TextField edtChordcomplexityMin;
     @FXML private TextField edtChordcomplexityMax;
+
+    //Scales
+    @FXML private TableView<MusicStructure> tblScales;
+    @FXML private TableColumn<MusicStructure, String> colScalesName;
+    @FXML private TableColumn<MusicStructure, String> colScalesUsage;
+    @FXML private TableColumn<MusicStructure, String> colScalesGroup;
+    @FXML private TextField edtScalesName;
+    @FXML private TextField edtScalesUsage;
+
+    //Scalegroups
+    @FXML private TableView<MusicStructureGroup> tblScalegroups;
+    @FXML private TableColumn<MusicStructureGroup, String> colScalegroupsName;
+    @FXML private TableColumn<MusicStructureGroup, Integer> colScalegroupsNr;
+    @FXML private ChoiceBox<MusicStructureGroup> chbScalesGroup;
+    @FXML private TextField edtScalegroupsName;
 
     private String callSave = " Please save the settings.";
 
@@ -76,6 +84,7 @@ public class SettingsController extends Controller {
         colChordsName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
         colChordsUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
         colChordsGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
+        colChordsMode.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("mode"));
         colChordgroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
         colChordgroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
         colChordcomplexityTerm.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("term"));
@@ -98,8 +107,10 @@ public class SettingsController extends Controller {
         allScalegroups = FXCollections.observableArrayList(getAllScalegroups());
         tblChords.setItems(allChords);
         tblScales.setItems(allScales);
-        chbChordsGroup.setItems(allChordgroupsAsString);
-        chbScalesGroup.setItems(allScalegroupsAsString);
+        chbChordsGroup.setConverter(new MusicStructureGroupConverter());
+        chbChordsGroup.setItems(allChordgroups);
+        chbScalesGroup.setConverter(new MusicStructureGroupConverter());
+        chbScalesGroup.setItems(allScalegroups);
         tblChordgroups.setItems(allChordgroups);
         tblScalegroups.setItems(allScalegroups);
         tblChordcomplexity.setItems(allChordcomplexities);
@@ -242,7 +253,7 @@ public class SettingsController extends Controller {
         String error = "Chord could not be added. ";
         String name = edtChordsName.getText();
         String usageText = edtChordsUsage.getText();
-        String group = chbChordsGroup.getValue();
+        String group = chbChordsGroup.getValue().getName();
         int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), group);
         if(name.matches(REG_CHORD_NAME)){
             if(settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)) {
@@ -316,7 +327,7 @@ public class SettingsController extends Controller {
                 chordgroup.setName(name);
                 settings.getChordgroups().add(chordgroup);
                 allChordgroups.add(chordgroup);
-                allChordgroupsAsString.add(chordgroup.getName());
+                //allChordgroupsAsString.add(chordgroup.getName());
                 edtChordgroupsName.clear();
                 msg("Chordgroup added." + callSave, MSG_W);
             } else {msg(error + name + " is not a valid name.",MSG_E);}
@@ -328,7 +339,7 @@ public class SettingsController extends Controller {
         MusicStructureGroup chordgroup = tblChordgroups.getSelectionModel().getSelectedItem();
         if(chordgroup != null){
             allChordgroups.remove(chordgroup);
-            allChordgroupsAsString.remove(chordgroup.getName());
+            //allChordgroupsAsString.remove(chordgroup.getName());
             settings.delChordgroup(chordgroup);
             msg("Chordgroup deleted." + callSave, MSG_W);
         } else {
@@ -477,7 +488,7 @@ public class SettingsController extends Controller {
         String error = "Scale could not be added. ";
         String name = edtScalesName.getText();
         String usageText = edtScalesUsage.getText();
-        String group = chbScalesGroup.getValue();
+        String group = chbScalesGroup.getValue().getName();
         int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), group);
         if(name.matches(REG_CHORD_NAME)){
             if(settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)) {

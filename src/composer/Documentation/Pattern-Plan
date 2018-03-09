@@ -27,3 +27,8 @@
     Reiter 1:       Basis-Einstellungen für die Komposition
     Reiter 2:       Pattern erstellen
     Reiter 3:       Rhythmus-Einstellungen (Swing - Achtel)
+
+    int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), chbPatternChordgroups.getValue().toString());
+    int indexOfComplexity = settings.getIndexOfComplexity((chbPatternChordcomplexity.getValue().toString()));
+    MusicStructureGroup chordgroup = settings.getChordgroups().get(indexOfGroup);
+    Chordcomplexity chordcomplexity = settings.getChordcomplexities().get(indexOfComplexity);

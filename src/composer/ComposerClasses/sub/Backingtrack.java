@@ -24,6 +24,7 @@ import composer.ComposerClasses.Composer;
 import composer.DataClasses.Chordcomplexity;
 import composer.DataClasses.MusicStructure;
 import composer.DataClasses.MusicStructureGroup;
+import composer.DataClasses.Patternelement;
 import jm.music.data.*;
 
 import java.util.ArrayList;
@@ -38,9 +39,8 @@ public class Backingtrack extends Composer {
     private Part drums = new Part("Drums", DRUM, 2);
     private int tempo;
     private int tone;
-    private List<Integer> pattern;
     private int repeat;
-    private int mode;
+    private ArrayList<Patternelement> pattern;
 
     public Part getPiano(){
         return piano;
@@ -52,6 +52,13 @@ public class Backingtrack extends Composer {
     public int getTempo() {
         return tempo;
     }
+    public int getTone() {
+        return tone;
+    }
+    public int getRepeat() {
+        return repeat;
+    }
+    public ArrayList<Patternelement> getPattern(){ return pattern;}
     public void setPiano(Part piano){
         this.piano = piano;
     }
@@ -61,43 +68,26 @@ public class Backingtrack extends Composer {
     public void setDrums(Part drums){
         this.drums = drums;
     }
-    public int getTone() {
-        return tone;
-    }
-    public List<Integer> getPattern() {
-        return pattern;
-    }
-    public int getRepeat() {
-        return repeat;
-    }
-    public int getMode() { return  mode; }
     public void setTempo(int tempo) {
         this.tempo = tempo;
     }
     public void setTone(int tone) {
         this.tone = tone;
     }
-    public void setPattern(List<Integer> pattern) {
-        this.pattern = pattern;
-    }
     public void setRepeat(int repeat) {
         this.repeat = repeat;
     }
-    public void setMode(int mode) { this.mode = mode; }
+    public void setPattern(ArrayList<Patternelement> pattern){ this.pattern = pattern;}
 
-    public void createBackingtrack(Boolean instruments[], int tempo, String tone, String pattern, int repeat, int mode,
-                                   MusicStructureGroup chordgroup, Chordcomplexity chordcomplexity){
+    public void addPattern(Patternelement patternelement){ pattern.add(patternelement);}
+    public void delPatternelement(Patternelement patternelement){ pattern.remove(patternelement);}
+
+    public void createBackingtrack(Boolean instruments[], int tempo, String tone, int repeat, ArrayList<Patternelement> pattern){
         //transfer input data into data model
         this.tempo = tempo;
         this.tone = interpretTone(tone);
-        this.pattern = interpretPattern(pattern);
         this.repeat = repeat;
-        this.mode = mode;
-        this.chordgroup = chordgroup;
-        this.chordcomplexity = chordcomplexity;
-
-        //filtering the chords, taking into account the complexity
-        this.chordgroup = filterComplexity();
+        this.pattern = pattern;
 
         //generate Parts
         if(instruments[0])generatePianoPart();
@@ -122,7 +112,7 @@ public class Backingtrack extends Composer {
         CPhrase chord;
         MusicStructure randChord;
 
-        for(int i=0; i<repeat; i++) {
+        /*for(int i=0; i<repeat; i++) {
             for (int j = 0; j < this.pattern.size(); j++) {
                 randChord = getRandomChord();
                 chord = getChord(this.pattern.get(j), randChord, C);
@@ -135,7 +125,7 @@ public class Backingtrack extends Composer {
                 //bass_phrase.addNote(bass_note);
                 //bass.addPhrase(bass_phrase);
             }
-        }
+        }*/
 
         score.add(piano);
         score.add(bass);

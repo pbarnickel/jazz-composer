@@ -12,6 +12,7 @@ public interface Regex {
     String REG_CHORD_USAGE = "[0-9]+(-[0-9]+)*";
     String REG_TONE = "[cdefgabCDEFGAB]+[b#]*";
     String REG_TEMPO = "-?\\d+";
-    String REG_NUMBER = "[123456789][0123456789]*";
+    String REG_NUMBER = "[1-9][0-9]*";
     String REG_NAME = "[a-zA-Z]+[a-z-A-Z0-9 ]*";
+    String REG_TRANSPOSE = "[-]*[0-9]+";
 }

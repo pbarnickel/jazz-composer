@@ -153,33 +153,34 @@ public class Settings {
 
     public ArrayList<MusicStructureGroup> loadMusicStructureGroup(JSONObject jsonObjectRoot, String jsonRootKey, String jsonMusicStructuresKey){
         ArrayList<MusicStructureGroup> groups = new ArrayList<MusicStructureGroup>();
-        JSONArray jsonArrayScalegroups = (JSONArray) jsonObjectRoot.get(jsonRootKey);
-        int lengthJSONArrayScalegroups  = jsonArrayScalegroups.size();
-        for(int i=0; i<lengthJSONArrayScalegroups; i++){
-            MusicStructureGroup scalegroup = new MusicStructureGroup();
-            JSONObject jsonObjectScalegroup = (JSONObject) jsonArrayScalegroups.get(i);
-            String scalegroupName = (String) jsonObjectScalegroup.get("name");
-            scalegroup.setName(scalegroupName);
-            JSONArray jsonArrayScales = (JSONArray) jsonObjectScalegroup.get(jsonMusicStructuresKey);
-            int lengthJSONArrayScales = jsonArrayScales.size();
-            for(int j=0; j<lengthJSONArrayScales; j++){
-                MusicStructure scale = new MusicStructure();
-                JSONObject jsonObjectScale = (JSONObject) jsonArrayScales.get(j);
-                String scaleName = (String) jsonObjectScale.get("name");
-                scale.setName(scaleName);
-                String scaleScalegroup = (String) jsonObjectScalegroup.get("name");
-                scale.setGroup(scaleScalegroup);
-                ArrayList<Integer> scaleUsage = new ArrayList<Integer>();
-                JSONArray jsonArrayScaleUsage = (JSONArray) jsonObjectScale.get("usage");
-                int lengthJSONArrayScaleUsage = jsonArrayScaleUsage.size();
-                for(int k=0; k<lengthJSONArrayScaleUsage; k++){
-                    int usagePart = (int)(long) jsonArrayScaleUsage.get(k);
-                    scaleUsage.add(usagePart);
+        JSONArray jsonArrayMusicStructureGroups = (JSONArray) jsonObjectRoot.get(jsonRootKey);
+        int lengthJSONArrayMusicStructureGroups  = jsonArrayMusicStructureGroups.size();
+        for(int i=0; i<lengthJSONArrayMusicStructureGroups; i++){
+            MusicStructureGroup musicStructureGroup = new MusicStructureGroup();
+            JSONObject jsonObjectMusicStructureGroup = (JSONObject) jsonArrayMusicStructureGroups.get(i);
+            String musicStructureGroupName = (String) jsonObjectMusicStructureGroup.get("name");
+            musicStructureGroup.setName(musicStructureGroupName);
+            JSONArray jsonArrayMusicStructures = (JSONArray) jsonObjectMusicStructureGroup.get(jsonMusicStructuresKey);
+            int lengthJSONArrayMusicStructures = jsonArrayMusicStructures.size();
+            for(int j=0; j<lengthJSONArrayMusicStructures; j++){
+                MusicStructure musicStructure = new MusicStructure();
+                JSONObject jsonObjectMusicStructure = (JSONObject) jsonArrayMusicStructures.get(j);
+                String musicStructureName = (String) jsonObjectMusicStructure.get("name");
+                musicStructure.setName(musicStructureName);
+                String musicStructureMusicStructureGroup = (String) jsonObjectMusicStructureGroup.get("name");
+                musicStructure.setGroup(musicStructureMusicStructureGroup);
+                ArrayList<Integer> musicStructureUsage = new ArrayList<Integer>();
+                JSONArray jsonArrayMusicStructureUsage = (JSONArray) jsonObjectMusicStructure.get("usage");
+                int lengthJSONArrayMusicStructureLength = jsonArrayMusicStructureUsage.size();
+                for(int k=0; k<lengthJSONArrayMusicStructureLength; k++){
+                    int usagePart = (int)(long) jsonArrayMusicStructureUsage.get(k);
+                    musicStructureUsage.add(usagePart);
                 }//usage
-                scale.setUsage(scaleUsage);
-                scalegroup.addMusicStructure(scale);
+                musicStructure.setUsage(musicStructureUsage);
+                musicStructure.setMode(musicStructure.calcMode());
+                musicStructureGroup.addMusicStructure(musicStructure);
             }//structure
-            groups.add(scalegroup);
+            groups.add(musicStructureGroup);
         }//group
         return groups;
     }

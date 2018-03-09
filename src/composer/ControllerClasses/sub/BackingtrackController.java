@@ -9,10 +9,11 @@ package composer.ControllerClasses.sub;
 
 import composer.ComposerClasses.sub.Backingtrack;
 import composer.ControllerClasses.Controller;
-import composer.DataClasses.Chordcomplexity;
-import composer.DataClasses.MusicStructureGroup;
-import composer.DataClasses.Settings;
-import composer.DataClasses.Response;
+import composer.ConverterClasses.MusicStructureConverter;
+import composer.ConverterClasses.MusicStructureGroupConverter;
+import composer.DataClasses.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -20,7 +21,9 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import javafx.scene.control.cell.PropertyValueFactory;
 import jm.music.data.*;
 
 import static composer.Main.d;
@@ -29,27 +32,49 @@ public class BackingtrackController extends Controller {
 
     private Backingtrack bt = new Backingtrack();
 
+    //Common
     @FXML private Label lblOut;
-    @FXML private ToggleButton tglPiano;
-    @FXML private ToggleButton tglBass;
-    @FXML private ToggleButton tglDrums;
-    @FXML private TextField edtTempo;
-    @FXML private TextField edtTone;
-    @FXML private TextField edtPattern;
-    @FXML private TextField edtRepeat;
-    @FXML private ToggleGroup tglGrpMode;
-    @FXML private ChoiceBox chbChordcomplexity;
-    @FXML private ChoiceBox chbChordgroups;
+
+    //General
+    @FXML private ToggleButton tglGeneralPiano;
+    @FXML private ToggleButton tglGeneralBass;
+    @FXML private ToggleButton tglGeneralDrums;
+    @FXML private TextField edtGeneralTempo;
+    @FXML private TextField edtGeneralTone;
+    @FXML private TextField edtGeneralRepeat;
+
+    //Pattern
+    @FXML private TableView tblPattern;
+    @FXML private TableColumn<Patternelement, Integer> colPatternTranspose;
+    @FXML private TableColumn<MusicStructure, String> colPatternMode;
+    @FXML private TableColumn<Patternelement, String> colPatternChordgroup;
+    @FXML private TableColumn<Patternelement, String> colPatternChord;
+    @FXML private TableColumn<Patternelement, String> colPatternChordcomplexity;
+    @FXML private TableColumn<MusicStructure, String> colPatternUsage;
+    @FXML private TextField edtPatternTranspose;
+    @FXML private ChoiceBox chbPatternChordgroups;
+    @FXML private ChoiceBox chbPatternChord;
+    @FXML private ChoiceBox chbPatternChordcomplexity;
 
     public void initialize(){
         //init settings
         settings = new Settings();
 
         //init choice-boxes
-        allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
+        //allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
-        chbChordgroups.setItems(getAllChordgroupsAsString());
-        chbChordcomplexity.setItems(getAllChordcomplexitiesAsString());
+        chbPatternChordgroups.setConverter(new MusicStructureGroupConverter());
+        chbPatternChordgroups.setItems(getAllChordgroups());
+        chbPatternChordcomplexity.setItems(getAllChordcomplexitiesAsString());
+        chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                //loadChords(newValue, chbPatternChord);
+                chords = FXCollections.observableArrayList(getChordsOfChordgroup((MusicStructureGroup) newValue));
+                chbPatternChord.setConverter(new MusicStructureConverter());
+                chbPatternChord.setItems(chords);
+            }
+        });
 
         //load default inputs
         defaultInputs();
@@ -57,21 +82,18 @@ public class BackingtrackController extends Controller {
 
     @Override
     public void defaultInputs(){
-        tglPiano.setSelected(true);
-        edtTempo.setText("120");
-        edtTone.setText("C");
-        edtPattern.setText("0-2-7");
-        edtPattern.setDisable(true);
-        edtRepeat.setText("3");
-        tglGrpMode.selectToggle(tglGrpMode.getToggles().get(0));
+        tglGeneralPiano.setSelected(true);
+        edtGeneralTempo.setText("120");
+        edtGeneralTone.setText("C");
+        edtGeneralRepeat.setText("3");
         int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(),"Basic");
         int indexOfComplexity = settings.getIndexOfComplexity("Medium");
-        if(indexOfGroup>-1) {
-            chbChordgroups.setValue(allChordgroupsAsString.get(indexOfGroup));
-        }
-        if(indexOfComplexity>-1) {
-            chbChordcomplexity.setValue(allChordcomplexitiesAsString.get(indexOfComplexity));
-        }
+//        if(indexOfGroup>-1) {
+//            chbPatternChordgroups.setValue(allChordgroupsAsString.get(indexOfGroup));
+//        }
+//        if(indexOfComplexity>-1) {
+//            chbPatternChordcomplexity.setValue(allChordcomplexitiesAsString.get(indexOfComplexity));
+//        }
     }
 
     @Override
@@ -140,47 +162,35 @@ public class BackingtrackController extends Controller {
     @FXML
     public void onCompose(ActionEvent actionEvent) {
         String error = "Composition unsuccessful: ";
-        if(tglPiano.isSelected() || tglBass.isSelected() || tglDrums.isSelected()){
-            if(edtTempo.getText().matches(REG_TEMPO)){
-                if(edtTone.getText().matches(REG_TONE)){
-                    if(edtPattern.getText().matches(REG_CHORD_USAGE)){
-                        if(edtRepeat.getText().matches(REG_NUMBER)){
-                            if(tglGrpMode.getSelectedToggle() != null) {
-                                if(chbChordcomplexity.getValue() != null) {
-                                    if(chbChordgroups.getValue() != null) {
-                                        Boolean instruments[] = new Boolean[3];
-                                        int tempo = Integer.parseInt(edtTempo.getText());
-                                        int repeat = Integer.parseInt((edtRepeat.getText()));
-                                        String tone = edtTone.getText();
-                                        String pattern = edtPattern.getText();
-                                        instruments[0] = tglPiano.isSelected();
-                                        instruments[1] = tglBass.isSelected();
-                                        instruments[2] = tglDrums.isSelected();
-                                        int mode;
-                                        if (tglGrpMode.getSelectedToggle().equals("Major")) {
-                                            mode = 4;
-                                        } else {
-                                            mode = 3;
-                                        }
-                                        int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), chbChordgroups.getValue().toString());
-                                        int indexOfComplexity = settings.getIndexOfComplexity((chbChordcomplexity.getValue().toString()));
-                                        MusicStructureGroup chordgroup = settings.getChordgroups().get(indexOfGroup);
-                                        Chordcomplexity chordcomplexity = settings.getChordcomplexities().get(indexOfComplexity);
-                                        bt.createBackingtrack(instruments, tempo, tone, pattern, repeat, mode, chordgroup, chordcomplexity);
-                                        msg("Composition created successfully.", MSG_S);
-                                    } else {msg(error + "No chordgroup selected.", MSG_E);}
-                                } else {msg(error + "No chordcomplexity selected.", MSG_E);}
-                            } else {msg(error + "No mode selected.", MSG_E);}
-                        } else {msg(error + "Repeat is not a number greater than zero.", MSG_E);}
-                    } else {msg(error + "Pattern is not valid. Example: 0-2-7", MSG_E);}
+        if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
+            if(edtGeneralTempo.getText().matches(REG_TEMPO)){
+                if(edtGeneralTone.getText().matches(REG_TONE)){
+                    if(edtGeneralRepeat.getText().matches(REG_NUMBER)){
+                        if(chbPatternChordcomplexity.getValue() != null) {
+                            if(chbPatternChordgroups.getValue() != null) {
+                                Boolean instruments[] = new Boolean[3];
+                                int tempo = Integer.parseInt(edtGeneralTempo.getText());
+                                int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
+                                String tone = edtGeneralTone.getText();
+                                instruments[0] = tglGeneralPiano.isSelected();
+                                instruments[1] = tglGeneralBass.isSelected();
+                                instruments[2] = tglGeneralDrums.isSelected();
+                                ArrayList<Patternelement> pattern = new ArrayList<Patternelement>();
+                                bt.createBackingtrack(instruments, tempo, tone, repeat, pattern);
+                                msg("Composition created successfully.", MSG_S);
+                            } else {msg(error + "No chordgroup selected.", MSG_E);}
+                        } else {msg(error + "No chordcomplexity selected.", MSG_E);}
+                    } else {msg(error + "Repeat is not a number greater than zero.", MSG_E);}
                 } else {msg(error + "Tone is not valid.", MSG_E);}
             } else {msg(error + "Tempo is not a number.", MSG_E);}
         } else {msg(error + "No instruments active.", MSG_E);}
     }
 
+    /*************************************** GENERAL ******************************************************************/
+
     @FXML
-    public void onPiano(ActionEvent actionEvent) {
-        if(tglPiano.isSelected()){
+    public void onGeneralPiano(ActionEvent actionEvent) {
+        if(tglGeneralPiano.isSelected()){
             msg("Piano activated.", MSG_I);
         } else {
             msg("Piano disabled.", MSG_W);
@@ -188,8 +198,8 @@ public class BackingtrackController extends Controller {
     }
 
     @FXML
-    public void onBass(ActionEvent actionEvent) {
-        if(tglBass.isSelected()){
+    public void onGeneralBass(ActionEvent actionEvent) {
+        if(tglGeneralBass.isSelected()){
             msg("Bass activated.", MSG_I);
         } else {
             msg("Bass disabled.", MSG_W);
@@ -197,8 +207,8 @@ public class BackingtrackController extends Controller {
     }
 
     @FXML
-    public void onDrums(ActionEvent actionEvent) {
-        if(tglDrums.isSelected()){
+    public void onGeneralDrums(ActionEvent actionEvent) {
+        if(tglGeneralDrums.isSelected()){
             msg("Drums activated.", MSG_I);
         } else {
             msg("Drums disabled.", MSG_W);
@@ -206,22 +216,63 @@ public class BackingtrackController extends Controller {
     }
 
     @FXML
-    public void onTempo(ActionEvent actionEvent) {
-        msg("Tempo set to " + edtTempo.getText() + ".", MSG_I);
+    public void onGeneralTempo(ActionEvent actionEvent) {
+        msg("Tempo set to " + edtGeneralTempo.getText() + ".", MSG_I);
     }
 
     @FXML
-    public void onTone(ActionEvent actionEvent) {
-        msg("Tone set to " + edtTone.getText() + ".", MSG_I);
+    public void onGeneralTone(ActionEvent actionEvent) {
+        msg("Tone set to " + edtGeneralTone.getText() + ".", MSG_I);
     }
 
     @FXML
-    public void onPattern(ActionEvent actionEvent) {
-        msg("Pattern set to " + edtPattern.getText() + ".", MSG_I);
+    public void onGeneralRepeat(ActionEvent actionEvent) {
+        msg("Repeat set to " + edtGeneralRepeat.getText() + " times.", MSG_I);
+    }
+
+    /********************************* PATTERN ************************************************************************/
+
+    @FXML
+    public void changePatternTransposeCellEvent(TableColumn.CellEditEvent<Patternelement, Integer> patternelementIntegerCellEditEvent) {
     }
 
     @FXML
-    public void onRepeat(ActionEvent actionEvent) {
-        msg("Repeat set to " + edtRepeat.getText() + " times.", MSG_I);
+    public void changePatternModeCellEvent(TableColumn.CellEditEvent<MusicStructure, String> musicStructureStringCellEditEvent) {
     }
+
+    @FXML
+    public void changePatternChordgroupCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+    }
+
+    @FXML
+    public void changePatternChordCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+    }
+
+    @FXML
+    public void changePatternChordcomplexityCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+    }
+
+    @FXML
+    public void onPatternAdd(ActionEvent actionEvent) {
+        String error = "Adding Patternelement unsuccessful: ";
+        if(edtPatternTranspose.getText().matches(REG_TRANSPOSE)){
+            if(chbPatternChordgroups != null && chbPatternChord != null && chbPatternChordcomplexity != null){
+                int transpose = Integer.parseInt(edtPatternTranspose.getText());
+                //Patternelement patternelement = new Patternelement();
+                // TODO Chords müssen nach Chordgroup geladen werden, sowohl nach Change- als auch bei Add-Formular
+                // TODO Chordgroup muss nicht in Patternelement gespeichert werden → Redundant, da Chord.groupname
+                // TODO Fehlerhandling Add
+                // TODO Erzeugen und hinzufügen eines Patternelements
+            }
+        }
+    }
+
+    @FXML
+    public void onPatternDelete(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void onPatternPlay(ActionEvent actionEvent) {
+    }
+
 }

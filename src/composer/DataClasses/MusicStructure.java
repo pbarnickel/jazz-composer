@@ -19,16 +19,19 @@ public class MusicStructure implements JMC{
     private String name;
     private ArrayList<Integer> usage;
     private String group;
+    private String mode;
 
     public MusicStructure(){
         this.name = "";
         this.usage = new ArrayList<Integer>();
+        this.mode = "";
     }
 
     public MusicStructure(String name, ArrayList<Integer> usage, String group){
         this.name = name;
         this.usage = usage;
         this.group = group;
+        this.mode = calcMode();
     }
 
     public String getName() {
@@ -53,6 +56,8 @@ public class MusicStructure implements JMC{
         return group;
     }
 
+    public String getMode() {return mode;}
+
     public void setName(String name){
         this.name = name;
     }
@@ -63,6 +68,18 @@ public class MusicStructure implements JMC{
 
     public void setGroup(String group){
         this.group = group;
+    }
+
+    public void setMode(String mode) {this.mode = mode;}
+
+    public String calcMode(){
+        int length = usage.size();
+        for(int i=0; i<length; i++){
+            if(usage.get(i).intValue()==3){
+                return "Minor";
+            }
+        }
+        return "Major";
     }
 
     public void play(boolean asChord){

@@ -14,6 +14,7 @@ import composer.DataClasses.Settings;
 import composer.Interfaces.MessageTypes;
 import composer.Interfaces.Regex;
 import composer.DataClasses.Response;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +35,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected Response r;
     protected Settings settings;
     protected ObservableList<MusicStructure> allChords;
+    protected ObservableList<MusicStructure> chords;
     protected ObservableList<MusicStructure> allScales;
     protected ObservableList<MusicStructureGroup> allChordgroups;
     protected ObservableList<MusicStructureGroup> allScalegroups;
@@ -84,6 +86,28 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
 
     /*********************************************** GET LISTS ********************************************************/
 
+    // TODO: Evtl zusammenfassen
+    // TODO: StringConverter einsetzen
+
+    public ObservableList<MusicStructure> getMusicStructureItems(MusicStructureGroup musicStructureGroup){
+        ObservableList<MusicStructure> items = FXCollections.observableArrayList();
+        int length = musicStructureGroup.getMusicStructures().size();
+        for(int i=0; i<length; i++){
+            items.add(musicStructureGroup.getMusicStructures().get(i));
+        }
+        return items;
+    }
+
+    public ObservableList<MusicStructure> getAllMusicStructureItems(ArrayList<MusicStructureGroup> musicStructureGroups){
+        ObservableList<MusicStructure> allItems = FXCollections.observableArrayList();
+        int lengthGroups = musicStructureGroups.size();
+        for(int i=0; i<lengthGroups; i++){
+            ObservableList<MusicStructure> items = getMusicStructureItems(musicStructureGroups.get(i));
+            allItems.addAll(items);
+        }
+        return allItems;
+    }
+
     public ObservableList<MusicStructure> getAllChords() {
         ObservableList<MusicStructure> allChords = FXCollections.observableArrayList();
         int lengthChordgroups = settings.getChordgroups().size();
@@ -94,6 +118,15 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
             }
         }
         return allChords;
+    }
+
+    public ObservableList<MusicStructure> getChordsOfChordgroup(MusicStructureGroup chordgroup) {
+        ObservableList<MusicStructure> chords = FXCollections.observableArrayList();
+        int lengthChords = chordgroup.getMusicStructures().size();
+        for(int i=0; i<lengthChords; i++){
+            chords.add(chordgroup.getMusicStructures().get(i));
+        }
+        return chords;
     }
 
     public ObservableList<String> getAllChordgroupsAsString() {
