@@ -12,6 +12,7 @@ import composer.ControllerClasses.Controller;
 import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -51,24 +52,31 @@ public class BackingtrackController extends Controller {
     @FXML private ChoiceBox chbPatternChordcomplexity;
 
     public void initialize(){
-        //init settings
-        //settings = new Settings();
+        settings = new Settings();
+        update();
+        defaultInputs();
+    }
 
-        //init choice-boxes
-        //allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
-        //allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
-        //chbPatternChordgroups.setConverter(new MusicElementConverter());
-        chbPatternChordgroups.setItems(getMusicStructureGroupsAsString(settings.getChordgroups()));
-        chbPatternChordcomplexity.setItems(getChordcomplexitiesAsString(settings.getChordcomplexities()));
+    public void update(){
+        //load lists
+        allChords = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getChordgroups()));
+        allChordgroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getChordgroups()));
+        allChordgroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getChordgroups()));
+        allChordcomplexities = FXCollections.observableArrayList(getChordcomplexityItems(settings.getChordcomplexities()));
+        allChordcomplexitiesAsString = FXCollections.observableArrayList(getChordcomplexitiesAsString(settings.getChordcomplexities()));
+        chbPatternChordgroups.setItems(allChordgroupsAsString);
+        chbPatternChordcomplexity.setItems(allChordcomplexitiesAsString);
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-
+                int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), newValue.toString());
+                chords = FXCollections.observableArrayList(getMusicStructureItems(settings.getChordgroups().get(indexOfGroup)));
+                chordsAsString = FXCollections.observableArrayList(getMusicStructuresAsString(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
+                chbPatternChord.setItems(chordsAsString);
             }
         });
 
-        //load default inputs
-        defaultInputs();
+
     }
 
     @Override

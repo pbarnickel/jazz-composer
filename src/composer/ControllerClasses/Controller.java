@@ -29,12 +29,14 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
 
     protected Response r;
     protected Settings settings;
+    protected ObservableList<MusicStructure> chords;
     protected ObservableList<MusicStructure> allChords;
     protected ObservableList<MusicStructure> allScales;
     protected ObservableList<MusicStructureGroup> allChordgroups;
     protected ObservableList<MusicStructureGroup> allScalegroups;
     protected ObservableList<Chordcomplexity> allChordcomplexities;
-    protected ObservableList allChordgroupsAsString;
+    protected ObservableList<String> chordsAsString;
+    protected ObservableList<String> allChordgroupsAsString;
     protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;
 
