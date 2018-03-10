@@ -8,7 +8,6 @@
 package composer.ControllerClasses.sub;
 
 import composer.ControllerClasses.Controller;
-import composer.ConverterClasses.MusicElementConverter;
 import composer.DataClasses.*;
 import composer.DataClasses.Response;
 
@@ -76,61 +75,8 @@ public class SettingsController extends Controller {
     private String callSave = " Please save the settings.";
 
     public void initialize() {
-        //init settings
         settings = new Settings();
-
-        //set up columns in table
-        colChordsName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
-        colChordsUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
-        colChordsGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
-        colChordsMode.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("mode"));
-        colChordgroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
-        colChordgroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
-        colChordcomplexityName.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("name"));
-        colChordcomplexityMin.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("minAsString"));
-        colChordcomplexityMax.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("maxAsString"));
-        colScalesName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
-        colScalesUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
-        colScalesGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
-        colScalegroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
-        colScalegroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
-
-        //load data
-        edtDefaultLocation.setText(settings.getDefault_location());
-        allChords = FXCollections.observableArrayList(getAllChords());
-        allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
-        allChordgroups = FXCollections.observableArrayList(getAllChordgroups());
-        allChordcomplexities = FXCollections.observableArrayList(getAllChordcomplexities());
-        allScales = FXCollections.observableArrayList(getAllScales());
-        allScalegroupsAsString = FXCollections.observableArrayList(getAllScalegroupsAsString());
-        allScalegroups = FXCollections.observableArrayList(getAllScalegroups());
-        tblChords.setItems(allChords);
-        tblScales.setItems(allScales);
-        chbChordsGroup.setConverter(new MusicElementConverter());
-        chbChordsGroup.setItems(allChordgroups);
-        chbScalesGroup.setConverter(new MusicElementConverter());
-        chbScalesGroup.setItems(allScalegroups);
-        tblChordgroups.setItems(allChordgroups);
-        tblScalegroups.setItems(allScalegroups);
-        tblChordcomplexity.setItems(allChordcomplexities);
-
-        //editable table
-        tblChords.setEditable(true);
-        colChordsName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colChordsUsage.setCellFactory(TextFieldTableCell.forTableColumn());
-        colChordsGroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
-        tblChordgroups.setEditable(true);
-        colChordgroupsName.setCellFactory(TextFieldTableCell.forTableColumn());
-        tblChordcomplexity.setEditable(true);
-        colChordcomplexityName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colChordcomplexityMin.setCellFactory(TextFieldTableCell.forTableColumn());
-        colChordcomplexityMax.setCellFactory(TextFieldTableCell.forTableColumn());
-        tblScales.setEditable(true);
-        colScalesName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colScalesUsage.setCellFactory(TextFieldTableCell.forTableColumn());
-        colScalesGroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allScalegroupsAsString));
-        tblScalegroups.setEditable(true);
-        colScalegroupsName.setCellFactory(TextFieldTableCell.forTableColumn());
+        update();
     }
 
     @Override
@@ -190,6 +136,62 @@ public class SettingsController extends Controller {
             edtDefaultLocation.setText(settings.getDefault_location());
             msg("Path is not valid.", MSG_E);
         }
+    }
+
+    public void update(){
+        //set up lists
+        allChords = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getChordgroups()));
+        allScales = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getScalegroups()));
+        allChordgroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getChordgroups()));
+        allScalegroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getScalegroups()));
+        allChordcomplexities = FXCollections.observableArrayList(getChordcomplexityItems(settings.getChordcomplexities()));
+        allChordgroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getChordgroups()));
+        allScalegroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getScalegroups()));
+        allChordcomplexitiesAsString = FXCollections.observableArrayList(getChordcomplexitiesAsString(settings.getChordcomplexities()));
+
+        //set up columns in table
+        colChordsName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
+        colChordsUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
+        colChordsGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
+        colChordsMode.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("mode"));
+        colChordgroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
+        colChordgroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
+        colChordcomplexityName.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("name"));
+        colChordcomplexityMin.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("minAsString"));
+        colChordcomplexityMax.setCellValueFactory(new PropertyValueFactory<Chordcomplexity, String>("maxAsString"));
+        colScalesName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
+        colScalesUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
+        colScalesGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
+        colScalegroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
+        colScalegroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
+
+        //load data
+        edtDefaultLocation.setText(settings.getDefault_location());
+        tblChords.setItems(allChords);
+        tblScales.setItems(allScales);
+        chbChordsGroup.setItems(allChordgroupsAsString);
+        chbScalesGroup.setItems(allScalegroupsAsString);
+        tblChordgroups.setItems(allChordgroups);
+        tblScalegroups.setItems(allScalegroups);
+        tblChordcomplexity.setItems(allChordcomplexities);
+
+        //editable table
+        tblChords.setEditable(true);
+        colChordsName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colChordsUsage.setCellFactory(TextFieldTableCell.forTableColumn());
+        colChordsGroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
+        tblChordgroups.setEditable(true);
+        colChordgroupsName.setCellFactory(TextFieldTableCell.forTableColumn());
+        tblChordcomplexity.setEditable(true);
+        colChordcomplexityName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colChordcomplexityMin.setCellFactory(TextFieldTableCell.forTableColumn());
+        colChordcomplexityMax.setCellFactory(TextFieldTableCell.forTableColumn());
+        tblScales.setEditable(true);
+        colScalesName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colScalesUsage.setCellFactory(TextFieldTableCell.forTableColumn());
+        colScalesGroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allScalegroupsAsString));
+        tblScalegroups.setEditable(true);
+        colScalegroupsName.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     /********************************************CHORDS****************************************************************/
@@ -326,7 +328,7 @@ public class SettingsController extends Controller {
                 chordgroup.setName(name);
                 settings.getChordgroups().add(chordgroup);
                 allChordgroups.add(chordgroup);
-                //allChordgroupsAsString.add(chordgroup.getName());
+                allChordgroupsAsString.add(chordgroup.getName());
                 edtChordgroupsName.clear();
                 msg("Chordgroup added." + callSave, MSG_W);
             } else {msg(error + name + " is not a valid name.",MSG_E);}
@@ -338,8 +340,9 @@ public class SettingsController extends Controller {
         MusicStructureGroup chordgroup = tblChordgroups.getSelectionModel().getSelectedItem();
         if(chordgroup != null){
             allChordgroups.remove(chordgroup);
-            //allChordgroupsAsString.remove(chordgroup.getName());
+            allChordgroupsAsString.remove(chordgroup.getName());
             settings.delChordgroup(chordgroup);
+            update();
             msg("Chordgroup deleted." + callSave, MSG_W);
         } else {
             msg("No chordgroup selected.",MSG_E);
@@ -576,6 +579,7 @@ public class SettingsController extends Controller {
             allScalegroups.remove(scalegroup);
             allScalegroupsAsString.remove(scalegroup.getName());
             settings.delScalegroup(scalegroup);
+            update();
             msg("Scalegroup deleted." + callSave, MSG_W);
         } else {
             msg("No scalegroup selected.",MSG_E);

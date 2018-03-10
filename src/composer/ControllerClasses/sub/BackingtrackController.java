@@ -9,11 +9,9 @@ package composer.ControllerClasses.sub;
 
 import composer.ComposerClasses.sub.Backingtrack;
 import composer.ControllerClasses.Controller;
-import composer.ConverterClasses.MusicElementConverter;
 import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -54,21 +52,18 @@ public class BackingtrackController extends Controller {
 
     public void initialize(){
         //init settings
-        settings = new Settings();
+        //settings = new Settings();
 
         //init choice-boxes
         //allChordgroupsAsString = FXCollections.observableArrayList(getAllChordgroupsAsString());
-        allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
-        chbPatternChordgroups.setConverter(new MusicElementConverter());
-        chbPatternChordgroups.setItems(getAllChordgroups());
-        chbPatternChordcomplexity.setItems(getAllChordcomplexitiesAsString());
+        //allChordcomplexitiesAsString = FXCollections.observableArrayList(getAllChordcomplexitiesAsString());
+        //chbPatternChordgroups.setConverter(new MusicElementConverter());
+        chbPatternChordgroups.setItems(getMusicStructureGroupsAsString(settings.getChordgroups()));
+        chbPatternChordcomplexity.setItems(getChordcomplexitiesAsString(settings.getChordcomplexities()));
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                //loadChords(newValue, chbPatternChord);
-                chords = FXCollections.observableArrayList(getChordsOfChordgroup((MusicStructureGroup) newValue));
-                chbPatternChord.setConverter(new MusicElementConverter());
-                chbPatternChord.setItems(chords);
+
             }
         });
 

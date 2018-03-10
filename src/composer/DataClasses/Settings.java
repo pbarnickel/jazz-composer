@@ -25,9 +25,7 @@ public class Settings {
     private ArrayList<Chordcomplexity> chordcomplexities;
     private ArrayList<MusicStructureGroup> scalegroups;
 
-    public Settings() {
-        loadSettings();
-    }
+    public Settings(){loadSettings();}
 
     public String getDefault_location(){ return this.default_location; }
 

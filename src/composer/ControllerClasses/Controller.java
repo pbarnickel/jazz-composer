@@ -7,13 +7,9 @@
 
 package composer.ControllerClasses;
 
-import composer.DataClasses.Chordcomplexity;
-import composer.DataClasses.MusicStructure;
-import composer.DataClasses.MusicStructureGroup;
-import composer.DataClasses.Settings;
+import composer.DataClasses.*;
 import composer.Interfaces.MessageTypes;
 import composer.Interfaces.Regex;
-import composer.DataClasses.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -34,13 +30,12 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected Response r;
     protected Settings settings;
     protected ObservableList<MusicStructure> allChords;
-    protected ObservableList<MusicStructure> chords;
     protected ObservableList<MusicStructure> allScales;
     protected ObservableList<MusicStructureGroup> allChordgroups;
     protected ObservableList<MusicStructureGroup> allScalegroups;
-    protected ObservableList<String> allChordgroupsAsString;
-    protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<Chordcomplexity> allChordcomplexities;
+    protected ObservableList allChordgroupsAsString;
+    protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;
 
     public abstract void msg(String message, int type);
@@ -85,9 +80,6 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
 
     /*********************************************** GET LISTS ********************************************************/
 
-    // TODO: Evtl zusammenfassen
-    // TODO: StringConverter einsetzen
-
     public ObservableList<MusicStructure> getMusicStructureItems(MusicStructureGroup musicStructureGroup){
         ObservableList<MusicStructure> items = FXCollections.observableArrayList();
         int length = musicStructureGroup.getMusicStructures().size();
@@ -107,90 +99,48 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         return allItems;
     }
 
-    public ObservableList<MusicStructure> getAllChords() {
-        ObservableList<MusicStructure> allChords = FXCollections.observableArrayList();
-        int lengthChordgroups = settings.getChordgroups().size();
-        for (int i = 0; i < lengthChordgroups; i++) {
-            int lengthChords = settings.getChordgroups().get(i).getMusicStructures().size();
-            for (int j = 0; j < lengthChords; j++) {
-                allChords.add(settings.getChordgroups().get(i).getMusicStructures().get(j));
-            }
-        }
-        return allChords;
-    }
-
-    public ObservableList<MusicStructure> getChordsOfChordgroup(MusicStructureGroup chordgroup) {
-        ObservableList<MusicStructure> chords = FXCollections.observableArrayList();
-        int lengthChords = chordgroup.getMusicStructures().size();
-        for(int i=0; i<lengthChords; i++){
-            chords.add(chordgroup.getMusicStructures().get(i));
-        }
-        return chords;
-    }
-
-    public ObservableList<String> getAllChordgroupsAsString() {
-        ObservableList<String> allGroups = FXCollections.observableArrayList();
-        int lengthChordgroups = settings.getChordgroups().size();
-        for(int i=0; i<lengthChordgroups; i++){
-            allGroups.add(settings.getChordgroups().get(i).getName());
-        }
-        return allGroups;
-    }
-
-    public ObservableList<MusicStructureGroup> getAllChordgroups(){
-        ObservableList<MusicStructureGroup> allGroups = FXCollections.observableArrayList();
-        int lengthChordgroups = settings.getChordgroups().size();
-        for (int i = 0; i < lengthChordgroups; i++) {
-            allGroups.add(settings.getChordgroups().get(i));
-        }
-        return allGroups;
-    }
-
-    public ObservableList<Chordcomplexity> getAllChordcomplexities() {
-        ObservableList<Chordcomplexity> allComplexities = FXCollections.observableArrayList();
-        int length = settings.getChordcomplexities().size();
+    public ObservableList getMusicStructureGroupsItems(ArrayList<MusicStructureGroup> musicStructureGroups){
+        ObservableList groups = FXCollections.observableArrayList();
+        int length = musicStructureGroups.size();
         for(int i=0; i<length; i++){
-            allComplexities.add(settings.getChordcomplexities().get(i));
+            groups.add(musicStructureGroups.get(i));
         }
-        return allComplexities;
+        return groups;
     }
 
-    public ObservableList<MusicStructure> getAllScales() {
-        ObservableList<MusicStructure> allScales = FXCollections.observableArrayList();
-        int lengthScalegoups = settings.getScalegroups().size();
-        for (int i = 0; i < lengthScalegoups; i++) {
-            int lengthScales = settings.getScalegroups().get(i).getMusicStructures().size();
-            for (int j = 0; j < lengthScales; j++) {
-                allScales.add(settings.getScalegroups().get(i).getMusicStructures().get(j));
-            }
+    public ObservableList<Chordcomplexity> getChordcomplexityItems(ArrayList<Chordcomplexity> chordcomplexities){
+        ObservableList<Chordcomplexity> complexities = FXCollections.observableArrayList();
+        int length = chordcomplexities.size();
+        for(int i=0; i<length; i++){
+            complexities.add(chordcomplexities.get(i));
         }
-        return allScales;
+        return complexities;
     }
 
-    public ObservableList<String> getAllScalegroupsAsString() {
-        ObservableList<String> allGroups = FXCollections.observableArrayList();
-        int lengthScalegroups = settings.getScalegroups().size();
-        for(int i=0; i<lengthScalegroups; i++){
-            allGroups.add(settings.getScalegroups().get(i).getName());
+    public ObservableList<String> getMusicStructuresAsString(ArrayList<MusicStructure> musicStructures){
+        ObservableList<String> strings = FXCollections.observableArrayList();
+        int length = musicStructures.size();
+        for(int i=0; i<length; i++){
+            strings.add(musicStructures.get(i).getName());
         }
-        return allGroups;
+        return strings;
     }
 
-    public ObservableList<MusicStructureGroup> getAllScalegroups(){
-        ObservableList<MusicStructureGroup> allGroups = FXCollections.observableArrayList();
-        int lengthScalegroups = settings.getScalegroups().size();
-        for (int i = 0; i < lengthScalegroups; i++) {
-            allGroups.add(settings.getScalegroups().get(i));
+    public ObservableList<String> getMusicStructureGroupsAsString(ArrayList<MusicStructureGroup> musicStructureGroups){
+        ObservableList<String> strings = FXCollections.observableArrayList();
+        int length = musicStructureGroups.size();
+        for(int i=0; i<length; i++){
+            strings.add(musicStructureGroups.get(i).getName());
         }
-        return allGroups;
+        return strings;
     }
 
-    public ObservableList<String> getAllChordcomplexitiesAsString() {
-        ObservableList<String> allComplexities = FXCollections.observableArrayList();
-        int lengthComplexities = settings.getChordcomplexities().size();
-        for(int i=0; i<lengthComplexities; i++){
-            allComplexities.add(settings.getChordcomplexities().get(i).getName());
+    public ObservableList<String> getChordcomplexitiesAsString(ArrayList<Chordcomplexity> chordcomplexities){
+        ObservableList<String> complexities = FXCollections.observableArrayList();
+        int length = chordcomplexities.size();
+        for(int i=0; i<length; i++){
+            complexities.add(chordcomplexities.get(i).getName());
         }
-        return allComplexities;
+        return complexities;
     }
 }
