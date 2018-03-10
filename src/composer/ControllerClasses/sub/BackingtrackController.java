@@ -19,8 +19,10 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javafx.scene.shape.Path;
 import jm.music.data.*;
 
 public class BackingtrackController extends Controller {
@@ -75,8 +77,6 @@ public class BackingtrackController extends Controller {
                 chbPatternChord.setItems(chordsAsString);
             }
         });
-
-
     }
 
     @Override
@@ -85,14 +85,6 @@ public class BackingtrackController extends Controller {
         edtGeneralTempo.setText("120");
         edtGeneralTone.setText("C");
         edtGeneralRepeat.setText("3");
-        int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(),"Basic");
-        int indexOfComplexity = settings.getIndexOfComplexity("Medium");
-//        if(indexOfGroup>-1) {
-//            chbPatternChordgroups.setValue(allChordgroupsAsString.get(indexOfGroup));
-//        }
-//        if(indexOfComplexity>-1) {
-//            chbPatternChordcomplexity.setValue(allChordcomplexitiesAsString.get(indexOfComplexity));
-//        }
     }
 
     @Override
@@ -118,24 +110,24 @@ public class BackingtrackController extends Controller {
 
     @FXML
     public void onOpen(ActionEvent actionEvent){
-        File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent);
-        if (selectedFile != null) {
-            bt.readMIDIinScore(selectedFile.getPath());
-            msg(selectedFile.getName() + " loaded.",MSG_S);
-        } else {
-            msg("File could not be loaded.",MSG_E);
-        }
+        if(new File(settings.getDefault_location()).exists()) {
+            File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent);
+            if (selectedFile != null) {
+                bt.readMIDIinScore(selectedFile.getPath());
+                msg(selectedFile.getName() + " loaded.", MSG_S);
+            } else {msg("File could not be loaded.", MSG_E);}
+        } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
 
     @FXML
     public void onSave(ActionEvent actionEvent){
-        File selectedFile = midiFileChooser("Choose place for saving File", actionEvent);
-        if (selectedFile != null) {
-            bt.writeScoreinMIDI(selectedFile.getPath());
-            msg(selectedFile.getName() + " saved.",MSG_S);
-        } else {
-            msg("File could not be saved.",MSG_E);
-        }
+        if(new File(settings.getDefault_location()).exists()) {
+            File selectedFile = midiFileChooser("Choose place for saving File", actionEvent);
+            if (selectedFile != null) {
+                bt.writeScoreinMIDI(selectedFile.getPath());
+                msg(selectedFile.getName() + " saved.",MSG_S);
+            } else {msg("File could not be saved.", MSG_E);}
+        } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
 
     @FXML

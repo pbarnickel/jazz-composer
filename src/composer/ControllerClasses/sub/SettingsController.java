@@ -112,18 +112,18 @@ public class SettingsController extends Controller {
 
     @FXML
     public void onFiles(ActionEvent actionEvent) {
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Choose default location for project files");
-        chooser.setInitialDirectory(new File(settings.getDefault_location()));
-        Stage stg = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        File dir = chooser.showDialog(stg);
-        if (dir != null) {
-            settings.setDefault_location(dir.getPath());
-            edtDefaultLocation.setText(dir.getPath());
-            msg(dir.getPath() + " selected." + callSave, MSG_W);
-        } else {
-            msg("No directory selected.", MSG_E);
-        }
+        if(new File(settings.getDefault_location()).exists()) {
+            DirectoryChooser chooser = new DirectoryChooser();
+            chooser.setTitle("Choose default location for project files");
+            chooser.setInitialDirectory(new File(settings.getDefault_location()));
+            Stage stg = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            File dir = chooser.showDialog(stg);
+            if (dir != null) {
+                settings.setDefault_location(dir.getPath());
+                edtDefaultLocation.setText(dir.getPath());
+                msg(dir.getPath() + " selected." + callSave, MSG_W);
+            } else {msg("No directory selected.", MSG_E);}
+        } else { msg("Default directory not valid. Change it manually in the edit-field.",MSG_E);}
     }
 
     @FXML
