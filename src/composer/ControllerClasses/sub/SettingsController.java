@@ -62,6 +62,7 @@ public class SettingsController extends Controller {
     @FXML private TableColumn<MusicStructure, String> colScalesName;
     @FXML private TableColumn<MusicStructure, String> colScalesUsage;
     @FXML private TableColumn<MusicStructure, String> colScalesGroup;
+    @FXML private TableColumn<MusicStructure, String> colScalesMode;
     @FXML private TextField edtScalesName;
     @FXML private TextField edtScalesUsage;
     @FXML private ChoiceBox chbScalesGroup;
@@ -162,6 +163,7 @@ public class SettingsController extends Controller {
         colScalesName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));
         colScalesUsage.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("usageAsString"));
         colScalesGroup.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("group"));
+        colScalesMode.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("mode"));
         colScalegroupsName.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, String>("name"));
         colScalegroupsNr.setCellValueFactory(new PropertyValueFactory<MusicStructureGroup, Integer>("nrOfMusicStructures"));
 

@@ -19,10 +19,8 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
-import javafx.scene.shape.Path;
 import jm.music.data.*;
 
 public class BackingtrackController extends Controller {
