@@ -339,5 +339,7 @@ public class BackingtrackController extends Controller {
 
     @FXML
     public void onPatternPlay(ActionEvent actionEvent) {
+        Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+        if(patternelement != null)patternelement.getChord().play(true);
     }
 }
