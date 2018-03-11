@@ -24,11 +24,11 @@ public final class Main extends Application {
     }
 
     public static void main(String[] args) {
-        d("Barnickel Jazz Composer started.");
+        p("Barnickel Jazz Composer started.");
         launch(args);
     }
 
-    public static void d(String str){
+    public static void p(String str){
         System.out.println(str);
     }
 }

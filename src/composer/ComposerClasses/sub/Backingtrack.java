@@ -21,15 +21,12 @@
 package composer.ComposerClasses.sub;
 
 import composer.ComposerClasses.Composer;
-import composer.DataClasses.Chordcomplexity;
 import composer.DataClasses.MusicStructure;
 import composer.DataClasses.MusicStructureGroup;
 import composer.DataClasses.Patternelement;
 import jm.music.data.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Backingtrack extends Composer {
 

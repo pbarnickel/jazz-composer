@@ -21,9 +21,10 @@ import jm.util.View;
 import jm.util.Write;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static composer.Main.p;
 
 public class Composer implements JMC, Tempo {
 

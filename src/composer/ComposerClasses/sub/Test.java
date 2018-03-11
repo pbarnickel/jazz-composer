@@ -19,7 +19,6 @@ public class Test implements JMC {
         Note n = new Note(C4, QUARTER_NOTE);
         Phrase phr = new Phrase();
         phr.addNote(n);
-
         View.notate(phr);
     }
 

@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static composer.Main.p;
+
 public abstract class Controller implements MessageTypes, JMC, Regex {
 
     protected Response r;
