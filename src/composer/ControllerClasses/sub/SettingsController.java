@@ -156,14 +156,14 @@ public class SettingsController extends Controller {
 
     public void update(){
         //set up lists
-        allChords = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getChordgroups()));
-        allScales = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getScalegroups()));
-        allChordgroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getChordgroups()));
-        allScalegroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getScalegroups()));
-        allChordcomplexities = FXCollections.observableArrayList(getChordcomplexityItems(settings.getChordcomplexities()));
-        allChordgroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getChordgroups()));
-        allScalegroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getScalegroups()));
-        allChordcomplexitiesAsString = FXCollections.observableArrayList(getChordcomplexitiesAsString(settings.getChordcomplexities()));
+        allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
+        allScales = FXCollections.observableArrayList(getAllItems(settings.getScalegroups()));
+        allChordgroups = FXCollections.observableArrayList(settings.getChordgroups());
+        allScalegroups = FXCollections.observableArrayList(settings.getScalegroups());
+        allChordcomplexities = FXCollections.observableArrayList(settings.getChordcomplexities());
+        allChordgroupsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups()));
+        allScalegroupsAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups()));
+        allChordcomplexitiesAsString = FXCollections.observableArrayList(getStrings(settings.getChordcomplexities()));
 
         //set up columns in table
         colChordsName.setCellValueFactory(new PropertyValueFactory<MusicStructure, String>("name"));

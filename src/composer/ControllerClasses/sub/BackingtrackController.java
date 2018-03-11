@@ -60,19 +60,19 @@ public class BackingtrackController extends Controller {
 
     public void update(){
         //load lists
-        allChords = FXCollections.observableArrayList(getAllMusicStructureItems(settings.getChordgroups()));
-        allChordgroups = FXCollections.observableArrayList(getMusicStructureGroupsItems(settings.getChordgroups()));
-        allChordgroupsAsString = FXCollections.observableArrayList(getMusicStructureGroupsAsString(settings.getChordgroups()));
-        allChordcomplexities = FXCollections.observableArrayList(getChordcomplexityItems(settings.getChordcomplexities()));
-        allChordcomplexitiesAsString = FXCollections.observableArrayList(getChordcomplexitiesAsString(settings.getChordcomplexities()));
+        allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
+        allChordgroups = FXCollections.observableArrayList(settings.getChordgroups());
+        allChordgroupsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups()));
+        allChordcomplexities = FXCollections.observableArrayList(settings.getChordcomplexities());
+        allChordcomplexitiesAsString = FXCollections.observableArrayList(getStrings(settings.getChordcomplexities()));
         chbPatternChordgroups.setItems(allChordgroupsAsString);
         chbPatternChordcomplexity.setItems(allChordcomplexitiesAsString);
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), newValue.toString());
-                chords = FXCollections.observableArrayList(getMusicStructureItems(settings.getChordgroups().get(indexOfGroup)));
-                chordsAsString = FXCollections.observableArrayList(getMusicStructuresAsString(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
+                chords = FXCollections.observableArrayList(settings.getChordgroups().get(indexOfGroup).getMusicStructures());
+                chordsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
                 chbPatternChord.setItems(chordsAsString);
             }
         });
