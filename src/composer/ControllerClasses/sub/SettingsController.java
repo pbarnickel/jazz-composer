@@ -203,18 +203,10 @@ public class SettingsController extends Controller {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
         int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), chordSelected.getGroup());
-        if(settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), newName)){
-            if (newName.matches(REG_CHORD_NAME)) {
-                chordSelected.setName(newName);
-                msg("Value changed." + callSave, MSG_W);
-            } else {
-                tblChords.refresh();
-                msg("Value not valid.", MSG_E);
-            }
-        } else {
-            tblChords.refresh();
-            msg(newName + " exists already in " + chordSelected.getGroup() + ".", MSG_E);
-        }
+        if(newName.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), newName)){
+            chordSelected.setName(newName);
+            msg("Value changed." + callSave, MSG_W);
+        } else {msg("Name not valid or already used.", MSG_E);}
     }
 
     @FXML
@@ -224,10 +216,7 @@ public class SettingsController extends Controller {
         if(newUsage.matches(REG_CHORD_USAGE)) {
             chordSelected.setUsage(getUsageAsArray(newUsage));
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblChords.refresh();
-            msg("Value not valid.", MSG_E);
-        }
+        } else {msg("Value not valid.", MSG_E);}
     }
 
     @FXML
@@ -245,39 +234,29 @@ public class SettingsController extends Controller {
             allChords.add(chordSelected);
             settings.getChordgroups().get(indexNewGroup).addMusicStructure(chordSelected);
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblChords.refresh();
-            msg(chordSelected.getName() + " exists already in " + newGroup + ".",MSG_E);
-        }
+        } else {msg(chordSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
 
     @FXML
     public void onChordsAdd(ActionEvent actionEvent) {
         String error = "Chord could not be added. ";
-        String name = edtChordsName.getText();
-        String usageText = edtChordsUsage.getText();
-        String group = chbChordsGroup.getValue().toString();
-        int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), group);
-        if(name.matches(REG_CHORD_NAME)){
-            if(settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)) {
-                if (usageText.matches(REG_CHORD_USAGE)) {
+        if(!edtChordsName.getText().isEmpty() && !edtChordsUsage.getText().isEmpty() && chbChordsGroup.getValue()!=null){
+            String name = edtChordsName.getText();
+            String usageText = edtChordsUsage.getText();
+            String group = chbChordsGroup.getValue().toString();
+            int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), group);
+            if(name.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)){
+                if(usageText.matches(REG_CHORD_USAGE)){
                     ArrayList<Integer> usage = getUsageAsArray(usageText);
-                    if (group != null) {
-                        int lengthChordgroups = settings.getChordgroups().size();
-                        for (int i = 0; i < lengthChordgroups; i++) {
-                            if (group.equals(settings.getChordgroups().get(i).getName())) {
-                                MusicStructure chord = new MusicStructure(name, usage, group);
-                                settings.getChordgroups().get(i).addMusicStructure(chord);
-                                tblChords.getItems().add(chord);
-                                edtChordsName.clear();
-                                edtChordsUsage.clear();
-                                msg("Chord " + name + " added." + callSave, MSG_W);
-                            }
-                        }
-                    } else {msg(error + "No group selected.", MSG_E);}
-                } else {msg(error + "Usage is empty or not in the right format (Example: 0-2-7).", MSG_E);}
-            } else {msg(error + name + " exists already in " + group + ".", MSG_E);}
-        } else {msg(error + "Name is not valid.", MSG_E);}
+                    MusicStructure chord = new MusicStructure(name, usage, group);
+                    settings.getChordgroups().get(indexOfGroup).addMusicStructure(chord);
+                    tblChords.getItems().add(chord);
+                    edtChordsName.clear();
+                    edtChordsUsage.clear();
+                    msg("Chord " + name + " added." + callSave, MSG_W);
+                } else {msg(error + "Usage not valid.",MSG_E);}
+            } else {msg(error + "Name not valid or already used.",MSG_E);}
+        } else {msg(error + "All fields are required.",MSG_E);}
     }
 
     @FXML
@@ -288,15 +267,13 @@ public class SettingsController extends Controller {
             allChords.remove(chord);
             settings.getChordgroups().get(indexChordgroup).delMusicStructure(chord);
             msg("Chord deleted." + callSave, MSG_W);
-        } else {
-            msg("No chord selected.", MSG_E);
-        }
+        } else {msg("No chord selected.", MSG_E);}
     }
 
     public void onChordsPlay(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
         if(chord != null)chord.play(true);
-        else msg("No chord selected",MSG_E);
+        else msg("No chord selected.",MSG_E);
     }
 
     /********************************************CHORDGROUPS***********************************************************/
@@ -305,36 +282,25 @@ public class SettingsController extends Controller {
     public void changeChordgroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup chordgroupSelected = tblChordgroups.getSelectionModel().getSelectedItem();
-        if(settings.isGroupNameUnique(settings.getChordgroups(), newName)) {
-            if (newName.matches(REG_CHORD_NAME)) {
-                chordgroupSelected.setName(newName);
-                chordgroupSelected.changeMusicStructureGroupInMusicStructures();
-                msg("Value changed." + callSave, MSG_W);
-            } else {
-                tblScalegroups.refresh();
-                msg("Value not valid.", MSG_E);
-            }
-        } else {
-            tblScalegroups.refresh();
-            msg("There is already a chordgroup named " + newName + ".", MSG_E);
-        }
+        if(newName.matches(REG_CHORD_NAME) && settings.isGroupNameUnique(settings.getChordgroups(), newName)) {
+            chordgroupSelected.setName(newName);
+            chordgroupSelected.changeMusicStructureGroupInMusicStructures();
+            msg("Value changed." + callSave, MSG_W);
+        } else {msg("Name not valid or already used.", MSG_E);}
     }
 
     @FXML
     public void onChordgroupsAdd(ActionEvent actionEvent) {
         String error = "Chordgroup could not be added. ";
         String name = edtChordgroupsName.getText();
-        if(settings.isGroupNameUnique(settings.getChordgroups(), name)){
-            if(name.matches(REG_NAME)){
-                MusicStructureGroup chordgroup = new MusicStructureGroup();
-                chordgroup.setName(name);
-                settings.getChordgroups().add(chordgroup);
-                allChordgroups.add(chordgroup);
-                allChordgroupsAsString.add(chordgroup.getName());
-                edtChordgroupsName.clear();
-                msg("Chordgroup added." + callSave, MSG_W);
-            } else {msg(error + name + " is not a valid name.",MSG_E);}
-        } else {msg(error + "There is already a chordgroup named " + name + ".",MSG_E);}
+        if(name.matches(REG_NAME) && settings.isGroupNameUnique(settings.getChordgroups(), name)){
+            MusicStructureGroup chordgroup = new MusicStructureGroup(name);
+            settings.getChordgroups().add(chordgroup);
+            allChordgroups.add(chordgroup);
+            allChordgroupsAsString.add(chordgroup.getName());
+            edtChordgroupsName.clear();
+            msg("Chordgroup " + name + " added." + callSave, MSG_W);
+        } else {msg(error + "Name not valid or already used.",MSG_E);}
     }
 
     @FXML
@@ -346,9 +312,7 @@ public class SettingsController extends Controller {
             settings.delChordgroup(chordgroup);
             update();
             msg("Chordgroup deleted." + callSave, MSG_W);
-        } else {
-            msg("No chordgroup selected.",MSG_E);
-        }
+        } else {msg("No chordgroup selected.",MSG_E);}
     }
 
     /********************************************CHORDCOMPLEXITY*******************************************************/
@@ -357,18 +321,10 @@ public class SettingsController extends Controller {
     public void changeChordcomplexityNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
-        if(settings.isComplexityUnique(newName)) {
-            if (newName.matches(REG_NAME)) {
-                chordcomplexitySelected.setName(newName);
-                msg("Value changed." + callSave, MSG_W);
-            } else {
-                tblChordcomplexity.refresh();
-                msg("Value not valid.", MSG_E);
-            }
-        } else {
-            tblChordcomplexity.refresh();
-            msg(newName + " exists already.", MSG_E);
-        }
+        if(newName.matches(REG_NAME) && settings.isComplexityUnique(newName)) {
+            chordcomplexitySelected.setName(newName);
+            msg("Value changed." + callSave, MSG_W);
+        } else {msg("Name not valid or already used.", MSG_E);}
     }
 
     @FXML
@@ -378,10 +334,7 @@ public class SettingsController extends Controller {
         if (newMin.matches(REG_NUMBER)) {
             chordcomplexitySelected.setMin(Integer.parseInt(newMin));
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblChordcomplexity.refresh();
-            msg("Value not valid.", MSG_E);
-        }
+        } else {msg("Value not valid.", MSG_E);}
     }
 
     @FXML
@@ -391,10 +344,7 @@ public class SettingsController extends Controller {
         if (newMax.matches(REG_NUMBER)) {
             chordcomplexitySelected.setMax(Integer.parseInt(newMax));
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblChordcomplexity.refresh();
-            msg("Value not valid.", MSG_E);
-        }
+        } else {msg("Value not valid.", MSG_E);}
     }
 
     @FXML
@@ -403,21 +353,17 @@ public class SettingsController extends Controller {
         String name = edtChordcomplexityName.getText();
         String min = edtChordcomplexityMin.getText();
         String max = edtChordcomplexityMax.getText();
-        if(name.matches(REG_NAME)){
-            if(settings.isComplexityUnique(name)){
-                if(min.matches(REG_NUMBER)){
-                    if(max.matches(REG_NUMBER)){
-                        Chordcomplexity chordcomplexity = new Chordcomplexity(name, Integer.parseInt(min), Integer.parseInt(max));
-                        settings.getChordcomplexities().add(chordcomplexity);
-                        allChordcomplexities.add(chordcomplexity);
-                        edtChordcomplexityName.clear();
-                        edtChordcomplexityMin.clear();
-                        edtChordcomplexityMax.clear();
-                        msg("Chordcomplexity added." + callSave, MSG_W);
-                    } else {msg(error + max + "is not a valid number.",MSG_E);}
-                } else {msg(error + min + "is not a valid number.",MSG_E);}
-            } else {msg(error + name + " exists already.", MSG_E);}
-        } else {msg(error + name + " is not a valid name.",MSG_E);}
+        if(name.matches(REG_NAME) && settings.isComplexityUnique(name)){
+            if(min.matches(REG_NUMBER) && max.matches(REG_NUMBER)){
+                Chordcomplexity chordcomplexity = new Chordcomplexity(name, Integer.parseInt(min), Integer.parseInt(max));
+                settings.getChordcomplexities().add(chordcomplexity);
+                allChordcomplexities.add(chordcomplexity);
+                edtChordcomplexityName.clear();
+                edtChordcomplexityMin.clear();
+                edtChordcomplexityMax.clear();
+                msg("Chordcomplexity added." + callSave, MSG_W);
+            } else {msg("Min or Max are not valid.",MSG_E);}
+        } else {msg(error + name + " is not valid or already used.",MSG_E);}
     }
 
     @FXML
@@ -427,9 +373,7 @@ public class SettingsController extends Controller {
             allChordcomplexities.remove(chordcomplexity);
             settings.delChordcomplexity(chordcomplexity);
             msg("Complexity deleted." + callSave, MSG_W);
-        } else {
-            msg("No complexity selected.",MSG_E);
-        }
+        } else {msg("No complexity selected.",MSG_E);}
     }
 
     /********************************************SCALES****************************************************************/
@@ -439,18 +383,10 @@ public class SettingsController extends Controller {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
         int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), scaleSelected.getGroup());
-        if(settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), newName)){
-            if (newName.matches(REG_CHORD_NAME)) {
-                scaleSelected.setName(newName);
-                msg("Value changed." + callSave, MSG_W);
-            } else {
-                tblScales.refresh();
-                msg("Value not valid.", MSG_E);
-            }
-        } else {
-            tblScales.refresh();
-            msg(newName + " exists already in " + scaleSelected.getGroup() + ".", MSG_E);
-        }
+        if(newName.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), newName)){
+            scaleSelected.setName(newName);
+            msg("Value changed." + callSave, MSG_W);
+        } else {msg("Name not valid or already used.", MSG_E);}
     }
 
     @FXML
@@ -460,10 +396,7 @@ public class SettingsController extends Controller {
         if(newUsage.matches(REG_CHORD_USAGE)) {
             scaleSelected.setUsage(getUsageAsArray(newUsage));
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblScales.refresh();
-            msg("Value not valid.", MSG_E);
-        }
+        } else {msg("Value not valid.", MSG_E);}
     }
 
     @FXML
@@ -474,47 +407,36 @@ public class SettingsController extends Controller {
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
         if(settings.isStructureNameUnique(settings.getScalegroups().get(indexNewGroup).getMusicStructures(), scaleSelected.getName())) {
             //remove
-            allChords.remove(scaleSelected);
+            allScales.remove(scaleSelected);
             settings.getScalegroups().get(indexOldGroup).delMusicStructure(scaleSelected);
             //add
             scaleSelected.setGroup(newGroup);
-            allChords.add(scaleSelected);
+            allScales.add(scaleSelected);
             settings.getScalegroups().get(indexNewGroup).addMusicStructure(scaleSelected);
             msg("Value changed." + callSave, MSG_W);
-        } else {
-            tblScales.refresh();
-            msg(scaleSelected.getName() + " exists already in " + newGroup + ".",MSG_E);
-        }
+        } else {msg(scaleSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
 
     @FXML
     public void onScalesAdd(ActionEvent actionEvent) {
         String error = "Scale could not be added. ";
-        String name = edtScalesName.getText();
-        String usageText = edtScalesUsage.getText();
-        String group = chbScalesGroup.getValue().toString();
-        int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), group);
-        if(name.matches(REG_CHORD_NAME)){
-            if(settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)) {
-                if (usageText.matches(REG_CHORD_USAGE)) {
+        if(!edtScalesName.getText().isEmpty() && !edtScalesUsage.getText().isEmpty() && chbScalesGroup.getValue()!=null){
+            String name = edtScalesName.getText();
+            String usageText = edtScalesUsage.getText();
+            String group = chbScalesGroup.getValue().toString();
+            int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), group);
+            if(name.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)){
+                if(usageText.matches(REG_CHORD_USAGE)){
                     ArrayList<Integer> usage = getUsageAsArray(usageText);
-                    if (group != null) {
-                        int lengthScalegroups = settings.getScalegroups().size();
-                        for (int i = 0; i < lengthScalegroups; i++) {
-                            if (group.equals(settings.getScalegroups().get(i).getName())) {
-                                MusicStructure scale = new MusicStructure(name, usage, group);
-                                settings.getScalegroups().get(i).addMusicStructure(scale);
-                                tblScales.getItems().add(scale);
-                                edtScalesName.clear();
-                                edtScalesUsage.clear();
-                                msg("Scale " + name + " added." + callSave, MSG_W);
-                                continue;
-                            }
-                        }
-                    } else {msg(error + "No group selected.", MSG_E);}
-                } else {msg(error + "Usage is empty or not in the right format (Example: 0-2-7).", MSG_E);}
-            } else {msg(error + name + " exists already.", MSG_E);}
-        } else {msg(error + "Name is not valid.", MSG_E);}
+                    MusicStructure scale = new MusicStructure(name, usage, group);
+                    settings.getScalegroups().get(indexOfGroup).addMusicStructure(scale);
+                    tblScales.getItems().add(scale);
+                    edtScalesName.clear();
+                    edtScalesUsage.clear();
+                    msg("Scale " + name + " added." + callSave, MSG_W);
+                } else {msg(error + "Usage not valid.",MSG_E);}
+            } else {msg(error + "Name not valid or already used.",MSG_E);}
+        } else {msg(error + "All fields are required.",MSG_E);}
     }
 
     @FXML
@@ -525,9 +447,7 @@ public class SettingsController extends Controller {
             allScales.remove(scale);
             settings.getScalegroups().get(indexScalegroup).delMusicStructure(scale);
             msg("Scale deleted." + callSave, MSG_W);
-        } else {
-            msg("No scale selected.", MSG_E);
-        }
+        } else {msg("No scale selected.", MSG_E);}
     }
 
     public void onScalesPlay(ActionEvent actionEvent) {
@@ -542,36 +462,25 @@ public class SettingsController extends Controller {
     public void changeScalegroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup scalegroupSelected = tblScalegroups.getSelectionModel().getSelectedItem();
-        if(settings.isGroupNameUnique(settings.getScalegroups(), newName)) {
-            if (newName.matches(REG_NAME)) {
-                scalegroupSelected.setName(newName);
-                scalegroupSelected.changeMusicStructureGroupInMusicStructures();
-                msg("Value changed." + callSave, MSG_W);
-            } else {
-                tblScalegroups.refresh();
-                msg("Value not valid.", MSG_E);
-            }
-        } else {
-            tblScalegroups.refresh();
-            msg("There is already a scalegroup named " + newName + ".", MSG_E);
-        }
+        if(newName.matches(REG_NAME) && settings.isGroupNameUnique(settings.getScalegroups(), newName)) {
+            scalegroupSelected.setName(newName);
+            scalegroupSelected.changeMusicStructureGroupInMusicStructures();
+            msg("Value changed." + callSave, MSG_W);
+        } else {msg("Name not valid or already used.", MSG_E);}
     }
 
     @FXML
     public void onScalegroupsAdd(ActionEvent actionEvent) {
         String error = "Scalegroup could not be added. ";
         String name = edtScalegroupsName.getText();
-        if(settings.isGroupNameUnique(settings.getScalegroups(), name)){
-            if(name.matches(REG_NAME)){
-                MusicStructureGroup scalegroup = new MusicStructureGroup();
-                scalegroup.setName(name);
-                settings.getScalegroups().add(scalegroup);
-                allScalegroups.add(scalegroup);
-                allScalegroupsAsString.add(scalegroup.getName());
-                edtScalegroupsName.clear();
-                msg("Scalegroup added." + callSave, MSG_W);
-            } else {msg(error + name + " is not a valid name.",MSG_E);}
-        } else {msg(error + "There is already a scalegroup named " + name + ".",MSG_E);}
+        if(name.matches(REG_NAME) && settings.isGroupNameUnique(settings.getScalegroups(), name)){
+            MusicStructureGroup scalegroup = new MusicStructureGroup(name);
+            settings.getScalegroups().add(scalegroup);
+            allScalegroups.add(scalegroup);
+            allScalegroupsAsString.add(scalegroup.getName());
+            edtScalegroupsName.clear();
+            msg("Scalegroup added." + callSave, MSG_W);
+        } else {msg(error + name + " is not valid or is already used.",MSG_E);}
     }
 
     @FXML
@@ -583,8 +492,6 @@ public class SettingsController extends Controller {
             settings.delScalegroup(scalegroup);
             update();
             msg("Scalegroup deleted." + callSave, MSG_W);
-        } else {
-            msg("No scalegroup selected.",MSG_E);
-        }
+        } else {msg("No scalegroup selected.",MSG_E);}
     }
 }

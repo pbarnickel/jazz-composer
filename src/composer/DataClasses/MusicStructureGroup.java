@@ -18,6 +18,11 @@ public class MusicStructureGroup extends MusicElement {
         this.musicStructures = new ArrayList<MusicStructure>();
     }
 
+    public MusicStructureGroup(String name){
+        this.name = name;
+        this.musicStructures = new ArrayList<MusicStructure>();
+    }
+
     public String getName(){
         return name;
     }

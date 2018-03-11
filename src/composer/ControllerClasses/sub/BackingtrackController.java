@@ -26,6 +26,7 @@ import jm.music.data.*;
 public class BackingtrackController extends Controller {
 
     private Backingtrack bt = new Backingtrack();
+    private String error = "Composition unsuccessful. ";
 
     //Common
     @FXML private Label lblOut;
@@ -150,32 +151,32 @@ public class BackingtrackController extends Controller {
 
     @FXML
     public void onCompose(ActionEvent actionEvent) {
-        String error = "Composition unsuccessful: ";
-        if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
-            if(edtGeneralTempo.getText().matches(REG_TEMPO)){
-                if(edtGeneralTone.getText().matches(REG_TONE)){
-                    if(edtGeneralRepeat.getText().matches(REG_NUMBER)){
-                        if(chbPatternChordcomplexity.getValue() != null) {
-                            if(chbPatternChordgroups.getValue() != null) {
-                                Boolean instruments[] = new Boolean[3];
-                                int tempo = Integer.parseInt(edtGeneralTempo.getText());
-                                int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-                                String tone = edtGeneralTone.getText();
-                                instruments[0] = tglGeneralPiano.isSelected();
-                                instruments[1] = tglGeneralBass.isSelected();
-                                instruments[2] = tglGeneralDrums.isSelected();
-                                ArrayList<Patternelement> pattern = new ArrayList<Patternelement>();
-                                bt.createBackingtrack(instruments, tempo, tone, repeat, pattern);
-                                msg("Composition created successfully.", MSG_S);
-                            } else {msg(error + "No chordgroup selected.", MSG_E);}
-                        } else {msg(error + "No chordcomplexity selected.", MSG_E);}
-                    } else {msg(error + "Repeat is not a number greater than zero.", MSG_E);}
-                } else {msg(error + "Tone is not valid.", MSG_E);}
-            } else {msg(error + "Tempo is not a number.", MSG_E);}
-        } else {msg(error + "No instruments active.", MSG_E);}
+        if(validateGeneral()){
+            // TODO: Extend Composer with Band has Band-members. Adding a Band-Members if toggleBtns are selected.
+            Boolean instruments[] = new Boolean[3];
+            int tempo = Integer.parseInt(edtGeneralTempo.getText());
+            int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
+            String tone = edtGeneralTone.getText();
+            instruments[0] = tglGeneralPiano.isSelected();
+            instruments[1] = tglGeneralBass.isSelected();
+            instruments[2] = tglGeneralDrums.isSelected();
+            ArrayList<Patternelement> pattern = new ArrayList<Patternelement>();
+            bt.createBackingtrack(instruments, tempo, tone, repeat, pattern);
+            msg("Composition created successfully.", MSG_S);
+        }
     }
 
     /*************************************** GENERAL ******************************************************************/
+
+    public boolean validateGeneral(){
+        if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
+            if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE)
+                    && edtGeneralRepeat.getText().matches(REG_NUMBER)){
+                return true;
+            } else {msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);}
+        } else {msg(error + "No instruments active.", MSG_E);}
+        return false;
+    }
 
     @FXML
     public void onGeneralPiano(ActionEvent actionEvent) {
