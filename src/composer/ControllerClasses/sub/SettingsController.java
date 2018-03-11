@@ -13,12 +13,18 @@ import composer.DataClasses.Response;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -28,7 +34,10 @@ import java.util.ArrayList;
 
 public class SettingsController extends Controller {
 
+    public static final KeyCombination kcCtrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN);
+
     //Common
+    @FXML private VBox vboxSettings;
     @FXML private Label lblOut;
     @FXML private TextField edtDefaultLocation;
 
@@ -76,6 +85,12 @@ public class SettingsController extends Controller {
     private String callSave = " Please save the settings.";
 
     public void initialize() {
+        vboxSettings.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(kcCtrlS.match(event)){onSave(new ActionEvent());}
+            }
+        });
         settings = new Settings();
         update();
     }
