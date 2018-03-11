@@ -25,8 +25,11 @@ import composer.DataClasses.MusicStructure;
 import composer.DataClasses.MusicStructureGroup;
 import composer.DataClasses.Patternelement;
 import jm.music.data.*;
+import jm.util.Play;
 
 import java.util.ArrayList;
+
+import static composer.Main.p;
 
 public class Backingtrack extends Composer {
 

@@ -10,7 +10,7 @@ Part            -       Einzelne Stimme oder einzelnes Instrument, die oder welc
 Phrase			-		Ausdruck mit beliebig vielen Noten. Reihenfolge des Hinzufügens hat Relevanz. Phrasen werden
                         einem Part hinzugefügt.
 Pitch   		-		Tonhöhe
-Note            -       Kernelement zur Beschreibung von Musik. Kann mehrere durch mehrere Parameter beschrieben werden:
+Note            -       Kernelement zur Beschreibung von Musik. Kann durch mehrere Parameter beschrieben werden:
                             Pitch (Tonhöhe)
                             Ryhtmus (Notenwert)
                         Noten können als Liste in eine Phrase gesetzt werden.

@@ -53,52 +53,18 @@ public class Settings {
 
     public String getPathForDefaultSettings(){return new File("").getAbsolutePath() + "/src/composer/JSON/default.json";}
 
-    public int getIndexOfGroup(ArrayList<MusicStructureGroup> group, String groupName){
-        int length = group.size();
+    public int getIndexOfMusicElement(ArrayList<? extends MusicElement> musicElements, String element){
+        int length = musicElements.size();
         for(int i=0; i<length; i++){
-            if(group.get(i).getName().equals(groupName)){
-                return i;
-            }
+            if(musicElements.get(i).getName().equals(element))return i;
         }
         return -1;
     }
 
-    public int getIndexOfComplexity(String name){
-        int length = chordcomplexities.size();
+    public boolean isNameUnique(ArrayList<? extends MusicElement> musicElements, String name){
+        int length = musicElements.size();
         for(int i=0; i<length; i++){
-            if(chordcomplexities.get(i).getName().equals(name)){
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public boolean isStructureNameUnique(ArrayList<MusicStructure> list, String name){
-        int length = list.size();
-        for(int i=0; i<length; i++){
-            if(list.get(i).getName().equals(name)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isGroupNameUnique(ArrayList<MusicStructureGroup> list, String name){
-        int length = list.size();
-        for(int i=0; i<length; i++){
-            if(list.get(i).getName().equals(name)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isComplexityUnique(String name){
-        int length = chordcomplexities.size();
-        for(int i=0; i<length; i++){
-            if(chordcomplexities.get(i).getName().equals(name)){
-                return false;
-            }
+            if(musicElements.get(i).getName().equals(name))return false;
         }
         return true;
     }

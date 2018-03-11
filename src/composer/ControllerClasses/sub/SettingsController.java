@@ -155,7 +155,7 @@ public class SettingsController extends Controller {
     }
 
     public void update(){
-        //set up lists
+        //load lists
         allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
         allScales = FXCollections.observableArrayList(getAllItems(settings.getScalegroups()));
         allChordgroups = FXCollections.observableArrayList(settings.getChordgroups());
@@ -217,8 +217,8 @@ public class SettingsController extends Controller {
     public void changeChordsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
-        int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), chordSelected.getGroup());
-        if(newName.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), newName)){
+        int indexOfGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chordSelected.getGroup());
+        if(newName.matches(REG_CHORD_NAME) && settings.isNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), newName)){
             chordSelected.setName(newName);
             msg("Value changed." + callSave, MSG_W);
         } else {msg("Name not valid or already used.", MSG_E);}
@@ -237,10 +237,10 @@ public class SettingsController extends Controller {
     @FXML
     public void changeChordsGroupCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newGroup = cellEdited.getNewValue().toString();
-        int indexOldGroup = settings.getIndexOfGroup(settings.getChordgroups(), cellEdited.getOldValue().toString());
-        int indexNewGroup = settings.getIndexOfGroup(settings.getChordgroups(), newGroup);
+        int indexOldGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), cellEdited.getOldValue().toString());
+        int indexNewGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), newGroup);
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
-        if(settings.isStructureNameUnique(settings.getChordgroups().get(indexNewGroup).getMusicStructures(), chordSelected.getName())) {
+        if(settings.isNameUnique(settings.getChordgroups().get(indexNewGroup).getMusicStructures(), chordSelected.getName())) {
             //remove
             allChords.remove(chordSelected);
             settings.getChordgroups().get(indexOldGroup).delMusicStructure(chordSelected);
@@ -259,8 +259,8 @@ public class SettingsController extends Controller {
             String name = edtChordsName.getText();
             String usageText = edtChordsUsage.getText();
             String group = chbChordsGroup.getValue().toString();
-            int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), group);
-            if(name.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)){
+            int indexOfGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), group);
+            if(name.matches(REG_CHORD_NAME) && settings.isNameUnique(settings.getChordgroups().get(indexOfGroup).getMusicStructures(), name)){
                 if(usageText.matches(REG_CHORD_USAGE)){
                     ArrayList<Integer> usage = getUsageAsArray(usageText);
                     MusicStructure chord = new MusicStructure(name, usage, group);
@@ -277,7 +277,7 @@ public class SettingsController extends Controller {
     @FXML
     public void onChordsDelete(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
-        int indexChordgroup = settings.getIndexOfGroup(settings.getChordgroups(), chord.getGroup());
+        int indexChordgroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chord.getGroup());
         if(chord != null){
             allChords.remove(chord);
             settings.getChordgroups().get(indexChordgroup).delMusicStructure(chord);
@@ -297,7 +297,7 @@ public class SettingsController extends Controller {
     public void changeChordgroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup chordgroupSelected = tblChordgroups.getSelectionModel().getSelectedItem();
-        if(newName.matches(REG_CHORD_NAME) && settings.isGroupNameUnique(settings.getChordgroups(), newName)) {
+        if(newName.matches(REG_CHORD_NAME) && settings.isNameUnique(settings.getChordgroups(), newName)) {
             chordgroupSelected.setName(newName);
             chordgroupSelected.changeMusicStructureGroupInMusicStructures();
             msg("Value changed." + callSave, MSG_W);
@@ -308,7 +308,7 @@ public class SettingsController extends Controller {
     public void onChordgroupsAdd(ActionEvent actionEvent) {
         String error = "Chordgroup could not be added. ";
         String name = edtChordgroupsName.getText();
-        if(name.matches(REG_NAME) && settings.isGroupNameUnique(settings.getChordgroups(), name)){
+        if(name.matches(REG_NAME) && settings.isNameUnique(settings.getChordgroups(), name)){
             MusicStructureGroup chordgroup = new MusicStructureGroup(name);
             settings.getChordgroups().add(chordgroup);
             allChordgroups.add(chordgroup);
@@ -336,7 +336,7 @@ public class SettingsController extends Controller {
     public void changeChordcomplexityNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
-        if(newName.matches(REG_NAME) && settings.isComplexityUnique(newName)) {
+        if(newName.matches(REG_NAME) && settings.isNameUnique(settings.getChordcomplexities(), newName)) {
             chordcomplexitySelected.setName(newName);
             msg("Value changed." + callSave, MSG_W);
         } else {msg("Name not valid or already used.", MSG_E);}
@@ -368,7 +368,7 @@ public class SettingsController extends Controller {
         String name = edtChordcomplexityName.getText();
         String min = edtChordcomplexityMin.getText();
         String max = edtChordcomplexityMax.getText();
-        if(name.matches(REG_NAME) && settings.isComplexityUnique(name)){
+        if(name.matches(REG_NAME) && settings.isNameUnique(settings.getChordcomplexities(), name)){
             if(min.matches(REG_NUMBER) && max.matches(REG_NUMBER)){
                 Chordcomplexity chordcomplexity = new Chordcomplexity(name, Integer.parseInt(min), Integer.parseInt(max));
                 settings.getChordcomplexities().add(chordcomplexity);
@@ -397,8 +397,8 @@ public class SettingsController extends Controller {
     public void changeScalesNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
-        int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), scaleSelected.getGroup());
-        if(newName.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), newName)){
+        int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), scaleSelected.getGroup());
+        if(newName.matches(REG_CHORD_NAME) && settings.isNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), newName)){
             scaleSelected.setName(newName);
             msg("Value changed." + callSave, MSG_W);
         } else {msg("Name not valid or already used.", MSG_E);}
@@ -417,10 +417,10 @@ public class SettingsController extends Controller {
     @FXML
     public void changeScalesGroupCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newGroup = cellEdited.getNewValue().toString();
-        int indexOldGroup = settings.getIndexOfGroup(settings.getScalegroups(), cellEdited.getOldValue().toString());
-        int indexNewGroup = settings.getIndexOfGroup(settings.getScalegroups(), newGroup);
+        int indexOldGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), cellEdited.getOldValue().toString());
+        int indexNewGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newGroup);
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
-        if(settings.isStructureNameUnique(settings.getScalegroups().get(indexNewGroup).getMusicStructures(), scaleSelected.getName())) {
+        if(settings.isNameUnique(settings.getScalegroups().get(indexNewGroup).getMusicStructures(), scaleSelected.getName())) {
             //remove
             allScales.remove(scaleSelected);
             settings.getScalegroups().get(indexOldGroup).delMusicStructure(scaleSelected);
@@ -439,8 +439,8 @@ public class SettingsController extends Controller {
             String name = edtScalesName.getText();
             String usageText = edtScalesUsage.getText();
             String group = chbScalesGroup.getValue().toString();
-            int indexOfGroup = settings.getIndexOfGroup(settings.getScalegroups(), group);
-            if(name.matches(REG_CHORD_NAME) && settings.isStructureNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)){
+            int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), group);
+            if(name.matches(REG_CHORD_NAME) && settings.isNameUnique(settings.getScalegroups().get(indexOfGroup).getMusicStructures(), name)){
                 if(usageText.matches(REG_CHORD_USAGE)){
                     ArrayList<Integer> usage = getUsageAsArray(usageText);
                     MusicStructure scale = new MusicStructure(name, usage, group);
@@ -457,7 +457,7 @@ public class SettingsController extends Controller {
     @FXML
     public void onScalesDelete(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
-        int indexScalegroup = settings.getIndexOfGroup(settings.getScalegroups(), scale.getGroup());
+        int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), scale.getGroup());
         if(scale != null){
             allScales.remove(scale);
             settings.getScalegroups().get(indexScalegroup).delMusicStructure(scale);
@@ -477,7 +477,7 @@ public class SettingsController extends Controller {
     public void changeScalegroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup scalegroupSelected = tblScalegroups.getSelectionModel().getSelectedItem();
-        if(newName.matches(REG_NAME) && settings.isGroupNameUnique(settings.getScalegroups(), newName)) {
+        if(newName.matches(REG_NAME) && settings.isNameUnique(settings.getScalegroups(), newName)) {
             scalegroupSelected.setName(newName);
             scalegroupSelected.changeMusicStructureGroupInMusicStructures();
             msg("Value changed." + callSave, MSG_W);
@@ -488,7 +488,7 @@ public class SettingsController extends Controller {
     public void onScalegroupsAdd(ActionEvent actionEvent) {
         String error = "Scalegroup could not be added. ";
         String name = edtScalegroupsName.getText();
-        if(name.matches(REG_NAME) && settings.isGroupNameUnique(settings.getScalegroups(), name)){
+        if(name.matches(REG_NAME) && settings.isNameUnique(settings.getScalegroups(), name)){
             MusicStructureGroup scalegroup = new MusicStructureGroup(name);
             settings.getScalegroups().add(scalegroup);
             allScalegroups.add(scalegroup);

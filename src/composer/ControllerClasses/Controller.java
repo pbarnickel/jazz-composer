@@ -41,6 +41,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected ObservableList<String> allChordgroupsAsString;
     protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;
+    protected ObservableList<Patternelement> allPatternelements;
 
     public abstract void msg(String message, int type);
 

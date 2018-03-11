@@ -15,4 +15,5 @@ public interface Regex {
     String REG_NUMBER = "[1-9][0-9]*";
     String REG_NAME = "[a-zA-Z]+[a-z-A-Z0-9 ]*";
     String REG_TRANSPOSE = "[-]*[0-9]+";
+    String REG_TACT_PROPORTION = "Full|Semi";
 }

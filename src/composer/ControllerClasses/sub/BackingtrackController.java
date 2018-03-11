@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.scene.control.cell.ChoiceBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import jm.music.data.*;
 
 public class BackingtrackController extends Controller {
@@ -40,22 +43,26 @@ public class BackingtrackController extends Controller {
     @FXML private TextField edtGeneralRepeat;
 
     //Pattern
-    @FXML private TableView tblPattern;
-    @FXML private TableColumn<Patternelement, Integer> colPatternTranspose;
-    @FXML private TableColumn<MusicStructure, String> colPatternMode;
+    @FXML private TableView<Patternelement> tblPattern;
+    @FXML private TableColumn<Patternelement, String> colPatternTranspose;
+    @FXML private TableColumn<Patternelement, String> colPatternMode;
     @FXML private TableColumn<Patternelement, String> colPatternChordgroup;
     @FXML private TableColumn<Patternelement, String> colPatternChord;
     @FXML private TableColumn<Patternelement, String> colPatternChordcomplexity;
-    @FXML private TableColumn<MusicStructure, String> colPatternUsage;
+    @FXML private TableColumn<Patternelement, String> colPatternUsage;
+    @FXML private TableColumn<Patternelement, String> colPatternTactProp;
     @FXML private TextField edtPatternTranspose;
     @FXML private ChoiceBox chbPatternChordgroups;
     @FXML private ChoiceBox chbPatternChord;
     @FXML private ChoiceBox chbPatternChordcomplexity;
+    @FXML private ToggleGroup tglGrpPatternTactProp;
+    @FXML private ToggleButton tglBtnPatternTactPropSemi;
+    @FXML private ToggleButton tglBtnPatternTactPropFull;
 
     public void initialize(){
         settings = new Settings();
-        update();
         defaultInputs();
+        update();
     }
 
     public void update(){
@@ -65,17 +72,48 @@ public class BackingtrackController extends Controller {
         allChordgroupsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups()));
         allChordcomplexities = FXCollections.observableArrayList(settings.getChordcomplexities());
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getStrings(settings.getChordcomplexities()));
+        allPatternelements = FXCollections.observableArrayList();
+        allPatternelements.add(new Patternelement(
+                0,
+                allChordgroups.get(0),
+                allChordgroups.get(0).getMusicStructures().get(0),
+                allChordcomplexities.get(0),
+                "Semi")
+        );
+
+        //init choiceboxes and togglegroups
         chbPatternChordgroups.setItems(allChordgroupsAsString);
         chbPatternChordcomplexity.setItems(allChordcomplexitiesAsString);
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                int indexOfGroup = settings.getIndexOfGroup(settings.getChordgroups(), newValue.toString());
+                int indexOfGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), newValue.toString());
                 chords = FXCollections.observableArrayList(settings.getChordgroups().get(indexOfGroup).getMusicStructures());
                 chordsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
                 chbPatternChord.setItems(chordsAsString);
             }
         });
+        tglBtnPatternTactPropFull.setUserData("Full");
+        tglBtnPatternTactPropSemi.setUserData("Semi");
+
+        //set up columns in table
+        colPatternTranspose.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("transposeAsString"));
+        colPatternChordgroup.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("groupName"));
+        colPatternChord.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("chordName"));
+        colPatternChordcomplexity.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("chordcomplexityName"));
+        colPatternMode.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("mode"));
+        colPatternUsage.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("usage"));
+        colPatternTactProp.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("tactProportion"));
+
+        //load table
+        tblPattern.setItems(allPatternelements);
+
+        //editable table
+        tblPattern.setEditable(true);
+        colPatternTranspose.setCellFactory(TextFieldTableCell.forTableColumn());
+        colPatternChordgroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
+        colPatternChordcomplexity.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordcomplexitiesAsString));
+        colPatternTactProp.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     @Override
@@ -223,46 +261,83 @@ public class BackingtrackController extends Controller {
     /********************************* PATTERN ************************************************************************/
 
     @FXML
-    public void changePatternTransposeCellEvent(TableColumn.CellEditEvent<Patternelement, Integer> patternelementIntegerCellEditEvent) {
-    }
-
-    @FXML
-    public void changePatternModeCellEvent(TableColumn.CellEditEvent<MusicStructure, String> musicStructureStringCellEditEvent) {
+    public void changePatternTransposeCellEvent(TableColumn.CellEditEvent patternelementIntegerCellEditEvent) {
+        String newTranspose = patternelementIntegerCellEditEvent.getNewValue().toString();
+        Patternelement patternelementSelected = tblPattern.getSelectionModel().getSelectedItem();
+        if(newTranspose.matches(REG_TRANSPOSE)) {
+            patternelementSelected.setTranspose(Integer.parseInt(newTranspose));
+            msg("Transpose changed.", MSG_S);
+        } else {msg("Value not valid.", MSG_E);}
     }
 
     @FXML
     public void changePatternChordgroupCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        String newGroup = patternelementStringCellEditEvent.getNewValue().toString();
+        int index = settings.getIndexOfMusicElement(settings.getChordgroups(), newGroup);
+        Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+        patternelement.setChordgroup(settings.getChordgroups().get(index));
+        chordsAsString = getStrings(settings.getChordgroups().get(index).getMusicStructures());
+        colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
+        msg("Chordgroup changed.",MSG_S);
     }
 
     @FXML
     public void changePatternChordCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+        chordsAsString = getStrings(patternelement.getChordgroup().getMusicStructures());
+
     }
 
     @FXML
     public void changePatternChordcomplexityCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        String newComplexity = patternelementStringCellEditEvent.getNewValue().toString();
+        int index = settings.getIndexOfMusicElement(settings.getChordcomplexities(), newComplexity);
+        Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+        patternelement.setChordcomplexity(settings.getChordcomplexities().get(index));
+        msg("Chordcomplexity changed.",MSG_S);
+    }
+
+    @FXML
+    public void changePatternTactPropCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        String newTactProp = patternelementStringCellEditEvent.getNewValue();
+        if(newTactProp.matches(REG_TACT_PROPORTION)){
+            Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+            patternelement.setTactProportion(newTactProp);
+            msg("Tact-Proportion changed.",MSG_S);
+        } else {msg("Value not valid",MSG_E);}
     }
 
     @FXML
     public void onPatternAdd(ActionEvent actionEvent) {
-        String error = "Adding Patternelement unsuccessful: ";
+        String error = "Adding Patternelement unsuccessful. ";
         if(edtPatternTranspose.getText().matches(REG_TRANSPOSE)){
-            if(chbPatternChordgroups != null && chbPatternChord != null && chbPatternChordcomplexity != null){
+            if(chbPatternChordgroups.getValue() != null && chbPatternChord.getValue() != null
+                && chbPatternChordcomplexity.getValue() != null && tglGrpPatternTactProp.getSelectedToggle() != null){
                 int transpose = Integer.parseInt(edtPatternTranspose.getText());
-                //Patternelement patternelement = new Patternelement();
-                // TODO Chords müssen nach Chordgroup geladen werden, sowohl nach Change- als auch bei Add-Formular
-                // TODO Chordgroup muss nicht in Patternelement gespeichert werden → Redundant, da Chord.groupname
-                // TODO Fehlerhandling Add
-                // TODO Erzeugen und hinzufügen eines Patternelements
-            }
-        }
+                int indexGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chbPatternChordgroups.getValue().toString());
+                int indexComplexity = settings.getIndexOfMusicElement(settings.getChordcomplexities(), chbPatternChordcomplexity.getValue().toString());
+                int indexChord = settings.getIndexOfMusicElement(settings.getChordgroups().get(indexGroup).getMusicStructures(), chbPatternChord.getValue().toString());
+                MusicStructureGroup chordgroup = settings.getChordgroups().get(indexGroup);
+                MusicStructure chord = chordgroup.getMusicStructures().get(indexChord);
+                Chordcomplexity chordcomplexity = settings.getChordcomplexities().get(indexComplexity);
+                String tactProportion = tglGrpPatternTactProp.getSelectedToggle().getUserData().toString();
+                Patternelement patternelement = new Patternelement(transpose, chordgroup, chord, chordcomplexity, tactProportion);
+                allPatternelements.add(patternelement);
+                edtPatternTranspose.clear();
+            } else msg(error + "All fields are required.",MSG_E);
+        } else {msg(error + "Transpose is not valid.",MSG_E);}
     }
 
     @FXML
     public void onPatternDelete(ActionEvent actionEvent) {
+        Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+        if(patternelement != null){
+            allPatternelements.remove(patternelement);
+            msg("Patternelement deleted.", MSG_W);
+        } else {msg("No Patternelement selected.", MSG_E);}
     }
 
     @FXML
     public void onPatternPlay(ActionEvent actionEvent) {
     }
-
 }

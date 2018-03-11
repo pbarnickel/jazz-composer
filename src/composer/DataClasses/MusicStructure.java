@@ -44,10 +44,12 @@ public class MusicStructure extends MusicElement implements JMC {
     public String getUsageAsString() {
         String usageAsString = "";
         int length = usage.size();
-        for(int i=0; i<length-1; i++){
-            usageAsString += usage.get(i).toString() + "-";
+        if(length>0){
+            for(int i=0; i<length-1; i++){
+                usageAsString += usage.get(i).toString() + "-";
+            }
+            usageAsString += usage.get(length-1).toString();
         }
-        usageAsString += usage.get(length-1).toString();
         return usageAsString;
     }
 

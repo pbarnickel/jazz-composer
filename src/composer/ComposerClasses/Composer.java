@@ -123,8 +123,8 @@ public class Composer implements JMC, Tempo {
             r = rand.nextInt(chordgroup.getNrOfMusicStructures());
             return chordgroup.getMusicStructures().get(r);
         } else {
-            r = rand.nextInt(settings.getChordgroups().get(settings.getIndexOfGroup(settings.getChordgroups(),"Basic")).getNrOfMusicStructures());
-            return settings.getChordgroups().get(settings.getIndexOfGroup(settings.getChordgroups(),"Basic")).getMusicStructures().get(r);
+            r = rand.nextInt(settings.getChordgroups().get(settings.getIndexOfMusicElement(settings.getChordgroups(),"Basic")).getNrOfMusicStructures());
+            return settings.getChordgroups().get(settings.getIndexOfMusicElement(settings.getChordgroups(),"Basic")).getMusicStructures().get(r);
         }
     }
 
