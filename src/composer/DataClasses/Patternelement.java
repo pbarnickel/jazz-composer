@@ -28,9 +28,9 @@ public class Patternelement {
 
     public String getTactProportion(){ return this.tactProportion;}
 
-    public String getGroupName(){ return this.chord.getGroup();}
+    public String getGroupName(){ return this.chordgroup.getName();}
 
-    public String getChordName(){ return this.getChord().getName();}
+    public String getChordName(){ return this.chord.getName();}
 
     public String getChordcomplexityName(){return this.getChordcomplexity().getName();}
 

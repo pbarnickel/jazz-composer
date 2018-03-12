@@ -128,7 +128,7 @@ public class BackingtrackController extends Controller {
                 Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
                 chords = FXCollections.observableArrayList(patternelement.getChordgroup().getMusicStructures());
                 chordsAsString = getStrings(patternelement.getChordgroup().getMusicStructures());
-                msg("Item " + tblPattern.getSelectionModel().getSelectedItem().getTranspose() + " selected.", MSG_I);
+                colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
             }
         });
 
@@ -136,7 +136,6 @@ public class BackingtrackController extends Controller {
         tblPattern.setEditable(true);
         colPatternTranspose.setCellFactory(TextFieldTableCell.forTableColumn());
         colPatternChordgroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
-        colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
         colPatternChordcomplexity.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordcomplexitiesAsString));
         colPatternTactProp.setCellFactory(TextFieldTableCell.forTableColumn());
     }
@@ -306,6 +305,8 @@ public class BackingtrackController extends Controller {
         patternelement.setChordgroup(settings.getChordgroups().get(index));
         chords = FXCollections.observableArrayList(patternelement.getChordgroup().getMusicStructures());
         chordsAsString = FXCollections.observableArrayList(getStrings(patternelement.getChordgroup().getMusicStructures()));
+        colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
+        tblPattern.refresh();
         msg("Chordgroup changed.",MSG_S);
     }
 
@@ -315,6 +316,7 @@ public class BackingtrackController extends Controller {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         int index = settings.getIndexOfMusicElement(patternelement.getChordgroup().getMusicStructures(), newChord);
         patternelement.setChord(patternelement.getChordgroup().getMusicStructures().get(index));
+        tblPattern.refresh();
         msg("Chord changed.",MSG_S);
     }
 
