@@ -233,10 +233,9 @@ public class BackingtrackController extends Controller {
     public boolean validateGeneral(){
         if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
             if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE)
-                    && edtGeneralRepeat.getText().matches(REG_NUMBER)){
-                return true;
-            } else {msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);}
-        } else {msg(error + "No instruments active.", MSG_E);}
+                    && edtGeneralRepeat.getText().matches(REG_NUMBER))return true;
+            else msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);
+        } else msg(error + "No instruments active.", MSG_E);
         return false;
     }
 
