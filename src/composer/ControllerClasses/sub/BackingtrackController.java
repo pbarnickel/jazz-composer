@@ -67,6 +67,8 @@ public class BackingtrackController extends Controller {
 
     public void update(){
         //load lists
+        chords = FXCollections.observableArrayList();
+        chordsAsString = FXCollections.observableArrayList();
         allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
         allChordgroups = FXCollections.observableArrayList(settings.getChordgroups());
         allChordgroupsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups()));
@@ -78,6 +80,20 @@ public class BackingtrackController extends Controller {
                 allChordgroups.get(0),
                 allChordgroups.get(0).getMusicStructures().get(0),
                 allChordcomplexities.get(0),
+                "Semi")
+        );
+        allPatternelements.add(new Patternelement(
+                1,
+                allChordgroups.get(1),
+                allChordgroups.get(1).getMusicStructures().get(0),
+                allChordcomplexities.get(1),
+                "Full")
+        );
+        allPatternelements.add(new Patternelement(
+                2,
+                allChordgroups.get(2),
+                allChordgroups.get(2).getMusicStructures().get(0),
+                allChordcomplexities.get(2),
                 "Semi")
         );
 
@@ -107,11 +123,20 @@ public class BackingtrackController extends Controller {
 
         //load table
         tblPattern.setItems(allPatternelements);
+        tblPattern.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
+                chords = FXCollections.observableArrayList(patternelement.getChordgroup().getMusicStructures());
+                chordsAsString = getStrings(patternelement.getChordgroup().getMusicStructures());
+                msg("Item " + tblPattern.getSelectionModel().getSelectedItem().getTranspose() + " selected.", MSG_I);
+            }
+        });
 
         //editable table
         tblPattern.setEditable(true);
         colPatternTranspose.setCellFactory(TextFieldTableCell.forTableColumn());
         colPatternChordgroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
+        colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
         colPatternChordcomplexity.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordcomplexitiesAsString));
         colPatternTactProp.setCellFactory(TextFieldTableCell.forTableColumn());
     }
@@ -189,8 +214,7 @@ public class BackingtrackController extends Controller {
 
     @FXML
     public void onCompose(ActionEvent actionEvent) {
-        if(validateGeneral()){
-            // TODO: Extend Composer with Band has Band-members. Adding a Band-Members if toggleBtns are selected.
+        if(validateGeneral() && validatePattern()){
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
@@ -201,7 +225,7 @@ public class BackingtrackController extends Controller {
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>();
             bt.createBackingtrack(instruments, tempo, tone, repeat, pattern);
             msg("Composition created successfully.", MSG_S);
-        }
+        } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }
 
     /*************************************** GENERAL ******************************************************************/
@@ -260,6 +284,11 @@ public class BackingtrackController extends Controller {
 
     /********************************* PATTERN ************************************************************************/
 
+    public boolean validatePattern(){
+        if(allPatternelements.size()>0)return true;
+        else return false;
+    }
+
     @FXML
     public void changePatternTransposeCellEvent(TableColumn.CellEditEvent patternelementIntegerCellEditEvent) {
         String newTranspose = patternelementIntegerCellEditEvent.getNewValue().toString();
@@ -276,16 +305,18 @@ public class BackingtrackController extends Controller {
         int index = settings.getIndexOfMusicElement(settings.getChordgroups(), newGroup);
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         patternelement.setChordgroup(settings.getChordgroups().get(index));
-        chordsAsString = getStrings(settings.getChordgroups().get(index).getMusicStructures());
-        colPatternChord.setCellFactory(ChoiceBoxTableCell.forTableColumn(chordsAsString));
+        chords = FXCollections.observableArrayList(patternelement.getChordgroup().getMusicStructures());
+        chordsAsString = FXCollections.observableArrayList(getStrings(patternelement.getChordgroup().getMusicStructures()));
         msg("Chordgroup changed.",MSG_S);
     }
 
     @FXML
     public void changePatternChordCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        String newChord = patternelementStringCellEditEvent.getNewValue().toString();
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
-        chordsAsString = getStrings(patternelement.getChordgroup().getMusicStructures());
-
+        int index = settings.getIndexOfMusicElement(patternelement.getChordgroup().getMusicStructures(), newChord);
+        patternelement.setChord(patternelement.getChordgroup().getMusicStructures().get(index));
+        msg("Chord changed.",MSG_S);
     }
 
     @FXML
