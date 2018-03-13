@@ -30,6 +30,7 @@ public class BackingtrackController extends Controller {
 
     private Backingtrack bt = new Backingtrack();
     private String error = "Composition unsuccessful. ";
+    private boolean tactProp;
 
     //Common
     @FXML private Label lblOut;
@@ -63,6 +64,7 @@ public class BackingtrackController extends Controller {
         settings = new Settings();
         defaultInputs();
         update();
+        tactProp = true;
     }
 
     public void update(){
@@ -266,6 +268,13 @@ public class BackingtrackController extends Controller {
         else return false;
     }
 
+    //If 'Semi' patternelement is added -> the next patternelement has to be 'Semi' too. This is implemented by disabling
+    //the ToggleButton for 'Full'
+    public void setTactProp(){
+        tactProp = !tactProp;
+        tglBtnPatternTactPropFull.setDisable(!tactProp);
+    }
+
     @FXML
     public void changePatternTransposeCellEvent(TableColumn.CellEditEvent patternelementIntegerCellEditEvent) {
         String newTranspose = patternelementIntegerCellEditEvent.getNewValue().toString();
@@ -332,6 +341,7 @@ public class BackingtrackController extends Controller {
                 MusicStructure chord = chordgroup.getMusicStructures().get(indexChord);
                 Chordcomplexity chordcomplexity = settings.getChordcomplexities().get(indexComplexity);
                 String tactProportion = tglGrpPatternTactProp.getSelectedToggle().getUserData().toString();
+                if(tactProportion.equals("Semi"))setTactProp();
                 Patternelement patternelement = new Patternelement(transpose, chordgroup, chord, chordcomplexity, tactProportion);
                 allPatternelements.add(patternelement);
                 edtPatternTranspose.clear();
