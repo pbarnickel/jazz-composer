@@ -14,13 +14,11 @@ import java.io.IOException;
 
 public class MenuController extends Controller {
 
-    public void gotoAbout(ActionEvent actionEvent) throws IOException {changeScene("about", actionEvent);}
+    public void gotoSettings(ActionEvent actionEvent) throws IOException {changeScene("settings", actionEvent);}
 
     public void gotoBackingTrack(ActionEvent actionEvent) throws IOException {changeScene("backingtrack", actionEvent);}
 
-    public void gotoTest(ActionEvent actionEvent) throws IOException {changeScene("test", actionEvent);}
-
-    public void gotoSettings(ActionEvent actionEvent) throws IOException {changeScene("settings", actionEvent);}
+    public void gotoAbout(ActionEvent actionEvent) throws IOException {changeScene("about", actionEvent);}
 
     @Override
     public void msg(String message, int type) {}

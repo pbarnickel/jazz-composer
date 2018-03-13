@@ -34,12 +34,10 @@ import static composer.Main.p;
 
 public class Backingtrack extends Composer {
 
-    private Part test = new Part("Piano", 0, 10);
     private Part piano = new Part("Piano", PIANO, 0);
     private Part bass = new Part("Bass", BASS, 1);
     private Part drums = new Part("Drums", DRUM, 2);
     private Tone tone;
-    private int tempo;
     private int repeat;
     private ArrayList<Patternelement> pattern;
 
@@ -48,34 +46,32 @@ public class Backingtrack extends Composer {
     public Backingtrack(){}
 
     public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern){
-        //transfer input data into data model
-        this.tempo = tempo;
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
 
-        //generate Parts
+        //generate parts
         if(instruments[0])generatePianoPart();
         if(instruments[1])generateBassPart();
         if(instruments[2])generateDrumsPart();
+
+        //Final operations
+        score.addPart(piano);
+        score.addPart(bass);
+        score.addPart(drums);
+        score.setTempo(tempo);
+
+        //TODO Generate Piano Part
+        //TODO Generate Bass Part
+        //TODO Generate Drums Part
     }
 
-    public MusicStructureGroup filterComplexity(){
-        MusicStructureGroup newChordgroup = new MusicStructureGroup();
-        int length = chordgroup.getNrOfMusicStructures();
-        int size;
-        for(int i=0; i<length; i++){
-            size = chordgroup.getMusicStructures().get(i).getUsage().size();
-            if(size <= chordcomplexity.getMax() && size >= chordcomplexity.getMin()){
-                newChordgroup.addMusicStructure(chordgroup.getMusicStructures().get(i));
-            }
-        }
-        return newChordgroup;
-    }
-
+    //Generates piano part in score
     public void generatePianoPart(){
-        CPhrase chord;
-        MusicStructure randChord;
+
+        for(int i=0; i<repeat; i++){
+
+        }
 
         /*for(int i=0; i<repeat; i++) {
             for (int j = 0; j < this.pattern.size(); j++) {
@@ -91,99 +87,15 @@ public class Backingtrack extends Composer {
                 //bass.addPhrase(bass_phrase);
             }
         }*/
-
-        score.add(piano);
-        score.add(bass);
-        score.setTempo(this.tempo);
-
-        //TODO Generate Piano Part
-        //TODO Generate Bass Part
-        //TODO Generate Drums Part
-        //TODO Add parts to Score
-        //TODO Return different data-structures for printing in UI
     }
 
+    //Generates bass part in score
     public void generateBassPart(){
 
     }
 
+    //Generates drums part in score
     public void generateDrumsPart(){
 
-    }
-
-    /******************************************** TEST *****************************************************/
-
-    public Score getBackingTrack(int rootPitch, String name, int len){
-        score.setTitle(name);
-        for(int i=0; i<len; i++){
-            addFullJazzChord(rootPitch);
-            addFullJazzChordInv(rootPitch);
-            addFullJazzChordMinThree(rootPitch - 3);
-            addFullJazzChordDMaj(rootPitch + 2);
-            addFullJazzChordG(rootPitch - 5);
-        }
-        score.addPart(test);
-        return score;
-    }
-
-    public void addFullJazzChordG(int rp){
-        int[] pitchArray = new int[5];
-        pitchArray[0] = rp - 12;
-        pitchArray[1] = rp - 2;
-        pitchArray[2] = rp + 1;
-        pitchArray[3] = rp + 4;
-        pitchArray[4] = rp + 7;
-        CPhrase chord = new CPhrase();
-        chord.addChord(pitchArray, C);
-        test.addCPhrase(chord);
-    }
-
-    public void addFullJazzChordDMaj(int rp){
-        int[] pitchArray = new int[5];
-        pitchArray[0] = rp - 12;
-        pitchArray[1] = rp + 3;
-        pitchArray[2] = rp + 7;
-        pitchArray[3] = rp + 10;
-        pitchArray[4] = rp + 14;
-        CPhrase chord = new CPhrase();
-        chord.addChord(pitchArray, C);
-        test.addCPhrase(chord);
-    }
-
-    public void addFullJazzChordMinThree(int rp){
-        int[] pitchArray = new int[6];
-        pitchArray[0] = rp - 12;
-        pitchArray[1] = rp - 2;
-        pitchArray[2] = rp + 1;
-        pitchArray[3] = rp + 4;
-        pitchArray[4] = rp + 7;
-        pitchArray[5] = rp + 10;
-        CPhrase chord = new CPhrase();
-        chord.addChord(pitchArray, C);
-        test.addCPhrase(chord);
-    }
-
-    public void addFullJazzChord(int rp){
-        int[] pitchArray = new int[5];
-        pitchArray[0] = rp;
-        pitchArray[1] = rp + 4;
-        pitchArray[2] = rp + 7;
-        pitchArray[3] = rp + 9;
-        pitchArray[4] = rp + 12;
-        CPhrase chord = new CPhrase();
-        chord.addChord(pitchArray, C);
-        test.addCPhrase(chord);
-    }
-
-    public void addFullJazzChordInv(int rp){
-        int[] pitchArray = new int[5];
-        pitchArray[0] = rp + 9;
-        pitchArray[1] = rp + 12;
-        pitchArray[2] = rp + 14;
-        pitchArray[3] = rp + 17;
-        pitchArray[4] = rp + 21;
-        CPhrase chord = new CPhrase();
-        chord.addChord(pitchArray, C);
-        test.addCPhrase(chord);
     }
 }
