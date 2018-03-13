@@ -19,23 +19,18 @@ public class Chordcomplexity extends MusicElement {
         this.max = max;
     }
 
-    public int getMin() {
-        return min;
-    }
+    public int getMin() {return min;}
 
-    public String getMinAsString() {return Integer.toString(min);}
+    public int getMax() { return max;}
 
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public String getMaxAsString() {return Integer.toString(max);}
+    public void setMin(int min) {this.min = min;}
 
     public void setMax(int max) {
         this.max = max;
     }
+
+    //Getter for dynamically UI-outputs------------------------------------------
+    public String getMaxAsString() {return Integer.toString(max);}
+    public String getMinAsString() {return Integer.toString(min);}
+    //---------------------------------------------------------------------------
 }

@@ -19,11 +19,9 @@ public class TestController extends Controller {
 
     private Test t = new Test();
 
-    @FXML
-    Label lblOut;
+    @FXML Label lblOut;
 
-    //Back to Menu
-    @FXML
+    //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
         changeScene("menu", actionEvent);
     }

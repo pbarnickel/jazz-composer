@@ -26,40 +26,18 @@ public class Response {
         print(label);
     }
 
-    public Response(String message, Label label){
-        this.message = message;
-        this.message_type = 0;
-        print(label);
-    }
-
-    public Response(Label label){
-        this.message = "";
-        this.message_type = 0;
-        print(label);
-    }
-
-    public String getMessage(){
-        return this.message;
-    }
-
-    public int getMessage_type(){
-        return this.message_type;
-    }
-
-    public void setMessage(String message){
-        this.message = message;
-    }
-
     public void setMessage_type(int message_type){
         this.message_type = message_type;
     }
 
+    //Clears the label used for UI-outputs
     public void clear(Label label){
         this.message = "";
         this.message_type = 0;
         print(label);
     }
 
+    //Prints the message on the label used for UI-outputs
     private void print(Label label){
         label.getStyleClass().removeAll("msg_i", "msg_w", "msg_e", "msg_s");
         switch (this.message_type){

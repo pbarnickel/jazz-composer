@@ -92,13 +92,16 @@ public class SettingsController extends Controller {
     private String callSave = " Please save the settings.";
 
     public void initialize() {
+        //Saves settings by pressing Ctrl+S
         vboxSettings.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(kcCtrlS.match(event)){onSave(new ActionEvent());}
             }
         });
+
         settings = new Settings();
+
         //load lists
         allTones = FXCollections.observableArrayList(settings.getTones());
         allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
@@ -170,19 +173,18 @@ public class SettingsController extends Controller {
     @Override
     public void defaultInputs(){}
 
-    //Back to Menu
-    @FXML
+    //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
         changeScene("menu", actionEvent);
     }
 
-    @FXML
+    //Saves the settings
     public void onSave(ActionEvent actionEvent) {
         settings.saveSettings();
         msg("Settings saved.", MSG_S);
     }
 
-    @FXML
+    //Load default-settings
     public void onDefault(ActionEvent actionEvent) throws IOException {
         try {
             settings.loadDefaultSettings();
@@ -193,7 +195,7 @@ public class SettingsController extends Controller {
         }
     }
 
-    @FXML
+    //Opens the explorer for choosing default location
     public void onFiles(ActionEvent actionEvent) {
         if(new File(settings.getDefault_location()).exists()) {
             DirectoryChooser chooser = new DirectoryChooser();
@@ -209,7 +211,7 @@ public class SettingsController extends Controller {
         } else { msg("Default directory not valid. Change it manually in the edit-field.",MSG_E);}
     }
 
-    @FXML
+    //Sets the default location
     public void onFilesEdt(ActionEvent actionEvent) {
         String path = edtDefaultLocation.getText();
         if (new File(path).exists()) {
@@ -223,7 +225,7 @@ public class SettingsController extends Controller {
 
     /********************************************CHORDS****************************************************************/
 
-    @FXML
+    //Changes the name attribute of chord
     public void changeChordsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
@@ -234,7 +236,7 @@ public class SettingsController extends Controller {
         } else {msg("Name not valid or already used.", MSG_E);}
     }
 
-    @FXML
+    //Changes the usage attribute of chord
     public void changeChordsUsageCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newUsage = cellEdited.getNewValue().toString();
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
@@ -245,7 +247,7 @@ public class SettingsController extends Controller {
         } else {msg("Value not valid.", MSG_E);}
     }
 
-    @FXML
+    //Changes the group-name attribute of chord
     public void changeChordsGroupCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newGroup = cellEdited.getNewValue().toString();
         int indexOldGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), cellEdited.getOldValue().toString());
@@ -264,7 +266,7 @@ public class SettingsController extends Controller {
         } else {msg(chordSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
 
-    @FXML
+    //Adds a chord to chord-list
     public void onChordsAdd(ActionEvent actionEvent) {
         String error = "Chord could not be added. ";
         if(!edtChordsName.getText().isEmpty() && !edtChordsUsage.getText().isEmpty() && chbChordsGroup.getValue()!=null){
@@ -287,7 +289,7 @@ public class SettingsController extends Controller {
         } else {msg(error + "All fields are required.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a chord from chord-list
     public void onChordsDelete(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
         if(chord != null){
@@ -299,6 +301,7 @@ public class SettingsController extends Controller {
         } else {msg("No chord selected.", MSG_E);}
     }
 
+    //Plays a usage as a chord -> play(asChord = true)
     public void onChordsPlay(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
         if(chord != null)chord.play(true);
@@ -307,7 +310,7 @@ public class SettingsController extends Controller {
 
     /********************************************CHORDGROUPS***********************************************************/
 
-    @FXML
+    //Changes the name attribute of chordgroup
     public void changeChordgroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup chordgroupSelected = tblChordgroups.getSelectionModel().getSelectedItem();
@@ -318,7 +321,7 @@ public class SettingsController extends Controller {
         } else {msg("Name not valid or already used.", MSG_E);}
     }
 
-    @FXML
+    //Adds a chordgroup to chordgroup-list
     public void onChordgroupsAdd(ActionEvent actionEvent) {
         String error = "Chordgroup could not be added. ";
         String name = edtChordgroupsName.getText();
@@ -332,7 +335,7 @@ public class SettingsController extends Controller {
         } else {msg(error + "Name not valid or already used.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a chordgroup from chordgroup-list
     public void onChordgroupsDelete(ActionEvent actionEvent) {
         MusicStructureGroup chordgroup = tblChordgroups.getSelectionModel().getSelectedItem();
         if(chordgroup != null){
@@ -347,7 +350,7 @@ public class SettingsController extends Controller {
 
     /********************************************CHORDCOMPLEXITY*******************************************************/
 
-    @FXML
+    //Changes the name attribute of chordcomplexity
     public void changeChordcomplexityNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
@@ -357,7 +360,7 @@ public class SettingsController extends Controller {
         } else {msg("Name not valid or already used.", MSG_E);}
     }
 
-    @FXML
+    //Changes the min attribute of chordcomplexity
     public void changeChordcomplexityMinCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newMin = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
@@ -367,7 +370,7 @@ public class SettingsController extends Controller {
         } else {msg("Value not valid.", MSG_E);}
     }
 
-    @FXML
+    //Changes the max attribute of chordcomplexity
     public void changeChordcomplexityMaxCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newMax = cellEdited.getNewValue().toString();
         Chordcomplexity chordcomplexitySelected = tblChordcomplexity.getSelectionModel().getSelectedItem();
@@ -377,7 +380,7 @@ public class SettingsController extends Controller {
         } else {msg("Value not valid.", MSG_E);}
     }
 
-    @FXML
+    //Adds a chordcomplexity to the chordcomplexity-list
     public void onChordcomplexityAdd(ActionEvent actionEvent) {
         String error = "Chordcomplexity could not be added. ";
         String name = edtChordcomplexityName.getText();
@@ -396,7 +399,7 @@ public class SettingsController extends Controller {
         } else {msg(error + name + " is not valid or already used.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a chordcomplexity from chordcomplexity-list
     public void onChordcomplexityDelete(ActionEvent actionEvent) {
         Chordcomplexity chordcomplexity = tblChordcomplexity.getSelectionModel().getSelectedItem();
         if(chordcomplexity != null){
@@ -408,7 +411,7 @@ public class SettingsController extends Controller {
 
     /********************************************SCALES****************************************************************/
 
-    @FXML
+    //Changes the name attribute of scale
     public void changeScalesNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
@@ -419,7 +422,7 @@ public class SettingsController extends Controller {
         } else {msg("Name not valid or already used.", MSG_E);}
     }
 
-    @FXML
+    //Changes the usage attribute of scale
     public void changeScalesUsageCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newUsage = cellEdited.getNewValue().toString();
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
@@ -430,7 +433,7 @@ public class SettingsController extends Controller {
         } else {msg("Value not valid.", MSG_E);}
     }
 
-    @FXML
+    //Changes the group-name attribute of scale
     public void changeScalesGroupCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newGroup = cellEdited.getNewValue().toString();
         int indexOldGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), cellEdited.getOldValue().toString());
@@ -449,7 +452,7 @@ public class SettingsController extends Controller {
         } else {msg(scaleSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
 
-    @FXML
+    //Adds a scale to scale-list
     public void onScalesAdd(ActionEvent actionEvent) {
         String error = "Scale could not be added. ";
         if(!edtScalesName.getText().isEmpty() && !edtScalesUsage.getText().isEmpty() && chbScalesGroup.getValue()!=null){
@@ -472,7 +475,7 @@ public class SettingsController extends Controller {
         } else {msg(error + "All fields are required.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a scale from scale-list
     public void onScalesDelete(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
         if(scale != null){
@@ -484,6 +487,7 @@ public class SettingsController extends Controller {
         } else {msg("No scale selected.", MSG_E);}
     }
 
+    //Plays a usage as scale -> play(asChord = false)
     public void onScalesPlay(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
         if(scale != null)scale.play(false);
@@ -492,7 +496,7 @@ public class SettingsController extends Controller {
 
     /********************************************SCALEGROUPS***********************************************************/
 
-    @FXML
+    //Changes the name attribute of scalegroup
     public void changeScalegroupsNameCellEvent(TableColumn.CellEditEvent cellEdited) {
         String newName = cellEdited.getNewValue().toString();
         MusicStructureGroup scalegroupSelected = tblScalegroups.getSelectionModel().getSelectedItem();
@@ -503,7 +507,7 @@ public class SettingsController extends Controller {
         } else {msg("Name not valid or already used.", MSG_E);}
     }
 
-    @FXML
+    //Adds a scalegroup to scalegroup-list
     public void onScalegroupsAdd(ActionEvent actionEvent) {
         String error = "Scalegroup could not be added. ";
         String name = edtScalegroupsName.getText();
@@ -517,7 +521,7 @@ public class SettingsController extends Controller {
         } else {msg(error + name + " is not valid or is already used.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a scalegroup from scalegroup-list
     public void onScalegroupsDelete(ActionEvent actionEvent) {
         MusicStructureGroup scalegroup= tblScalegroups.getSelectionModel().getSelectedItem();
         if(scalegroup != null){
@@ -532,6 +536,7 @@ public class SettingsController extends Controller {
 
     /******************************* TONES ****************************************************************************/
 
+    //Changes the name attribute of tone
     public void changeTonesNameCellEvent(TableColumn.CellEditEvent<Tone, String> toneStringCellEditEvent) {
         String newName = toneStringCellEditEvent.getNewValue().toString();
         Tone toneSelected = tblTones.getSelectionModel().getSelectedItem();
@@ -541,6 +546,7 @@ public class SettingsController extends Controller {
         } else msg("Name not valid or already used.", MSG_E);
     }
 
+    //Changes the pitch attribute of tone
     public void changeTonesPitchCellEvent(TableColumn.CellEditEvent<Tone, String> toneStringCellEditEvent) {
         String newPitch = toneStringCellEditEvent.getNewValue().toString();
         Tone toneSelected = tblTones.getSelectionModel().getSelectedItem();
@@ -550,6 +556,7 @@ public class SettingsController extends Controller {
         } else msg("New pitch is not valid.",MSG_E);
     }
 
+    //Adds a tone to tone-list
     public void onTonesAdd(ActionEvent actionEvent) {
         String error = "Tone could not be added. ";
         String name = edtTonesName.getText();
@@ -566,6 +573,7 @@ public class SettingsController extends Controller {
         } else msg(error + name + " is not valid or is already used.",MSG_E);
     }
 
+    //Deletes a tone from tone-list
     public void onTonesDelete(ActionEvent actionEvent) {
         Tone tone = tblTones.getSelectionModel().getSelectedItem();
         if(tone != null){
@@ -575,6 +583,7 @@ public class SettingsController extends Controller {
         } else msg("No Tone selected.",MSG_E);
     }
 
+    //Plays a tone
     public void onTonesPlay(ActionEvent actionEvent) {
         Tone tone = tblTones.getSelectionModel().getSelectedItem();
         if(tone != null)tone.play();

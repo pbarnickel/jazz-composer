@@ -7,6 +7,7 @@
 
 package composer.DataClasses;
 
+import jm.JMC;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,8 +18,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static jm.constants.Pitches.C4;
 
-public class Settings {
+public class Settings implements JMC{
 
     private String default_location;
     private ArrayList<MusicStructureGroup> chordgroups;
@@ -52,12 +54,14 @@ public class Settings {
 
     public void delTone(Tone tone) { this.tones.remove(tone);}
 
+    //Returns paths for JSON-Settings-File and JSON-Default-Settings-File---------------------------------------------------------
     public String getPathForSettings(){
         return new File("").getAbsolutePath() +  "/src/composer/JSON/settings.json";
     }
-
     public String getPathForDefaultSettings(){return new File("").getAbsolutePath() + "/src/composer/JSON/default.json";}
+    //----------------------------------------------------------------------------------------------------------------------------
 
+    //Returns index of MusicElement-Name in MusicElement-List
     public int getIndexOfMusicElement(ArrayList<? extends MusicElement> musicElements, String element){
         int length = musicElements.size();
         for(int i=0; i<length; i++){
@@ -66,6 +70,7 @@ public class Settings {
         return -1;
     }
 
+    //Checkes if MusicElement-Name is unique in MusicElement-List
     public boolean isNameUnique(ArrayList<? extends MusicElement> musicElements, String name){
         int length = musicElements.size();
         for(int i=0; i<length; i++){
@@ -74,10 +79,30 @@ public class Settings {
         return true;
     }
 
+    //Returns Tone-Object by String of Tone-Name
+    public Tone getToneByString(String toneString){
+        int length = tones.size();
+        double pitch = 60;
+        for(int i=0; i<length; i++){
+            if(tones.get(i).getName().equals(toneString.substring(0,1))){
+                pitch = tones.get(i).getPitch();
+                if(toneString.length()>1){
+                    if(toneString.substring(1,2).equals("b"))pitch--;
+                    else if(toneString.substring(1,2).equals("#"))pitch++;
+                }
+            }
+        }
+        return new Tone(toneString, pitch);
+    }
+
+    //Loads default-settings
     public void loadDefaultSettings() throws IOException {
         Files.copy(new File(getPathForDefaultSettings()).toPath(), new File(getPathForSettings()).toPath(), REPLACE_EXISTING);
     }
 
+    /************************************************ JSON ***********************************************************/
+
+    //loads settings by JSON-settings-file
     public void loadSettings(){
         JSONParser parser = new JSONParser();
         try {
@@ -85,7 +110,6 @@ public class Settings {
             FileReader reader = new FileReader(getPathForSettings());
             Object obj = parser.parse(reader);
             JSONObject jsonObjectRoot = (JSONObject) obj;
-            //d(jsonObject.toJSONString());
 
             //read default_location
             this.default_location = (String) jsonObjectRoot.get("default_location");
@@ -132,6 +156,7 @@ public class Settings {
         }
     }
 
+    //Returns a MusicStructureGroup-list including there MusicStructures
     public ArrayList<MusicStructureGroup> loadMusicStructureGroup(JSONObject jsonObjectRoot, String jsonRootKey, String jsonMusicStructuresKey){
         ArrayList<MusicStructureGroup> groups = new ArrayList<MusicStructureGroup>();
         JSONArray jsonArrayMusicStructureGroups = (JSONArray) jsonObjectRoot.get(jsonRootKey);
@@ -166,7 +191,7 @@ public class Settings {
         return groups;
     }
 
-
+    //Saves runtime-settings in JSON-settings-file
     public void saveSettings(){
         JSONObject jsonObjectRoot = new JSONObject();
 
@@ -212,6 +237,7 @@ public class Settings {
         }
     }
 
+    //Returns a JSON-array with all MusicStructureGroups including there MusicStructures
     public JSONArray generateJSONMusicStructureGroup(ArrayList<MusicStructureGroup> groups, String jsonMusicStructuresKey){
         JSONArray jsonArrayGroups = new JSONArray();
         int lengthGroups = groups.size();

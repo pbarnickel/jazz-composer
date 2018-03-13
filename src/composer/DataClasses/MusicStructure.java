@@ -42,18 +42,6 @@ public class MusicStructure extends MusicElement {
         return usage;
     }
 
-    public String getUsageAsString() {
-        String usageAsString = "";
-        int length = usage.size();
-        if(length>0){
-            for(int i=0; i<length-1; i++){
-                usageAsString += usage.get(i).toString() + "-";
-            }
-            usageAsString += usage.get(length-1).toString();
-        }
-        return usageAsString;
-    }
-
     public String getGroup() {
         return group;
     }
@@ -75,16 +63,29 @@ public class MusicStructure extends MusicElement {
 
     public void setMode(String mode) {this.mode = mode;}
 
+    //Returns usage for dynamically UI-outputs
+    public String getUsageAsString() {
+        String usageAsString = "";
+        int length = usage.size();
+        if(length>0){
+            for(int i=0; i<length-1; i++){
+                usageAsString += usage.get(i).toString() + "-";
+            }
+            usageAsString += usage.get(length-1).toString();
+        }
+        return usageAsString;
+    }
+
+    //Calculates the mode [Minor | Major] by usage (determining if usages uses small or big Terz
     public String calcMode(){
         int length = usage.size();
         for(int i=0; i<length; i++){
-            if(usage.get(i).intValue()==3){
-                return "Minor";
-            }
+            if(usage.get(i).intValue()==3)return "Minor";
         }
         return "Major";
     }
 
+    //Plays usage as chord (asChord = true) or as scale (asChord = false)
     public void play(boolean asChord){
         Part piano = new Part("Piano", PIANO, 0);
         CPhrase chord = new CPhrase();

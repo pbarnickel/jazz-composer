@@ -22,7 +22,6 @@ public class AboutController extends Controller{
 
     @FXML private Hyperlink hypGitHub;
 
-    @FXML
     public void gotoMenu(ActionEvent actionEvent) throws IOException {changeScene("menu", actionEvent);}
 
     @Override
@@ -32,6 +31,7 @@ public class AboutController extends Controller{
     public void defaultInputs() {}
 
     public void initialize(){
+        //Activate hyperlink to GitHub
         hypGitHub.setOnAction(e -> {
             if(Desktop.isDesktopSupported())
             {

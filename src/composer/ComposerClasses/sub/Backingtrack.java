@@ -24,6 +24,7 @@ import composer.ComposerClasses.Composer;
 import composer.DataClasses.MusicStructure;
 import composer.DataClasses.MusicStructureGroup;
 import composer.DataClasses.Patternelement;
+import composer.DataClasses.Tone;
 import jm.music.data.*;
 import jm.util.Play;
 
@@ -37,55 +38,19 @@ public class Backingtrack extends Composer {
     private Part piano = new Part("Piano", PIANO, 0);
     private Part bass = new Part("Bass", BASS, 1);
     private Part drums = new Part("Drums", DRUM, 2);
+    private Tone tone;
     private int tempo;
-    private int tone;
     private int repeat;
     private ArrayList<Patternelement> pattern;
 
-    public Part getPiano(){
-        return piano;
-    }
-    public Part getBass(){ return bass; }
-    public Part getDrums(){
-        return drums;
-    }
-    public int getTempo() {
-        return tempo;
-    }
-    public int getTone() {
-        return tone;
-    }
-    public int getRepeat() {
-        return repeat;
-    }
-    public ArrayList<Patternelement> getPattern(){ return pattern;}
-    public void setPiano(Part piano){
-        this.piano = piano;
-    }
-    public void setBass(Part bass){
-        this.bass = bass;
-    }
-    public void setDrums(Part drums){
-        this.drums = drums;
-    }
-    public void setTempo(int tempo) {
-        this.tempo = tempo;
-    }
-    public void setTone(int tone) {
-        this.tone = tone;
-    }
-    public void setRepeat(int repeat) {
-        this.repeat = repeat;
-    }
-    public void setPattern(ArrayList<Patternelement> pattern){ this.pattern = pattern;}
+    //TODO: cut old
 
-    public void addPattern(Patternelement patternelement){ pattern.add(patternelement);}
-    public void delPatternelement(Patternelement patternelement){ pattern.remove(patternelement);}
+    public Backingtrack(){}
 
-    public void createBackingtrack(Boolean instruments[], int tempo, String tone, int repeat, ArrayList<Patternelement> pattern){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern){
         //transfer input data into data model
         this.tempo = tempo;
-        this.tone = interpretTone(tone);
+        this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
 

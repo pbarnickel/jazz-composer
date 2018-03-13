@@ -14,16 +14,12 @@ import java.io.IOException;
 
 public class MenuController extends Controller {
 
-    @FXML
     public void gotoAbout(ActionEvent actionEvent) throws IOException {changeScene("about", actionEvent);}
 
-    @FXML
     public void gotoBackingTrack(ActionEvent actionEvent) throws IOException {changeScene("backingtrack", actionEvent);}
 
-    @FXML
     public void gotoTest(ActionEvent actionEvent) throws IOException {changeScene("test", actionEvent);}
 
-    @FXML
     public void gotoSettings(ActionEvent actionEvent) throws IOException {changeScene("settings", actionEvent);}
 
     @Override

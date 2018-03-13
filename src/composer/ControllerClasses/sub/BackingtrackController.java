@@ -28,7 +28,7 @@ import jm.music.data.*;
 
 public class BackingtrackController extends Controller {
 
-    private Backingtrack bt = new Backingtrack();
+    private Backingtrack backingtrack;
     private String error = "Composition unsuccessful. ";
     private boolean tactProp;
 
@@ -141,12 +141,12 @@ public class BackingtrackController extends Controller {
 
     @FXML
     public void onView(ActionEvent actionEvent) {
-        bt.showScore();
+        if(backingtrack != null)backingtrack.showScore();
+        else msg("No composition to view.",MSG_E);
     }
 
     @FXML
     public void onClear(ActionEvent actionEvent){
-        bt = new Backingtrack();
         msg("Composition cleared.",MSG_I);
     }
 
@@ -155,7 +155,8 @@ public class BackingtrackController extends Controller {
         if(new File(settings.getDefault_location()).exists()) {
             File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent);
             if (selectedFile != null) {
-                bt.readMIDIinScore(selectedFile.getPath());
+                backingtrack = new Backingtrack();
+                backingtrack.readMIDIinScore(selectedFile.getPath());
                 msg(selectedFile.getName() + " loaded.", MSG_S);
             } else {msg("File could not be loaded.", MSG_E);}
         } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
@@ -166,30 +167,18 @@ public class BackingtrackController extends Controller {
         if(new File(settings.getDefault_location()).exists()) {
             File selectedFile = midiFileChooser("Choose place for saving File", actionEvent);
             if (selectedFile != null) {
-                bt.writeScoreinMIDI(selectedFile.getPath());
+                backingtrack.writeScoreinMIDI(selectedFile.getPath());
                 msg(selectedFile.getName() + " saved.",MSG_S);
             } else {msg("File could not be saved.", MSG_E);}
         } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
 
     @FXML
-    public void onTest(ActionEvent actionEvent) {
-        //Testing Module Backingtrack
-        bt.initScore();
-        int rootPitch = C4;
-        Score s = new Score();
-        s = bt.getBackingTrack(rootPitch, "Backingtrack in C", 2);
-        msg("Test Backing Track loaded.",MSG_I);
-    }
-
-    @FXML
     public void onPlay(ActionEvent actionEvent) {
-        if(bt.getScore().getSize() > 0){
-            bt.playScore();
+        if(backingtrack != null && backingtrack.getScore().getSize() > 0){
+            backingtrack.playScore();
             msg("Backing Track is played.",MSG_I);
-        } else {
-            msg("No Backing Track to play.",MSG_E);
-        }
+        } else msg("No Backing Track to play.",MSG_E);
     }
 
     @FXML
@@ -198,12 +187,12 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            String tone = edtGeneralTone.getText();
+            Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
-            ArrayList<Patternelement> pattern = new ArrayList<Patternelement>();
-            bt.createBackingtrack(instruments, tempo, tone, repeat, pattern);
+            ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }
@@ -212,57 +201,16 @@ public class BackingtrackController extends Controller {
 
     public boolean validateGeneral(){
         if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
-            if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE)
+            if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE_EXTENDED)
                     && edtGeneralRepeat.getText().matches(REG_NUMBER))return true;
             else msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);
         } else msg(error + "No instruments active.", MSG_E);
         return false;
     }
 
-    @FXML
-    public void onGeneralPiano(ActionEvent actionEvent) {
-        if(tglGeneralPiano.isSelected()){
-            msg("Piano activated.", MSG_I);
-        } else {
-            msg("Piano disabled.", MSG_W);
-        }
-    }
-
-    @FXML
-    public void onGeneralBass(ActionEvent actionEvent) {
-        if(tglGeneralBass.isSelected()){
-            msg("Bass activated.", MSG_I);
-        } else {
-            msg("Bass disabled.", MSG_W);
-        }
-    }
-
-    @FXML
-    public void onGeneralDrums(ActionEvent actionEvent) {
-        if(tglGeneralDrums.isSelected()){
-            msg("Drums activated.", MSG_I);
-        } else {
-            msg("Drums disabled.", MSG_W);
-        }
-    }
-
-    @FXML
-    public void onGeneralTempo(ActionEvent actionEvent) {
-        msg("Tempo set to " + edtGeneralTempo.getText() + ".", MSG_I);
-    }
-
-    @FXML
-    public void onGeneralTone(ActionEvent actionEvent) {
-        msg("Tone set to " + edtGeneralTone.getText() + ".", MSG_I);
-    }
-
-    @FXML
-    public void onGeneralRepeat(ActionEvent actionEvent) {
-        msg("Repeat set to " + edtGeneralRepeat.getText() + " times.", MSG_I);
-    }
-
     /********************************* PATTERN ************************************************************************/
 
+    //Checks if elements are included in the pattern
     public boolean validatePattern(){
         if(allPatternelements.size()>0)return true;
         else return false;
@@ -275,7 +223,7 @@ public class BackingtrackController extends Controller {
         tglBtnPatternTactPropFull.setDisable(!tactProp);
     }
 
-    @FXML
+    //Changes the transpose attribute of patternelement
     public void changePatternTransposeCellEvent(TableColumn.CellEditEvent patternelementIntegerCellEditEvent) {
         String newTranspose = patternelementIntegerCellEditEvent.getNewValue().toString();
         Patternelement patternelementSelected = tblPattern.getSelectionModel().getSelectedItem();
@@ -285,7 +233,7 @@ public class BackingtrackController extends Controller {
         } else {msg("Value not valid.", MSG_E);}
     }
 
-    @FXML
+    //Changes the chordgroup attribute of patternelement
     public void changePatternChordgroupCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
         String newGroup = patternelementStringCellEditEvent.getNewValue().toString();
         int index = settings.getIndexOfMusicElement(settings.getChordgroups(), newGroup);
@@ -298,7 +246,7 @@ public class BackingtrackController extends Controller {
         msg("Chordgroup changed.",MSG_S);
     }
 
-    @FXML
+    //Changes the chord attribute of patternelement
     public void changePatternChordCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
         String newChord = patternelementStringCellEditEvent.getNewValue().toString();
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
@@ -308,7 +256,7 @@ public class BackingtrackController extends Controller {
         msg("Chord changed.",MSG_S);
     }
 
-    @FXML
+    //Changes the chordcomplexity attribute of patternelement
     public void changePatternChordcomplexityCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
         String newComplexity = patternelementStringCellEditEvent.getNewValue().toString();
         int index = settings.getIndexOfMusicElement(settings.getChordcomplexities(), newComplexity);
@@ -317,7 +265,7 @@ public class BackingtrackController extends Controller {
         msg("Chordcomplexity changed.",MSG_S);
     }
 
-    @FXML
+    //Changes the tact-proportion attribute of patternelement
     public void changePatternTactPropCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
         String newTactProp = patternelementStringCellEditEvent.getNewValue();
         if(newTactProp.matches(REG_TACT_PROPORTION)){
@@ -327,7 +275,7 @@ public class BackingtrackController extends Controller {
         } else {msg("Value not valid",MSG_E);}
     }
 
-    @FXML
+    //Adds a patternelement to pattern-list
     public void onPatternAdd(ActionEvent actionEvent) {
         String error = "Adding Patternelement unsuccessful. ";
         if(edtPatternTranspose.getText().matches(REG_TRANSPOSE)){
@@ -349,7 +297,7 @@ public class BackingtrackController extends Controller {
         } else {msg(error + "Transpose is not valid.",MSG_E);}
     }
 
-    @FXML
+    //Deletes a patternelement from pattern-list
     public void onPatternDelete(ActionEvent actionEvent) {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         if(patternelement != null){
@@ -358,7 +306,7 @@ public class BackingtrackController extends Controller {
         } else {msg("No Patternelement selected.", MSG_E);}
     }
 
-    @FXML
+    //Plays the chord of the patternelement
     public void onPatternPlay(ActionEvent actionEvent) {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         if(patternelement != null)patternelement.getChord().play(true);

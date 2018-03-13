@@ -39,16 +39,6 @@ public class Patternelement {
 
     public String getTactProportion(){ return this.tactProportion;}
 
-    public String getGroupName(){ return this.chordgroup.getName();}
-
-    public String getChordName(){ return this.chord.getName();}
-
-    public String getChordcomplexityName(){return this.getChordcomplexity().getName();}
-
-    public String getMode(){ return this.chord.getMode();}
-
-    public String getUsage(){ return this.chord.getUsageAsString();}
-
     public void setTranspose(int transpose){ this.transpose = transpose;}
 
     public void setChordgroup(MusicStructureGroup chordgroup) {this.chordgroup = chordgroup;}
@@ -58,4 +48,12 @@ public class Patternelement {
     public void setChordcomplexity(Chordcomplexity chordcomplexity){ this.chordcomplexity = chordcomplexity;}
 
     public void setTactProportion(String tactProportion){ this.tactProportion = tactProportion;}
+
+    //Getters for dynamically UI-outputs--------------------------------------------------------
+    public String getGroupName(){ return this.chordgroup.getName();}
+    public String getChordName(){ return this.chord.getName();}
+    public String getChordcomplexityName(){return this.getChordcomplexity().getName();}
+    public String getMode(){ return this.chord.getMode();}
+    public String getUsage(){ return this.chord.getUsageAsString();}
+    //------------------------------------------------------------------------------------------
 }

@@ -44,10 +44,12 @@ public class MusicStructureGroup extends MusicElement {
         this.musicStructures.remove(musicStructure);
     }
 
+    //Getter for dynamically UI-outputs
     public int getNrOfMusicStructures(){
         return musicStructures.size();
     }
 
+    //Changes all group-attributes in enclosed MusicStructures
     public void changeMusicStructureGroupInMusicStructures(){
         int length = musicStructures.size();
         for(int i=0; i<length; i++){

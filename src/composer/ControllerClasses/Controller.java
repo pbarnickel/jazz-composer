@@ -29,8 +29,13 @@ import static composer.Main.p;
 
 public abstract class Controller implements MessageTypes, JMC, Regex {
 
+    //Response-Object for output-messages in UI
     protected Response r;
+
+    //Settings-Object for accessing the persistent data-model
     protected Settings settings;
+
+    //Lists for tables and choice-boxes, used in sub-controller-classes
     protected ObservableList<MusicStructure> chords;
     protected ObservableList<MusicStructure> allChords;
     protected ObservableList<MusicStructure> allScales;
@@ -42,13 +47,15 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected ObservableList<String> allChordgroupsAsString;
     protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;
-    protected ObservableList<String> allTonesAsString;
     protected ObservableList<Patternelement> allPatternelements;
 
+    //Outputs messages in UI
     public abstract void msg(String message, int type);
 
+    //Loads default inputs
     public abstract void defaultInputs();
 
+    //Transfers usage to string
     public String getUsageAsString(ArrayList<Integer> usage){
         String usageAsString = "";
         int length = usage.size();
@@ -59,6 +66,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         return usageAsString;
     }
 
+    //Transfers string to usage
     public ArrayList<Integer> getUsageAsArray(String usage){
         ArrayList<Integer> usageAsArray = new ArrayList<Integer>();
         while(usage.indexOf("-")>-1){
@@ -69,6 +77,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         return usageAsArray;
     }
 
+    //Changes the scene
     public void changeScene(String sceneKey, ActionEvent actionEvent) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("../../FXML/" + sceneKey + ".fxml"));
         Scene scene = new Scene(parent);
@@ -77,6 +86,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         window.show();
     }
 
+    //Generates filechooser to access MIDI-files
     public File midiFileChooser(String title, ActionEvent actionEvent){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
@@ -86,6 +96,7 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         return fileChooser.showOpenDialog(stg);
     }
 
+    //Returns all MusicStructures of a MusicStructureGroup-list. Example: Returns all chords of all chordgroups
     public ObservableList<MusicStructure> getAllItems(ArrayList<MusicStructureGroup> musicStructureGroups){
         ObservableList<MusicStructure> allItems = FXCollections.observableArrayList();
         int lengthGroups = musicStructureGroups.size();
@@ -93,12 +104,11 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
         return allItems;
     }
 
+    //Returns a MusicElement-list as a String-list. This is used for UI-output
     public ObservableList<String> getStrings(ArrayList<? extends MusicElement> musicElements){
         ObservableList<String> strings = FXCollections.observableArrayList();
         int length = musicElements.size();
-        for(int i=0; i<length; i++){
-            strings.add(musicElements.get(i).getName());
-        }
+        for(int i=0; i<length; i++)strings.add(musicElements.get(i).getName());
         return strings;
     }
 }
