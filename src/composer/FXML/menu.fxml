@@ -22,7 +22,7 @@
                   <Font name="Serif Regular" size="48.0" />
                </font>
             </Label>
-            <Button layoutX="50.0" layoutY="283.0" mnemonicParsing="false" onAction="#gotoBackingTrack" prefHeight="56.0" prefWidth="312.0" styleClass="btn" text="Create Backing Track" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+            <Button layoutX="50.0" layoutY="283.0" mnemonicParsing="false" onAction="#gotoBackingTrack" prefHeight="56.0" prefWidth="312.0" styleClass="btn" text="Create Backingtrack" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
             <Button layoutX="50.0" layoutY="346.0" mnemonicParsing="false" onAction="#gotoAbout" prefHeight="56.0" prefWidth="312.0" styleClass="btn" text="About" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
             <Button layoutX="1233.0" layoutY="33.0" mnemonicParsing="false" onAction="#gotoSettings" styleClass="btn" text="⚙" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="38.0" />
          </children>

@@ -301,3 +301,9 @@
 .scroll-pane .corner {
     -fx-background-color: transparent;
 }
+
+/******************** HYPERLINK ******************************/
+
+.hyp {
+    -fx-font-size: 20px;
+}
