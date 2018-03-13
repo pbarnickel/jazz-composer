@@ -37,8 +37,6 @@ Clear the Backingtrack by clicking on `❌`.
 Play Backingtrack by clicking on `🎶`.
 View Backingtrack as *JMusi-Project* by clicking on `🎼`.
 
-Create Backingtrack by clicking on `Compose`.
-
 In the *General* overview you can activate or deactivate the instruments Piano, Bass and Drums. Set the tone, the tempo and the number of repetitions.
 The Backingtrack will be composed in *Swing* and *4/4*-Tact.
 
@@ -50,6 +48,8 @@ Set the pattern-interval to `Semi` if you want to use the patternelement in a ha
 Otherwise set the pattern-interval `Full` for using the whole *4/4*-Tact. 
 
 ![create backingtrack 2](src/composer/Documentation/backingtrack-2.PNG  "Create Backingtrack 2")
+
+Create Backingtrack by clicking on `Compose`.
 
 ## 4. About
 

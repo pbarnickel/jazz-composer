@@ -71,22 +71,15 @@ public class Backingtrack extends Composer {
 
         for(int i=0; i<repeat; i++){
 
+            //TODO for every patternelement: extract tact, compose tact
+            //TODO add Chords to part
+
+            //Evtl
+            //TODO class Tact contains Swing CPhrases
+            //TODO class Composition extends Score
+            //TODO class CompositionPart extends Part contains Tacts[]
         }
 
-        /*for(int i=0; i<repeat; i++) {
-            for (int j = 0; j < this.pattern.size(); j++) {
-                randChord = getRandomChord();
-                chord = getChord(this.pattern.get(j), randChord, C);
-                piano.addCPhrase(chord);
-                chord = getChord(this.pattern.get(j), randChord, EIGHTH_NOTE);
-                piano.addCPhrase(chord);
-
-                //bass_note = new Note(this.pattern.get(j) - 36, QUADRAPHONIC);          // root bass note
-                //bass_note = getRandomBassNote(this.tone, randChord);
-                //bass_phrase.addNote(bass_note);
-                //bass.addPhrase(bass_phrase);
-            }
-        }*/
     }
 
     //Generates bass part in score
