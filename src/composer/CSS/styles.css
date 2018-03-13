@@ -230,10 +230,12 @@
     -fx-text-fill: #EAEAEA;
 }
 
+.table-view .filler,
 .table-view .column-header,
 .table-view .column-header .filler,
+.table-view > .column-header-background,
 .table-view .column-header-background .filler {
-    -fx-background-color: rgba(0,0,0,0.7);
+    -fx-background-color: rgba(0,0,0,0.3);
     -fx-stroke: transparent;
     -fx-size: 40;
 }
