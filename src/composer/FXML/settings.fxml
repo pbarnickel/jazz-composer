@@ -29,7 +29,7 @@
             </Label>
             <Button layoutX="21.0" layoutY="686.0" mnemonicParsing="false" onAction="#gotoMenu" prefHeight="47.0" prefWidth="59.0" styleClass="btn" text="←" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
             <Label fx:id="lblOut" layoutX="119.0" layoutY="650.0" prefWidth="1159.0" styleClass="out" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" />
-         <Label layoutX="561.0" layoutY="148.0" styleClass="lbl" text="Default location for project files" AnchorPane.rightAnchor="475.0" AnchorPane.topAnchor="150.0" />
+         <Label layoutX="561.0" layoutY="148.0" prefHeight="48.0" prefWidth="300.0" styleClass="lbl" text="Default location for project files" AnchorPane.rightAnchor="471.0" AnchorPane.topAnchor="150.0" />
          <TextField fx:id="edtDefaultLocation" layoutX="857.0" layoutY="148.0" onAction="#onFilesEdt" prefHeight="48.0" prefWidth="373.0" styleClass="edt" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="47.0" layoutY="134.0" mnemonicParsing="false" onAction="#onSave" styleClass="btn" text="💾" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="109.0" layoutY="134.0" mnemonicParsing="false" onAction="#onDefault" styleClass="btn" text="🔃" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="150.0" />
@@ -43,19 +43,19 @@
                            <TableView fx:id="tblChords" layoutX="14.0" layoutY="16.0" prefHeight="441.0" prefWidth="813.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="15.0">
                              <columns>
                                <TableColumn fx:id="colChordsName" onEditCommit="#changeChordsNameCellEvent" prefWidth="196.0" text="Name" />
-                               <TableColumn fx:id="colChordsUsage" onEditCommit="#changeChordsUsageCellEvent" prefWidth="197.0" text="Usage" />
-                                 <TableColumn fx:id="colChordsGroup" minWidth="0.0" onEditCommit="#changeChordsGroupCellEvent" prefWidth="230.0" text="Chordgroup" />
-                                 <TableColumn fx:id="colChordsMode" prefWidth="171.0" styleClass="col_disable" text="Mode" />
+                               <TableColumn fx:id="colChordsUsage" onEditCommit="#changeChordsUsageCellEvent" prefWidth="217.0" text="Usage" />
+                                 <TableColumn fx:id="colChordsGroup" minWidth="0.0" onEditCommit="#changeChordsGroupCellEvent" prefWidth="210.0" text="Chordgroup" />
+                                 <TableColumn fx:id="colChordsMode" prefWidth="158.0" styleClass="col_disable" text="Mode" />
                              </columns>
                            </TableView>
                            <Label layoutX="840.0" layoutY="16.0" prefHeight="48.0" prefWidth="123.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
                            <TextField fx:id="edtChordsName" layoutX="911.0" layoutY="16.0" prefHeight="48.0" prefWidth="252.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="839.0" layoutY="74.0" prefHeight="48.0" prefWidth="125.0" styleClass="lbl" text="Usage" AnchorPane.topAnchor="74.0" />
-                           <TextField fx:id="edtChordsUsage" layoutX="911.0" layoutY="74.0" prefHeight="48.0" prefWidth="249.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
+                           <Label layoutX="839.0" layoutY="74.0" prefHeight="48.0" prefWidth="124.0" styleClass="lbl" text="Usage" AnchorPane.topAnchor="74.0" />
+                           <TextField fx:id="edtChordsUsage" layoutX="911.0" layoutY="74.0" prefHeight="48.0" prefWidth="251.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnChordsAdd" layoutX="840.0" layoutY="195.0" mnemonicParsing="false" onAction="#onChordsAdd" prefHeight="37.0" prefWidth="373.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnChordsDelete" layoutX="840.0" layoutY="250.0" mnemonicParsing="false" onAction="#onChordsDelete" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
-                           <ChoiceBox fx:id="chbChordsGroup" layoutX="967.0" layoutY="134.0" prefHeight="34.0" prefWidth="245.0" styleClass="chb" AnchorPane.rightAnchor="16.0" />
-                           <Label layoutX="839.0" layoutY="134.0" prefHeight="48.0" prefWidth="128.0" styleClass="lbl" text="Chordgroup" />
+                           <ChoiceBox fx:id="chbChordsGroup" layoutX="967.0" layoutY="134.0" prefHeight="48.0" prefWidth="247.0" styleClass="chb" AnchorPane.rightAnchor="16.0" />
+                           <Label layoutX="839.0" layoutY="134.0" prefHeight="48.0" prefWidth="126.0" styleClass="lbl" text="Chordgroup" />
                            <Button fx:id="btnChordsPlay" layoutX="839.0" layoutY="304.0" mnemonicParsing="false" onAction="#onChordsPlay" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="🎶" AnchorPane.rightAnchor="15.0" />
                         </children>
                      </AnchorPane>
@@ -68,11 +68,11 @@
                            <TableView fx:id="tblChordgroups" layoutX="14.0" layoutY="14.0" prefHeight="438.0" prefWidth="838.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="15.0">
                              <columns>
                                <TableColumn fx:id="colChordgroupsName" onEditCommit="#changeChordgroupsNameCellEvent" prefWidth="577.0" text="Name" />
-                               <TableColumn fx:id="colChordgroupsNr" editable="false" prefWidth="218.0" styleClass="col_disable" text="Number of chords" />
+                               <TableColumn fx:id="colChordgroupsNr" editable="false" prefWidth="205.0" styleClass="col_disable" text="Number of chords" />
                              </columns>
                            </TableView>
-                           <Label layoutX="838.0" layoutY="15.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
-                           <TextField fx:id="edtChordgroupsName" layoutX="901.0" layoutY="14.0" prefHeight="48.0" prefWidth="303.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="838.0" layoutY="15.0" prefHeight="48.0" prefWidth="76.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
+                           <TextField fx:id="edtChordgroupsName" layoutX="901.0" layoutY="14.0" prefHeight="48.0" prefWidth="300.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Button fx:id="btnChordgroupsAdd" layoutX="838.0" layoutY="74.0" mnemonicParsing="false" onAction="#onChordgroupsAdd" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnChordgroupsDelete" layoutX="841.0" layoutY="127.0" mnemonicParsing="false" onAction="#onChordgroupsDelete" prefHeight="31.0" prefWidth="373.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
                         </children>
@@ -87,15 +87,15 @@
                              <columns>
                                <TableColumn fx:id="colChordcomplexityName" onEditCommit="#changeChordcomplexityNameCellEvent" prefWidth="546.0" text="Name" />
                                <TableColumn fx:id="colChordcomplexityMin" minWidth="0.0" onEditCommit="#changeChordcomplexityMinCellEvent" prefWidth="128.0" text="Min" />
-                                 <TableColumn fx:id="colChordcomplexityMax" onEditCommit="#changeChordcomplexityMaxCellEvent" prefWidth="120.0" text="Max" />
+                                 <TableColumn fx:id="colChordcomplexityMax" onEditCommit="#changeChordcomplexityMaxCellEvent" prefWidth="114.0" text="Max" />
                              </columns>
                            </TableView>
                            <Label layoutX="836.0" layoutY="15.0" prefHeight="48.0" prefWidth="83.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="836.0" layoutY="73.0" prefHeight="48.0" prefWidth="82.0" styleClass="lbl" text="Min" />
-                           <Label layoutX="835.0" layoutY="130.0" prefHeight="48.0" prefWidth="81.0" styleClass="lbl" text="Max" />
+                           <Label layoutX="835.0" layoutY="130.0" prefHeight="48.0" prefWidth="83.0" styleClass="lbl" text="Max" />
                            <TextField fx:id="edtChordcomplexityName" layoutX="900.0" layoutY="14.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <TextField fx:id="edtChordcomplexityMin" layoutX="891.0" layoutY="73.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
-                           <TextField fx:id="edtChordcomplexityMax" layoutX="890.0" layoutY="130.0" prefHeight="48.0" prefWidth="296.0" styleClass="edt" AnchorPane.rightAnchor="17.0" />
+                           <TextField fx:id="edtChordcomplexityMax" layoutX="890.0" layoutY="130.0" prefHeight="48.0" prefWidth="293.0" styleClass="edt" AnchorPane.rightAnchor="17.0" />
                            <Button fx:id="btnChordcomplexityAdd" layoutX="835.0" layoutY="190.0" mnemonicParsing="false" onAction="#onChordcomplexityAdd" prefHeight="44.0" prefWidth="379.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnChordcomplexityDelete" layoutX="834.0" layoutY="243.0" mnemonicParsing="false" onAction="#onChordcomplexityDelete" prefHeight="44.0" prefWidth="380.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="14.0" />
                         </children>
@@ -111,12 +111,12 @@
                                <TableColumn fx:id="colScalesName" onEditCommit="#changeScalesNameCellEvent" prefWidth="194.0" text="Name" />
                                <TableColumn fx:id="colScalesUsage" onEditCommit="#changeScalesUsageCellEvent" prefWidth="198.0" text="Usage" />
                                  <TableColumn fx:id="colScalesGroup" onEditCommit="#changeScalesGroupCellEvent" prefWidth="235.0" text="Scalegroup" />
-                                 <TableColumn fx:id="colScalesMode" prefWidth="164.0" styleClass="col_disable" text="Mode" />
+                                 <TableColumn fx:id="colScalesMode" prefWidth="153.0" styleClass="col_disable" text="Mode" />
                              </columns>
                            </TableView>
                            <Label layoutX="838.0" layoutY="15.0" prefHeight="48.0" prefWidth="119.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="837.0" layoutY="72.0" prefHeight="48.0" prefWidth="122.0" styleClass="lbl" text="Usage" />
-                           <Label layoutX="837.0" layoutY="128.0" prefHeight="48.0" prefWidth="121.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="837.0" layoutY="128.0" prefHeight="48.0" prefWidth="120.0" styleClass="lbl" text="Scalegroup" />
                            <TextField fx:id="edtScalesName" layoutX="954.0" layoutY="14.0" prefHeight="48.0" prefWidth="256.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <TextField fx:id="edtScalesUsage" layoutX="953.0" layoutY="72.0" prefHeight="48.0" prefWidth="256.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
                            <ChoiceBox fx:id="chbScalesGroup" layoutX="1009.0" layoutY="128.0" prefHeight="48.0" prefWidth="256.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
@@ -133,7 +133,7 @@
                            <TableView fx:id="tblScalegroups" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="15.0">
                              <columns>
                                <TableColumn fx:id="colScalegroupsName" onEditCommit="#changeScalegroupsNameCellEvent" prefWidth="581.0" text="Name" />
-                               <TableColumn fx:id="colScalegroupsNr" prefWidth="215.0" styleClass="col_disable" text="Number of Scales" />
+                               <TableColumn fx:id="colScalegroupsNr" prefWidth="196.0" styleClass="col_disable" text="Number of Scales" />
                              </columns>
                            </TableView>
                            <Label layoutX="836.0" layoutY="15.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />

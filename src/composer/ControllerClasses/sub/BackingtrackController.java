@@ -75,27 +75,6 @@ public class BackingtrackController extends Controller {
         allChordcomplexities = FXCollections.observableArrayList(settings.getChordcomplexities());
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getStrings(settings.getChordcomplexities()));
         allPatternelements = FXCollections.observableArrayList();
-        allPatternelements.add(new Patternelement(
-                0,
-                allChordgroups.get(0),
-                allChordgroups.get(0).getMusicStructures().get(0),
-                allChordcomplexities.get(0),
-                "Semi")
-        );
-        allPatternelements.add(new Patternelement(
-                1,
-                allChordgroups.get(1),
-                allChordgroups.get(1).getMusicStructures().get(0),
-                allChordcomplexities.get(1),
-                "Full")
-        );
-        allPatternelements.add(new Patternelement(
-                2,
-                allChordgroups.get(2),
-                allChordgroups.get(2).getMusicStructures().get(0),
-                allChordcomplexities.get(2),
-                "Semi")
-        );
 
         //init choiceboxes and togglegroups
         chbPatternChordgroups.setItems(allChordgroupsAsString);

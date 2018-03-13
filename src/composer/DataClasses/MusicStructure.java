@@ -65,6 +65,7 @@ public class MusicStructure extends MusicElement implements JMC {
 
     public void setUsage(ArrayList<Integer> usage){
         this.usage = usage;
+        this.mode = calcMode();
     }
 
     public void setGroup(String group){

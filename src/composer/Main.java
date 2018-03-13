@@ -26,6 +26,7 @@ public final class Main extends Application {
     public static void main(String[] args) {
         p("Barnickel Jazz Composer started.");
         launch(args);
+
     }
 
     public static void p(String str){

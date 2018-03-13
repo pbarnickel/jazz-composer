@@ -230,6 +230,7 @@ public class SettingsController extends Controller {
         MusicStructure chordSelected = tblChords.getSelectionModel().getSelectedItem();
         if(newUsage.matches(REG_CHORD_USAGE)) {
             chordSelected.setUsage(getUsageAsArray(newUsage));
+            tblChords.refresh();
             msg("Value changed." + callSave, MSG_W);
         } else {msg("Value not valid.", MSG_E);}
     }
@@ -248,6 +249,7 @@ public class SettingsController extends Controller {
             chordSelected.setGroup(newGroup);
             allChords.add(chordSelected);
             settings.getChordgroups().get(indexNewGroup).addMusicStructure(chordSelected);
+            tblChordgroups.refresh();
             msg("Value changed." + callSave, MSG_W);
         } else {msg(chordSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
@@ -268,6 +270,7 @@ public class SettingsController extends Controller {
                     tblChords.getItems().add(chord);
                     edtChordsName.clear();
                     edtChordsUsage.clear();
+                    tblChordgroups.refresh();
                     msg("Chord " + name + " added." + callSave, MSG_W);
                 } else {msg(error + "Usage not valid.",MSG_E);}
             } else {msg(error + "Name not valid or already used.",MSG_E);}
@@ -277,9 +280,10 @@ public class SettingsController extends Controller {
     @FXML
     public void onChordsDelete(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
-        int indexChordgroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chord.getGroup());
         if(chord != null){
+            int indexChordgroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chord.getGroup());
             allChords.remove(chord);
+            tblChordgroups.refresh();
             settings.getChordgroups().get(indexChordgroup).delMusicStructure(chord);
             msg("Chord deleted." + callSave, MSG_W);
         } else {msg("No chord selected.", MSG_E);}
@@ -325,7 +329,8 @@ public class SettingsController extends Controller {
             allChordgroups.remove(chordgroup);
             allChordgroupsAsString.remove(chordgroup.getName());
             settings.delChordgroup(chordgroup);
-            update();
+            allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
+            tblChords.setItems(allChords);
             msg("Chordgroup deleted." + callSave, MSG_W);
         } else {msg("No chordgroup selected.",MSG_E);}
     }
@@ -410,6 +415,7 @@ public class SettingsController extends Controller {
         MusicStructure scaleSelected = tblScales.getSelectionModel().getSelectedItem();
         if(newUsage.matches(REG_CHORD_USAGE)) {
             scaleSelected.setUsage(getUsageAsArray(newUsage));
+            tblScales.refresh();
             msg("Value changed." + callSave, MSG_W);
         } else {msg("Value not valid.", MSG_E);}
     }
@@ -428,6 +434,7 @@ public class SettingsController extends Controller {
             scaleSelected.setGroup(newGroup);
             allScales.add(scaleSelected);
             settings.getScalegroups().get(indexNewGroup).addMusicStructure(scaleSelected);
+            tblScalegroups.refresh();
             msg("Value changed." + callSave, MSG_W);
         } else {msg(scaleSelected.getName() + " exists already in " + newGroup + ".",MSG_E);}
     }
@@ -448,6 +455,7 @@ public class SettingsController extends Controller {
                     tblScales.getItems().add(scale);
                     edtScalesName.clear();
                     edtScalesUsage.clear();
+                    tblScalegroups.refresh();
                     msg("Scale " + name + " added." + callSave, MSG_W);
                 } else {msg(error + "Usage not valid.",MSG_E);}
             } else {msg(error + "Name not valid or already used.",MSG_E);}
@@ -457,10 +465,11 @@ public class SettingsController extends Controller {
     @FXML
     public void onScalesDelete(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
-        int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), scale.getGroup());
         if(scale != null){
+            int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), scale.getGroup());
             allScales.remove(scale);
             settings.getScalegroups().get(indexScalegroup).delMusicStructure(scale);
+            tblScalegroups.refresh();
             msg("Scale deleted." + callSave, MSG_W);
         } else {msg("No scale selected.", MSG_E);}
     }
@@ -505,7 +514,8 @@ public class SettingsController extends Controller {
             allScalegroups.remove(scalegroup);
             allScalegroupsAsString.remove(scalegroup.getName());
             settings.delScalegroup(scalegroup);
-            update();
+            allScales = FXCollections.observableArrayList(getAllItems(settings.getScalegroups()));
+            tblScales.setItems(allScales);
             msg("Scalegroup deleted." + callSave, MSG_W);
         } else {msg("No scalegroup selected.",MSG_E);}
     }
