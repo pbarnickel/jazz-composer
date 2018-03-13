@@ -1,3 +1,14 @@
+/*
+    Description:    Data-model-class for a Patternelement.
+                    Transpose is the key up from the mode of the jazz composition.
+                    Chordgroup is the Group of neighbour-chords of the used chord.
+                    Chord is the specific used chord.
+                    Chordcomplexity is the range of complexity in which chords are generated.
+                    TactProportion is the information about how much the Patternelement is used in a tact. [50% | 100%]
+    Version:        1.0
+    Date:           13.03.2018
+ */
+
 package composer.DataClasses;
 
 public class Patternelement {

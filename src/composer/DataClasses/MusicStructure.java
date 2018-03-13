@@ -1,5 +1,8 @@
 /*
     Description:    Data-model-class for MusicStructure like Chords or Scales.
+                    Usage is used for saving an Pitch-Array which is used to store chords / scales.
+                    Group is a reference to the MusicStructureGroup which contains the MusicStructure.
+                    Mode = [Major | Minor]
     Author:         Philipp Barnickel
     Version:        1.0
     Date:           22.02.2018
@@ -7,14 +10,12 @@
 
 package composer.DataClasses;
 
-import javafx.scene.transform.Scale;
-import jm.JMC;
 import jm.music.data.*;
 import jm.util.Play;
 
 import java.util.ArrayList;
 
-public class MusicStructure extends MusicElement implements JMC {
+public class MusicStructure extends MusicElement {
 
     private ArrayList<Integer> usage;
     private String group;

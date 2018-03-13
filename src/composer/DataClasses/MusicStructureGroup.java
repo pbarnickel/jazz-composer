@@ -1,5 +1,6 @@
 /*
     Description:    Data-model-class for MusicStructureGroups like Chordgroups or Scalegroups.
+                    musicStructures is a list of all containing MusicStructures.
     Author:         Philipp Barnickel
     Version:        1.0
     Date:           22.02.2018

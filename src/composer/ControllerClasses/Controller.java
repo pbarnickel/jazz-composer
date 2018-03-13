@@ -37,10 +37,12 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     protected ObservableList<MusicStructureGroup> allChordgroups;
     protected ObservableList<MusicStructureGroup> allScalegroups;
     protected ObservableList<Chordcomplexity> allChordcomplexities;
+    protected ObservableList<Tone> allTones;
     protected ObservableList<String> chordsAsString;
     protected ObservableList<String> allChordgroupsAsString;
     protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;
+    protected ObservableList<String> allTonesAsString;
     protected ObservableList<Patternelement> allPatternelements;
 
     public abstract void msg(String message, int type);

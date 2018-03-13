@@ -114,9 +114,9 @@
                                  <TableColumn fx:id="colScalesMode" prefWidth="153.0" styleClass="col_disable" text="Mode" />
                              </columns>
                            </TableView>
-                           <Label layoutX="838.0" layoutY="15.0" prefHeight="48.0" prefWidth="119.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="837.0" layoutY="72.0" prefHeight="48.0" prefWidth="122.0" styleClass="lbl" text="Usage" />
-                           <Label layoutX="837.0" layoutY="128.0" prefHeight="48.0" prefWidth="120.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="841.0" layoutY="15.0" prefHeight="48.0" prefWidth="116.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="841.0" layoutY="72.0" prefHeight="48.0" prefWidth="118.0" styleClass="lbl" text="Usage" />
+                           <Label layoutX="841.0" layoutY="128.0" prefHeight="48.0" prefWidth="116.0" styleClass="lbl" text="Scalegroup" />
                            <TextField fx:id="edtScalesName" layoutX="954.0" layoutY="14.0" prefHeight="48.0" prefWidth="256.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <TextField fx:id="edtScalesUsage" layoutX="953.0" layoutY="72.0" prefHeight="48.0" prefWidth="256.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
                            <ChoiceBox fx:id="chbScalesGroup" layoutX="1009.0" layoutY="128.0" prefHeight="48.0" prefWidth="256.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
@@ -136,10 +136,31 @@
                                <TableColumn fx:id="colScalegroupsNr" prefWidth="196.0" styleClass="col_disable" text="Number of Scales" />
                              </columns>
                            </TableView>
-                           <Label layoutX="836.0" layoutY="15.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
-                           <TextField fx:id="edtScalegroupsName" layoutX="971.0" layoutY="15.0" prefHeight="48.0" prefWidth="307.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="840.0" layoutY="15.0" prefHeight="48.0" prefWidth="81.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
+                           <TextField fx:id="edtScalegroupsName" layoutX="971.0" layoutY="15.0" prefHeight="48.0" prefWidth="294.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Button fx:id="btnScalegroupsAdd" layoutX="836.0" layoutY="73.0" mnemonicParsing="false" onAction="#onScalegroupsAdd" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
                            <Button fx:id="btnScalegroupsDelete" layoutX="839.0" layoutY="127.0" mnemonicParsing="false" onAction="#onScalegroupsDelete" prefHeight="44.0" prefWidth="373.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
+                        </children>
+                     </AnchorPane>
+                 </content>
+               </Tab>
+               <Tab fx:id="tabTones" text="Tones">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <TableView fx:id="tblTones" layoutX="14.0" layoutY="7.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="15.0">
+                             <columns>
+                               <TableColumn fx:id="colTonesName" onEditCommit="#changeTonesNameCellEvent" prefWidth="365.0000305175781" text="Name" />
+                               <TableColumn fx:id="colTonesPitch" onEditCommit="#changeTonesPitchCellEvent" prefWidth="406.9999694824219" text="Pitch" />
+                             </columns>
+                           </TableView>
+                           <Label layoutX="845.0" layoutY="15.0" styleClass="lbl" text="Name" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="845.0" layoutY="74.0" prefHeight="48.0" prefWidth="70.0" styleClass="lbl" text="Pitch" />
+                           <TextField fx:id="edtTonesName" layoutX="906.0" layoutY="16.0" prefHeight="48.0" prefWidth="300.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <TextField fx:id="edtTonesPitch" layoutX="916.0" layoutY="74.0" prefHeight="48.0" prefWidth="300.0" styleClass="edt" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnTonesAdd" layoutX="845.0" layoutY="133.0" mnemonicParsing="false" onAction="#onTonesAdd" prefHeight="44.0" prefWidth="368.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnTonesDelete" layoutX="844.0" layoutY="190.0" mnemonicParsing="false" onAction="#onTonesDelete" prefHeight="44.0" prefWidth="368.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnTonesPlay" layoutX="845.0" layoutY="246.0" mnemonicParsing="false" onAction="#onTonesPlay" prefHeight="44.0" prefWidth="368.0" styleClass="btn" text="🎶" AnchorPane.rightAnchor="15.0" />
                         </children>
                      </AnchorPane>
                  </content>

@@ -24,6 +24,7 @@ public class Settings {
     private ArrayList<MusicStructureGroup> chordgroups;
     private ArrayList<Chordcomplexity> chordcomplexities;
     private ArrayList<MusicStructureGroup> scalegroups;
+    private ArrayList<Tone> tones;
 
     public Settings(){loadSettings();}
 
@@ -37,6 +38,8 @@ public class Settings {
 
     public ArrayList<MusicStructureGroup> getScalegroups() {return scalegroups;}
 
+    public ArrayList<Tone> getTones() {return this.tones;}
+
     public void setDefault_location(String default_location){this.default_location = default_location;}
 
     public void delChordgroup(MusicStructureGroup chordgroup){
@@ -46,6 +49,8 @@ public class Settings {
     public void delScalegroup(MusicStructureGroup scalegroup) {this.scalegroups.remove(scalegroup);}
 
     public void delChordcomplexity(Chordcomplexity chordcomplexity) { this.chordcomplexities.remove(chordcomplexity); }
+
+    public void delTone(Tone tone) { this.tones.remove(tone);}
 
     public String getPathForSettings(){
         return new File("").getAbsolutePath() +  "/src/composer/JSON/settings.json";
@@ -102,6 +107,18 @@ public class Settings {
                 int chordcomplexityMax = Integer.parseInt(jsonObjectChordcomplexity.get("max").toString());
                 Chordcomplexity chordcomplexity = new Chordcomplexity(chordcomplexityName, chordcomplexityMin, chordcomplexityMax);
                 chordcomplexities.add(chordcomplexity);
+            }
+
+            //read tones
+            tones = new ArrayList<Tone>();
+            JSONArray jsonArrayTones = (JSONArray) jsonObjectRoot.get("tones");
+            int lengthJSONArrayTones = jsonArrayTones.size();
+            for(int i=0; i<lengthJSONArrayTones; i++){
+                JSONObject jsonObjectTone = (JSONObject) jsonArrayTones.get(i);
+                String toneName = jsonObjectTone.get("name").toString();
+                Double tonePitch = Double.parseDouble(jsonObjectTone.get("pitch").toString());
+                Tone tone = new Tone(toneName, tonePitch);
+                tones.add(tone);
             }
 
             reader.close();
@@ -173,6 +190,17 @@ public class Settings {
             jsonArrayChordcomplexities.add(jsonObjectChordcomplexity);
         }
         jsonObjectRoot.put("chordcomplexities", jsonArrayChordcomplexities);
+
+        //tones
+        JSONArray jsonArrayTones = new JSONArray();
+        int lengthTones = tones.size();
+        for(int i=0; i<lengthTones; i++){
+            JSONObject jsonObjectTone = new JSONObject();
+            jsonObjectTone.put("name", tones.get(i).getName());
+            jsonObjectTone.put("pitch", tones.get(i).getPitch());
+            jsonArrayTones.add(jsonObjectTone);
+        }
+        jsonObjectRoot.put("tones", jsonArrayTones);
 
         //write JSON
         try (FileWriter writer = new FileWriter(getPathForSettings())){

@@ -166,6 +166,28 @@
       "name": "Rest"
     }]
   }],
+  "tones": [{
+    "name": "C",
+    "pitch": 60.0
+  }, {
+    "name": "D",
+    "pitch": 62.0
+  }, {
+    "name": "E",
+    "pitch": 64.0
+  }, {
+    "name": "F",
+    "pitch": 65.0
+  }, {
+    "name": "G",
+    "pitch": 67.0
+  }, {
+    "name": "A",
+    "pitch": 69.0
+  }, {
+    "name": "B",
+    "pitch": 71.0
+  }],
   "chordcomplexities": [{
     "min": 1,
     "max": 2,
