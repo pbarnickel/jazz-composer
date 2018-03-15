@@ -219,14 +219,14 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            double humanFactor = sldGeneralHumanizer.getValue();
+            double humanazerTolerance = sldGeneralHumanizer.getValue();
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
             ArrayList<Range> eighthsProbabilityRanges = getEighthsProbabilities();
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanFactor, eighthsProbabilityRanges);
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanazerTolerance, eighthsProbabilityRanges);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }

@@ -37,20 +37,22 @@ public class Backingtrack extends Composer {
     private Part drums = new Part("Drums", DRUM, 2);
     private Tone tone;
     private int repeat;
-    private double humanFactor;
     private ArrayList<Patternelement> pattern;
     private ArrayList<Range> eighthsProbabilityRanges;
 
-    //TODO: cut old
-
     public Backingtrack(){}
 
-    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanFactor, ArrayList<Range> eighthsProbabilityRanges){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanizerTolerance, ArrayList<Range> eighthsProbabilityRanges){
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
-        this.humanFactor = calcHumanizerFactor(humanFactor, 5);
         this.eighthsProbabilityRanges = eighthsProbabilityRanges;
+        this.humanizerTolerance = humanizerTolerance;
+        initHumanizer(5);
+
+        for(int i=0; i<100; i++){
+            p(Double.toString(calcHumanizer()));
+        }
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -94,11 +96,3 @@ public class Backingtrack extends Composer {
 
     }
 }
-
-/*
-
-    1. Nehme Patternelement
-    2. Prüfe ob Semi oder Full
-        a) Wenn Semi: nimm dieses Element und das nächste und sende
-
- */

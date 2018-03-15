@@ -17,12 +17,15 @@ import jm.util.Read;
 import jm.util.View;
 import jm.util.Write;
 
+import java.util.Random;
+
 import static composer.Main.p;
 
 public class Composer implements JMC, Tempo {
 
     protected Score score = new Score();
     protected Settings settings = new Settings();
+    protected double humanizerTolerance;
 
     public Composer(){
         settings.loadSettings();
@@ -51,9 +54,15 @@ public class Composer implements JMC, Tempo {
     //Plays the score as MIDI
     public void playScore(){ Play.midi(this.score); }
 
-    //Calculates the humanizer-factor from slider and returns percentage of humanizer-tolerance. Input -> max. Tolerance
-    public double calcHumanizerFactor(double userFactor, double maxFactor){
-        return userFactor/100*maxFactor;
+    //Initializes the humanizer from slider and returns percentage of humanizer-tolerance. Input -> max. Tolerance
+    public void initHumanizer(double maxTolerance){
+        humanizerTolerance = humanizerTolerance * maxTolerance / 10000;
+    }
+
+    //Returns random humanizer-factor for multiplication in algorithms considering the humanizer tolerance
+    public double calcHumanizer(){
+        if(new Random().nextBoolean()) return 1 - humanizerTolerance;
+        else return 1 + humanizerTolerance;
     }
 
     //TODO: Write method to calc Swing positions by WSK - set in UI
