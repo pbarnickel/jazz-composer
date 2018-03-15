@@ -42,6 +42,41 @@
     -fx-font-size: 20px;
 }
 
+/********************************** Label ************************************/
+
+.lbl {
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-padding: 9;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+}
+
+.lbl-static {
+    -fx-background-color: rgba(255,255,255,0.5);
+    -fx-padding: 9;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+    -fx-font-style: italic;
+}
+
+.lbl-list-item {
+    -fx-background-color: rgba(255,255,255,0.5);
+    -fx-padding: 7 9;
+    -fx-text-fill: #202020;
+    -fx-font-size: 20px;
+    -fx-pref-width: 120;
+    -fx-font-style: italic;
+}
+
+/********************************** Text-Field ************************************/
+
+.edt {
+    -fx-padding: 9;
+    -fx-text-fill0: #202020;
+    -fx-font-size: 20px;
+    -fx-background-radius: 2;
+}
+
 /********************************** Toggle-Button ************************************/
 
 .tgl {
@@ -76,24 +111,6 @@
     -fx-padding: 0 50;
     -fx-text-fill: #202020;
     -fx-font-size: 20px;
-}
-
-/********************************** Label ************************************/
-
-.lbl {
-    -fx-background-color: rgba(255,255,255,0.7);
-    -fx-padding: 9;
-    -fx-text-fill: #202020;
-    -fx-font-size: 20px;
-}
-
-/********************************** Text-Field ************************************/
-
-.edt {
-    -fx-padding: 9;
-    -fx-text-fill: #202020;
-    -fx-font-size: 20px;
-    -fx-background-radius: 2;
 }
 
 /********************************** Choice-Box ************************************/
@@ -309,3 +326,5 @@
 .hyp {
     -fx-font-size: 20px;
 }
+
+/******************** SLIDER *********************************/

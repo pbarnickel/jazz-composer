@@ -51,6 +51,11 @@ public class Composer implements JMC, Tempo {
     //Plays the score as MIDI
     public void playScore(){ Play.midi(this.score); }
 
+    //Calculates the humanizer-factor from slider and returns percentage of humanizer-tolerance. Input -> max. Tolerance
+    public double calcHumanizerFactor(double userFactor, double maxFactor){
+        return userFactor/100*maxFactor;
+    }
+
     //TODO: Write method to calc Swing positions by WSK - set in UI
     //TODO: Calc random chords and set them in Swing-Positions. Return Cphrases
     //TODO: implement getRootBassNote with given pitch - 36 (3 octaves down)

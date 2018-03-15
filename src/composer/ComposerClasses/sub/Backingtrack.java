@@ -21,13 +21,11 @@
 package composer.ComposerClasses.sub;
 
 import composer.ComposerClasses.Composer;
-import composer.DataClasses.MusicStructure;
-import composer.DataClasses.MusicStructureGroup;
-import composer.DataClasses.Patternelement;
-import composer.DataClasses.Tone;
+import composer.DataClasses.*;
 import jm.music.data.*;
 import jm.util.Play;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static composer.Main.p;
@@ -39,16 +37,20 @@ public class Backingtrack extends Composer {
     private Part drums = new Part("Drums", DRUM, 2);
     private Tone tone;
     private int repeat;
+    private double humanFactor;
     private ArrayList<Patternelement> pattern;
+    private ArrayList<Range> eighthsProbabilityRanges;
 
     //TODO: cut old
 
     public Backingtrack(){}
 
-    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanFactor, ArrayList<Range> eighthsProbabilityRanges){
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
+        this.humanFactor = calcHumanizerFactor(humanFactor, 5);
+        this.eighthsProbabilityRanges = eighthsProbabilityRanges;
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -92,3 +94,11 @@ public class Backingtrack extends Composer {
 
     }
 }
+
+/*
+
+    1. Nehme Patternelement
+    2. Prüfe ob Semi oder Full
+        a) Wenn Semi: nimm dieses Element und das nächste und sende
+
+ */

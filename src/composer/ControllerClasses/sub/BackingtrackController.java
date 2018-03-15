@@ -19,11 +19,16 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.DragEvent;
 import jm.music.data.*;
 
 public class BackingtrackController extends Controller {
@@ -42,6 +47,7 @@ public class BackingtrackController extends Controller {
     @FXML private TextField edtGeneralTempo;
     @FXML private TextField edtGeneralTone;
     @FXML private TextField edtGeneralRepeat;
+    @FXML private Slider sldGeneralHumanizer;
 
     //Pattern
     @FXML private TableView<Patternelement> tblPattern;
@@ -60,14 +66,22 @@ public class BackingtrackController extends Controller {
     @FXML private ToggleButton tglBtnPatternTactPropSemi;
     @FXML private ToggleButton tglBtnPatternTactPropFull;
 
-    public void initialize(){
-        settings = new Settings();
-        defaultInputs();
-        update();
-        tactProp = true;
-    }
+    //Swing
+    private ArrayList<Slider> sldSwing;
+    @FXML private Slider sldSwing1;
+    @FXML private Slider sldSwing2;
+    @FXML private Slider sldSwing3;
+    @FXML private Slider sldSwing4;
+    @FXML private Slider sldSwing5;
+    @FXML private Slider sldSwing6;
+    @FXML private Slider sldSwing7;
+    @FXML private Slider sldSwing8;
 
-    public void update(){
+    public void initialize(){
+        //general
+        settings = new Settings();
+        tactProp = true;
+
         //load lists
         chords = FXCollections.observableArrayList();
         chordsAsString = FXCollections.observableArrayList();
@@ -119,38 +133,56 @@ public class BackingtrackController extends Controller {
         colPatternChordgroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
         colPatternChordcomplexity.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordcomplexitiesAsString));
         colPatternTactProp.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        //add sliders to slider array
+        sldSwing = new ArrayList<Slider>(Arrays.asList(sldSwing1, sldSwing2, sldSwing3, sldSwing4, sldSwing5, sldSwing6, sldSwing7, sldSwing8));
+
+        //load default user inputs
+        defaultInputs();
     }
 
+    //Default user inputs for faster testing
     @Override
     public void defaultInputs(){
         tglGeneralPiano.setSelected(true);
         edtGeneralTempo.setText("120");
         edtGeneralTone.setText("C");
         edtGeneralRepeat.setText("3");
+        allPatternelements.add(
+                new Patternelement(
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(0),
+                        settings.getChordcomplexities().get(0),
+                        "Full"
+                )
+        );
+        for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
     }
 
     @Override
+    //Writes a message in output-label
     public void msg(String message, int type) {
         this.r = new Response(message, type, lblOut);
     }
 
-    @FXML
+    //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
         changeScene("menu", actionEvent);
     }
 
-    @FXML
+    //Views JMusic composition-overview
     public void onView(ActionEvent actionEvent) {
         if(backingtrack != null)backingtrack.showScore();
         else msg("No composition to view.",MSG_E);
     }
 
-    @FXML
+    //Clears composition
     public void onClear(ActionEvent actionEvent){
         msg("Composition cleared.",MSG_I);
     }
 
-    @FXML
+    //Opens a MIDI-composition
     public void onOpen(ActionEvent actionEvent){
         if(new File(settings.getDefault_location()).exists()) {
             File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent);
@@ -162,7 +194,7 @@ public class BackingtrackController extends Controller {
         } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
 
-    @FXML
+    //Saves composed backingtrack as MIDI-File
     public void onSave(ActionEvent actionEvent){
         if(new File(settings.getDefault_location()).exists()) {
             File selectedFile = midiFileChooser("Choose place for saving File", actionEvent);
@@ -173,7 +205,7 @@ public class BackingtrackController extends Controller {
         } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
 
-    @FXML
+    //Plays composed backingtrack
     public void onPlay(ActionEvent actionEvent) {
         if(backingtrack != null && backingtrack.getScore().getSize() > 0){
             backingtrack.playScore();
@@ -181,24 +213,27 @@ public class BackingtrackController extends Controller {
         } else msg("No Backing Track to play.",MSG_E);
     }
 
-    @FXML
+    //Composes a backingtrack by user input
     public void onCompose(ActionEvent actionEvent) {
         if(validateGeneral() && validatePattern()){
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
+            double humanFactor = sldGeneralHumanizer.getValue();
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern);
+            ArrayList<Range> eighthsProbabilityRanges = getEighthsProbabilities();
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanFactor, eighthsProbabilityRanges);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }
 
     /*************************************** GENERAL ******************************************************************/
 
+    //Validates general configuration of create backingtrack
     public boolean validateGeneral(){
         if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
             if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE_EXTENDED)
@@ -310,5 +345,23 @@ public class BackingtrackController extends Controller {
     public void onPatternPlay(ActionEvent actionEvent) {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         if(patternelement != null)patternelement.getChord().play(true);
+    }
+
+    /******************************************* SWING ****************************************************************/
+
+    public ArrayList<Range> getEighthsProbabilities(){
+        ArrayList<Range> sliders = new ArrayList<Range>();
+        int length = sldSwing.size();
+        double sum = 0;
+        double start = 0;
+        double percentage;
+        for (int i=0; i<length; i++)sum += sldSwing.get(i).getValue();
+        for (int i=0; i<length; i++){
+            percentage = sldSwing.get(i).getValue()/sum*100;
+            Range range = new Range((int) start,(int) (start + percentage - 1));
+            sliders.add(range);
+            start += percentage;
+        }
+        return sliders;
     }
 }

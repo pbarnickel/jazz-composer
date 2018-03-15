@@ -11,6 +11,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -25,7 +26,7 @@
 <VBox fx:id="vboxBackingtrack" prefHeight="858.0" prefWidth="1328.0" styleClass="root" stylesheets="@../CSS/styles.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="composer.ControllerClasses.sub.BackingtrackController">
     <children>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="829.0" prefWidth="1195.0" VBox.vgrow="ALWAYS">
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="468.0" layoutY="98.0" prefHeight="110.0" prefWidth="241.0" styleClass="hdr" text="Create Backing Track" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="468.0" layoutY="98.0" prefHeight="110.0" prefWidth="241.0" styleClass="hdr" text="Create Backingtrack" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <font>
                     <Font size="48.0" />
                 </font>
@@ -65,9 +66,13 @@
                            <Label layoutX="14.0" layoutY="300.0" prefHeight="48.0" prefWidth="90.0" styleClass="lbl" text="Repeat" AnchorPane.leftAnchor="15.0" />
                            <TextField fx:id="edtGeneralRepeat" layoutX="103.0" layoutY="300.0" prefHeight="48.0" prefWidth="234.0" styleClass="edt" AnchorPane.leftAnchor="103.0" />
                            <Label layoutX="12.0" layoutY="358.0" prefHeight="48.0" prefWidth="88.0" styleClass="lbl" text="Rhythm" AnchorPane.leftAnchor="15.0" />
-                           <Label disable="true" layoutX="103.0" layoutY="358.0" prefHeight="48.0" prefWidth="233.0" styleClass="lbl" text="Swing" />
-                           <Label layoutX="348.0" layoutY="15.0" prefHeight="32.0" prefWidth="69.0" styleClass="lbl" text="Tact" />
-                           <Label disable="true" layoutX="417.0" layoutY="15.0" prefHeight="48.0" prefWidth="227.0" styleClass="lbl" text="4/4" />
+                           <Label layoutX="103.0" layoutY="358.0" prefHeight="48.0" prefWidth="233.0" styleClass="lbl-static" text="Swing" />
+                           <Label layoutX="354.0" layoutY="358.0" prefHeight="48.0" prefWidth="114.0" styleClass="lbl" text="Tact" AnchorPane.leftAnchor="350.0" />
+                           <Label layoutX="423.0" layoutY="358.0" prefHeight="48.0" prefWidth="227.0" styleClass="lbl-static" text="4/4" AnchorPane.leftAnchor="464.0" />
+                           <Label layoutX="354.0" layoutY="18.0" styleClass="lbl" text="Humanizer" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="468.0" layoutY="18.0" styleClass="lbl-static" text="Computer" AnchorPane.leftAnchor="464.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="1131.0" layoutY="18.0" styleClass="lbl-static" text="Human" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Slider fx:id="sldGeneralHumanizer" layoutX="578.0" layoutY="30.0" prefHeight="18.0" prefWidth="544.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
                         </children>
                      </AnchorPane>
                </content>
@@ -112,7 +117,26 @@
              </Tab>
                <Tab fx:id="tabSwing" text="Swing">
                  <content>
-                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <Label layoutX="15.0" layoutY="14.0" styleClass="lbl" text="Set the probability of each Eighth-Note in a bar as upbeat." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="63.0" styleClass="lbl-list-item" text="1st Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="107.0" prefWidth="120.0" styleClass="lbl-list-item" text="2nd Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="151.0" prefHeight="24.0" styleClass="lbl-list-item" text="3rd Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="195.0" prefWidth="120.0" styleClass="lbl-list-item" text="4th Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="239.0" prefWidth="120.0" styleClass="lbl-list-item" text="5th Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="283.0" prefWidth="120.0" styleClass="lbl-list-item" text="6th Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="327.0" prefWidth="120.0" styleClass="lbl-list-item" text="7th Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="371.0" prefWidth="120.0" styleClass="lbl-list-item" text="8th Eighth" AnchorPane.leftAnchor="15.0" />
+                           <Slider fx:id="sldSwing1" layoutX="143.0" layoutY="76.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing2" layoutX="143.0" layoutY="120.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing3" layoutX="143.0" layoutY="164.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing4" layoutX="143.0" layoutY="208.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing5" layoutX="143.0" layoutY="252.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing6" layoutX="143.0" layoutY="296.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing7" layoutX="143.0" layoutY="340.0" prefHeight="18.0" prefWidth="1072.0" />
+                           <Slider fx:id="sldSwing8" layoutX="143.0" layoutY="384.0" prefHeight="18.0" prefWidth="1072.0" />
+                        </children></AnchorPane>
                  </content>
                </Tab>
            </tabs>
