@@ -27,6 +27,7 @@ import jm.util.Play;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static composer.Main.p;
 
@@ -50,10 +51,6 @@ public class Backingtrack extends Composer {
         this.humanizerTolerance = humanizerTolerance;
         initHumanizer(5);
 
-        for(int i=0; i<100; i++){
-            p(Double.toString(calcHumanizer()));
-        }
-
         //generate parts
         if(instruments[0])generatePianoPart();
         if(instruments[1])generateBassPart();
@@ -64,16 +61,25 @@ public class Backingtrack extends Composer {
         score.addPart(bass);
         score.addPart(drums);
         score.setTempo(tempo);
-
-        //TODO Generate Piano Part
-        //TODO Generate Bass Part
-        //TODO Generate Drums Part
     }
 
     //Generates piano part in score
     public void generatePianoPart(){
 
         for(int i=0; i<repeat; i++){
+            int lengthPattern = pattern.size();
+            for(int j=0; j<lengthPattern; j++){
+                ArrayList<CPhrase> bar;
+                if(pattern.get(j).getTactProportion().equals("Full")){
+                    bar = calcBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                    p("Pattern Full - 1.: " + pattern.get(j).getTactProportion());
+                } else if(pattern.get(j).getTactProportion().equals("Semi")) {
+                    bar = calcBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    j++;
+                    p("Pattern Semi - 1.: " + pattern.get(j).getTactProportion() + ", 2.: " + pattern.get(j).getTactProportion());
+                }
+            }
+            p("----------------------------------------------------------------------------------");
 
             //TODO for every patternelement: extract tact, compose tact
             //TODO add Chords to part
@@ -83,7 +89,6 @@ public class Backingtrack extends Composer {
             //TODO class Composition extends Score
             //TODO class CompositionPart extends Part contains Tacts[]
         }
-
     }
 
     //Generates bass part in score
@@ -94,5 +99,14 @@ public class Backingtrack extends Composer {
     //Generates drums part in score
     public void generateDrumsPart(){
 
+    }
+
+    //Calculates a full bar and returns result in a CPhrase-List
+    public ArrayList<CPhrase> calcBar(ArrayList<Patternelement> patternpart){
+        ArrayList<CPhrase> bar = new ArrayList<CPhrase>();
+        int length = patternpart.size();
+        int nrOfUsesInBar = getNrOfUsesInBar(3);
+        p("Size: " + Integer.toString(length) + ", Uses: " + Integer.toString(nrOfUsesInBar));
+        return bar;
     }
 }

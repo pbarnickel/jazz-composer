@@ -304,7 +304,7 @@ public class SettingsController extends Controller {
     //Plays a usage as a chord -> play(asChord = true)
     public void onChordsPlay(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
-        if(chord != null)chord.play(true);
+        if(chord != null)chord.play(C4, true);
         else msg("No chord selected.",MSG_E);
     }
 
@@ -490,7 +490,7 @@ public class SettingsController extends Controller {
     //Plays a usage as scale -> play(asChord = false)
     public void onScalesPlay(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
-        if(scale != null)scale.play(false);
+        if(scale != null)scale.play(C4,false);
         else msg("No scale selected",MSG_E);
     }
 

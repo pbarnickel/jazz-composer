@@ -86,7 +86,7 @@ public class MusicStructure extends MusicElement {
     }
 
     //Plays usage as chord (asChord = true) or as scale (asChord = false)
-    public void play(boolean asChord){
+    public void play(int rootPitch, boolean asChord){
         Part piano = new Part("Piano", PIANO, 0);
         CPhrase chord = new CPhrase();
         Phrase scale = new Phrase();
@@ -94,7 +94,7 @@ public class MusicStructure extends MusicElement {
         int notes[] = new int[length];
         for(int i=0; i<length; i++){
             if(asChord){
-                notes[i] = C4 + usage.get(i).intValue();
+                notes[i] = usage.get(i).intValue() + rootPitch;
             } else {
                 Note note = new Note(C4 + usage.get(i),SIXTEENTH_NOTE);
                 scale.addNote(note);

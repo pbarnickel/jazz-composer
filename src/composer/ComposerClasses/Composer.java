@@ -36,7 +36,9 @@ public class Composer implements JMC, Tempo {
     }
 
     //Writes MIDI in score
-    public void readMIDIinScore(String path){Read.midi(this.score, path);}
+    public void readMIDIinScore(String path) {
+        Read.midi(this.score, path);
+    }
 
     //Writes Score in MIDI
     public void writeScoreinMIDI(String path){
@@ -44,7 +46,9 @@ public class Composer implements JMC, Tempo {
     }
 
     //Empties the score
-    public void initScore(){ this.score.empty();}
+    public void initScore() {
+        this.score.empty();
+    }
 
     //Shows the score in JMusic-View
     public void showScore(){
@@ -52,7 +56,9 @@ public class Composer implements JMC, Tempo {
     }
 
     //Plays the score as MIDI
-    public void playScore(){ Play.midi(this.score); }
+    public void playScore() {
+        Play.midi(this.score);
+    }
 
     //Initializes the humanizer from slider and returns percentage of humanizer-tolerance. Input -> max. Tolerance
     public void initHumanizer(double maxTolerance){
@@ -63,6 +69,11 @@ public class Composer implements JMC, Tempo {
     public double calcHumanizer(){
         if(new Random().nextBoolean()) return 1 - humanizerTolerance;
         else return 1 + humanizerTolerance;
+    }
+
+    //Returns random number {1..max} for the number of uses in a bar
+    public int getNrOfUsesInBar(int max){
+        return new Random().nextInt(max) + 1;
     }
 
     //TODO: Write method to calc Swing positions by WSK - set in UI

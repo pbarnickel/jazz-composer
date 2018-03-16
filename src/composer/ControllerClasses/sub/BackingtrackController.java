@@ -152,8 +152,70 @@ public class BackingtrackController extends Controller {
                 new Patternelement(
                         0,
                         settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(0),
-                        settings.getChordcomplexities().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Semi"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Semi"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        7,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Semi"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Semi"
+                )
+        );allPatternelements.add(
+                new Patternelement(
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
                         "Full"
                 )
         );
@@ -344,7 +406,8 @@ public class BackingtrackController extends Controller {
     //Plays the chord of the patternelement
     public void onPatternPlay(ActionEvent actionEvent) {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
-        if(patternelement != null)patternelement.getChord().play(true);
+        int rootPitch = (int) settings.getToneByString(edtGeneralTone.getText()).getPitch() + patternelement.getTranspose();
+        if(patternelement != null)patternelement.getChord().play(rootPitch, true);
     }
 
     /******************************************* SWING ****************************************************************/
