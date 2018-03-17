@@ -219,7 +219,7 @@ public class BackingtrackController extends Controller {
                         "Full"
                 )
         );
-        for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
+        for(int i=0; i<8; i++)sldSwing.get(i).setValue(0);     //new Random().nextInt(100));
     }
 
     @Override
@@ -277,7 +277,7 @@ public class BackingtrackController extends Controller {
 
     //Composes a backingtrack by user input
     public void onCompose(ActionEvent actionEvent) {
-        if(validateGeneral() && validatePattern()){
+        if(validateGeneral() && validatePattern() && validateSwing()){
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
@@ -287,8 +287,8 @@ public class BackingtrackController extends Controller {
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
-            ArrayList<Range> eighthsProbabilityRanges = getEighthsProbabilities();
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanazerTolerance, eighthsProbabilityRanges);
+            ArrayList<Eighth> eighths = getEighthsProbabilities();
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanazerTolerance, eighths);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }
@@ -412,19 +412,33 @@ public class BackingtrackController extends Controller {
 
     /******************************************* SWING ****************************************************************/
 
-    public ArrayList<Range> getEighthsProbabilities(){
-        ArrayList<Range> sliders = new ArrayList<Range>();
+    //Validates general configuration of create backingtrack
+    public boolean validateSwing(){
+        int length = sldSwing.size();
+        for (int i=0; i<length; i++){
+            if(sldSwing.get(i).getValue()>0)return true;
+        }
+        return false;
+    }
+
+    //Reads EighthsProbabilities and adds them to probability-list
+    public ArrayList<Eighth> getEighthsProbabilities(){
+        ArrayList<Eighth> eighths = new ArrayList<Eighth>();
         int length = sldSwing.size();
         double sum = 0;
         double start = 0;
         double percentage;
         for (int i=0; i<length; i++)sum += sldSwing.get(i).getValue();
         for (int i=0; i<length; i++){
-            percentage = sldSwing.get(i).getValue()/sum*100;
-            Range range = new Range((int) start,(int) (start + percentage - 1));
-            sliders.add(range);
-            start += percentage;
+            //Checks if probability is > 0%
+            if(sldSwing.get(i).getValue() > 0) {
+                percentage = sldSwing.get(i).getValue() / sum * 100;
+                Range range = new Range((int) start, (int) (start + percentage - 1));
+                Eighth eighth = new Eighth(i, range);
+                eighths.add(eighth);
+                start += percentage;
+            }
         }
-        return sliders;
+        return eighths;
     }
 }

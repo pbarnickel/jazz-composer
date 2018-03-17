@@ -17,6 +17,7 @@ import jm.util.Read;
 import jm.util.View;
 import jm.util.Write;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static composer.Main.p;
@@ -71,9 +72,11 @@ public class Composer implements JMC, Tempo {
         else return 1 + humanizerTolerance;
     }
 
-    //Returns random number {1..max} for the number of uses in a bar
-    public int getNrOfUsesInBar(int max){
-        return new Random().nextInt(max) + 1;
+    //Adds CPhrase-List to a part
+    public Part addCPhrasesToPart(Part part, ArrayList<CPhrase> cphrases){
+        int length = cphrases.size();
+        for (int i=0; i<length; i++)part.addCPhrase(cphrases.get(i));
+        return part;
     }
 
     //TODO: Write method to calc Swing positions by WSK - set in UI
