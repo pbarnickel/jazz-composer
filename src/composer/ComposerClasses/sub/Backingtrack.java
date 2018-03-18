@@ -97,38 +97,38 @@ public class Backingtrack extends Composer {
 
     //Generates a full bar and returns result in a CPhrase
     public CPhrase generateBar(ArrayList<Patternelement> patternpart){
-        CPhrase bar = new CPhrase();
-        int lengthPatternpart = patternpart.size();
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
 
         //Select patternelement of bar-part by eighth-position → patternpart.size = {1..2} (1 x Full (1) --- or 2 x Semi (2))
         Patternelement currentPatternelemnt;
+        int lengthPatternpart = patternpart.size();
         if(startEighth < 4){
             currentPatternelemnt = patternpart.get(0);
         } else {
             currentPatternelemnt = patternpart.get(lengthPatternpart-1);
         }
 
-        //Get random number {1..max} for the number of uses in a bar {1..3}
-        //TODO: Calc generate usesInBar considering the length of a bar
-        int usesInBar = new Random().nextInt(Math.min(3,eighths.size())) + 1;
+        //Generate bar-uses
+        BarUses barUses = new BarUses(startEighth, eighths.size());
 
         //Add start-rest
+        CPhrase bar = new CPhrase();
         bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
-        for(int i=0; i<usesInBar; i++){
-            //First uses, last use
-            if(i<usesInBar-1){
-
-            } else {
-
-            }
+        for(int i=0; i<barUses.getBarUses().size(); i++){
+            bar.addChord(
+                    getUsageInContext(
+                        currentPatternelemnt.getChord().getUsage(),tone.getPitch() + currentPatternelemnt.getTranspose() + barUses.getBarUses().get(i).getProcedure()
+                    ),
+                    barUses.getBarUses().get(i).getDuration()
+            );
         }
 
         //Add end-rest
+        bar.addChord(getRest(), barUses.getEndRest());
 
         return bar;
     }
@@ -157,30 +157,3 @@ public class Backingtrack extends Composer {
     }
 
 }
-
-//###########################################################################
-//        Score s = new Score();
-//        Part piano = new Part("Piano", PIANO, 5);
-//        for (int i=0; i<10; i+=2) {
-//            CPhrase c = new CPhrase();
-//            int[] ch = new int[]{60+i, 64+i, 67+i, 71+i};
-//            int[] ch2 = new int[]{59+i, 63+i, 66+i, 70+i};
-//            //c.addChord(ch, QUARTER_NOTE_TRIPLET);
-//            //c.addChord(new int[]{REST}, 0.333333333333);
-//            //c.addChord(ch, 0.6666666666);
-//            c.addChord(ch, 1.0);
-//            c.addChord(ch2, 1.0);
-//            c.addChord(ch, 0.6666666666);
-//            c.addChord(new int[]{REST}, 1.333333333333);
-//            piano.addCPhrase(c);
-//            c = new CPhrase();
-//            c.addChord(new int[]{REST}, 0.6666666666666);
-//            c.addChord(ch, 1.33333333333);
-//            c.addChord(ch, 0.66666666666);
-//            c.addChord(new int[]{REST}, 1.3333333333333);
-//            piano.addCPhrase(c);
-//        }
-//        s.addPart(piano);
-//        s.setTempo(120);
-//        Play.midi(s);
-//###########################################################################

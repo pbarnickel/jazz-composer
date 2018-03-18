@@ -2,12 +2,10 @@ package composer.DataClasses;
 
 public class BarUse {
     double duration;
-    int start;
     int procedure;
 
-    public BarUse(double duration, int procedure, int start){
+    public BarUse(double duration, int procedure){
         this.duration = duration;
-        this.start = start;
         this.procedure = procedure;
     }
 
