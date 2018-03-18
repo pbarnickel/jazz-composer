@@ -551,7 +551,7 @@ public class SettingsController extends Controller {
         String newPitch = toneStringCellEditEvent.getNewValue().toString();
         Tone toneSelected = tblTones.getSelectionModel().getSelectedItem();
         if(newPitch.matches(REG_PITCH)){
-            toneSelected.setPitch(Double.parseDouble(newPitch));
+            toneSelected.setPitch(Integer.parseInt(newPitch));
             msg("Value changed." + callSave, MSG_W);
         } else msg("New pitch is not valid.",MSG_E);
     }
@@ -563,7 +563,7 @@ public class SettingsController extends Controller {
         String pitch = edtTonesPitch.getText();
         if(name.matches(REG_TONE) && settings.isNameUnique(settings.getTones(), name)){
             if(pitch.matches(REG_PITCH)) {
-                Tone tone = new Tone(name, Double.parseDouble(pitch));
+                Tone tone = new Tone(name, Integer.parseInt(pitch));
                 allTones.add(tone);
                 settings.getTones().add(tone);
                 edtTonesName.clear();

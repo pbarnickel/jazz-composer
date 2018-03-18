@@ -20,6 +20,7 @@
 
 package composer.ComposerClasses.sub;
 
+import com.sun.deploy.security.CPCallbackHandler;
 import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
@@ -32,9 +33,9 @@ import static composer.Main.p;
 
 public class Backingtrack extends Composer {
 
-    private Part piano = new Part("Piano", PIANO, 0);
-    private Part bass = new Part("Bass", BASS, 1);
-    private Part drums = new Part("Drums", DRUM, 2);
+    private Part piano;
+    private Part bass;
+    private Part drums;
     private Tone tone;
     private int repeat;
     private ArrayList<Patternelement> pattern;
@@ -43,6 +44,9 @@ public class Backingtrack extends Composer {
     public Backingtrack(){}
 
     public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanizerTolerance, ArrayList<Eighth> eighths){
+        this.piano = new Part("Piano", PIANO, 0);
+        this.bass = new Part("Bass", BASS, 1);
+        this.drums = new Part("Drums", DRUM, 2);
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
@@ -65,17 +69,17 @@ public class Backingtrack extends Composer {
     //Generates piano part in score
     public void generatePianoPart(){
 
-        ArrayList<CPhrase> bar;
+        CPhrase bar;
         for (int i=0; i<repeat; i++){
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
                 if (pattern.get(j).getTactProportion().equals("Full")){
-                    bar = calcBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                    bar = generateBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
                 } else {
-                    bar = calcBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    bar = generateBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
                     j++;
                 }
-                piano = addCPhrasesToPart(piano, bar);
+                piano.addCPhrase(bar);
             }
         }
     }
@@ -91,51 +95,92 @@ public class Backingtrack extends Composer {
 
     }
 
-    //Calculates a full bar and returns result in a CPhrase-List
-    public ArrayList<CPhrase> calcBar(ArrayList<Patternelement> patternpart){
+    //Generates a full bar and returns result in a CPhrase
+    public CPhrase generateBar(ArrayList<Patternelement> patternpart){
+        CPhrase bar = new CPhrase();
+        int lengthPatternpart = patternpart.size();
 
-        ArrayList<CPhrase> bar = new ArrayList<CPhrase>();
-        int length = patternpart.size();
+        //Generate random eighth positions
+        int startEighth = calcStartEighth();
 
-        //Get random number {1..max} for the number of uses in a bar
-        int nrOfUsesInBar = new Random().nextInt(Math.min(3,eighths.size())) + 1;
+        //Select patternelement of bar-part by eighth-position → patternpart.size = {1..2} (1 x Full (1) --- or 2 x Semi (2))
+        Patternelement currentPatternelemnt;
+        if(startEighth < 4){
+            currentPatternelemnt = patternpart.get(0);
+        } else {
+            currentPatternelemnt = patternpart.get(lengthPatternpart-1);
+        }
 
-        //Calculates random eighth positions
-        ArrayList<Integer> eighthPositions = calcEighthPositions(nrOfUsesInBar);
-        p("-----------------------------------------------------------------------------");
+        //Get random number {1..max} for the number of uses in a bar {1..3}
+        //TODO: Calc generate usesInBar considering the length of a bar
+        int usesInBar = new Random().nextInt(Math.min(3,eighths.size())) + 1;
+
+        //Add start-rest
+        bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
+
+        //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
+        for(int i=0; i<usesInBar; i++){
+            //First uses, last use
+            if(i<usesInBar-1){
+
+            } else {
+
+            }
+        }
+
+        //Add end-rest
 
         return bar;
     }
 
-    //Calc random start-position for CPhrase-uses in bar considering the eighth-probabilities
-    public ArrayList<Integer> calcEighthPositions(int nrOfUsesInBar){
-        ArrayList<Integer> eighthRandomPositions = new ArrayList<Integer>();
-        int rand;
+    //Calculates random start-position for CPhrase-uses in bar considering the eighth-probabilities
+    public int calcStartEighth(){
+        //Get random number
+        int rand = new Random().nextInt(eighths.get(eighths.size()-1).getRange().getEnd()+1);
         int lengthEighths = eighths.size();
-        for (int i=0; i<nrOfUsesInBar; i++){
-            //Generating random position as long as eighth is unique in list
-            do {
-                rand = new Random().nextInt(eighths.get(eighths.size()-1).getRange().getEnd()+1);
-                //Identifying eighth by range
-                for (int j=0; j<lengthEighths; j++) {
-                    if (eighths.get(j).getRange().isInRange(rand)) {
-                        //Overwriting random number with random position
-                        rand = eighths.get(j).getPosition();
-                        continue;
-                    }
-                }
-            } while (eighthRandomPositions.indexOf(rand)>-1);
-            //Adding eighth to list
-            eighthRandomPositions.add(rand);
+
+        //Identifying eighth by range
+        for (int j=0; j<lengthEighths; j++) {
+            if (eighths.get(j).getRange().isInRange(rand)) {
+                return eighths.get(j).getPosition();
+            }
         }
 
-        //Sorting the list
-        Collections.sort(eighthRandomPositions);
-
-        for(int i=0; i<eighthRandomPositions.size(); i++){
-            p(Integer.toString(eighthRandomPositions.get(i)));
-        }
-
-        return eighthRandomPositions;
+        return 0;
     }
+
+    //Calculates start of an eighth in a bar by position
+    public double calcStartOfEighthInBarByPosition(int position){
+        double start = position / 2;
+        start += (position % 2) * QUARTER_NOTE * 2 / 3;
+        return start;
+    }
+
 }
+
+//###########################################################################
+//        Score s = new Score();
+//        Part piano = new Part("Piano", PIANO, 5);
+//        for (int i=0; i<10; i+=2) {
+//            CPhrase c = new CPhrase();
+//            int[] ch = new int[]{60+i, 64+i, 67+i, 71+i};
+//            int[] ch2 = new int[]{59+i, 63+i, 66+i, 70+i};
+//            //c.addChord(ch, QUARTER_NOTE_TRIPLET);
+//            //c.addChord(new int[]{REST}, 0.333333333333);
+//            //c.addChord(ch, 0.6666666666);
+//            c.addChord(ch, 1.0);
+//            c.addChord(ch2, 1.0);
+//            c.addChord(ch, 0.6666666666);
+//            c.addChord(new int[]{REST}, 1.333333333333);
+//            piano.addCPhrase(c);
+//            c = new CPhrase();
+//            c.addChord(new int[]{REST}, 0.6666666666666);
+//            c.addChord(ch, 1.33333333333);
+//            c.addChord(ch, 0.66666666666);
+//            c.addChord(new int[]{REST}, 1.3333333333333);
+//            piano.addCPhrase(c);
+//        }
+//        s.addPart(piano);
+//        s.setTempo(120);
+//        Play.midi(s);
+//###########################################################################

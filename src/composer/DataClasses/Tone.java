@@ -4,19 +4,19 @@ import jm.music.data.Note;
 import jm.util.Play;
 
 public class Tone extends MusicElement {
-    private double pitch;
+    private int pitch;
 
-    public Tone(String name, double pitch){
+    public Tone(String name, int pitch){
         this.name = name;
         this.pitch = pitch;
     }
 
-    public double getPitch(){ return this.pitch;}
+    public int getPitch(){ return this.pitch;}
 
-    public void setPitch(double pitch){ this.pitch = pitch;}
+    public void setPitch(int pitch){ this.pitch = pitch;}
 
     //Returns pitch as String for dynamically UI-outputs
-    public String getPitchAsString(){ return Double.toString(this.pitch);}
+    public String getPitchAsString(){ return Integer.toString(this.pitch);}
 
     //Plays pitch
     public void play(){

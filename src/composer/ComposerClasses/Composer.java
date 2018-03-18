@@ -9,7 +9,7 @@
 package composer.ComposerClasses;
 
 import composer.DataClasses.Settings;
-import composer.Interfaces.Tempo;
+import composer.Interfaces.Constants;
 import jm.JMC;
 import jm.music.data.*;
 import jm.util.Play;
@@ -20,9 +20,7 @@ import jm.util.Write;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static composer.Main.p;
-
-public class Composer implements JMC, Tempo {
+public class Composer implements JMC, Constants {
 
     protected Score score = new Score();
     protected Settings settings = new Settings();
@@ -72,14 +70,20 @@ public class Composer implements JMC, Tempo {
         else return 1 + humanizerTolerance;
     }
 
-    //Adds CPhrase-List to a part
-    public Part addCPhrasesToPart(Part part, ArrayList<CPhrase> cphrases){
-        int length = cphrases.size();
-        for (int i=0; i<length; i++)part.addCPhrase(cphrases.get(i));
-        return part;
+    //Returns an usage array added with a root pitch
+    public int[] getUsageInContext(ArrayList<Integer> usage, int rootPitch){
+        int length = usage.size();
+        int[] result = new int[length];
+        for (int i=0; i<length; i++){
+            result[i] = usage.get(i) + rootPitch;
+        }
+        return result;
     }
 
-    //TODO: Write method to calc Swing positions by WSK - set in UI
-    //TODO: Calc random chords and set them in Swing-Positions. Return Cphrases
+    //Returns a rest
+    public int[] getRest(){
+        return new int[]{REST};
+    }
+
     //TODO: implement getRootBassNote with given pitch - 36 (3 octaves down)
 }

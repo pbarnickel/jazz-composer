@@ -152,34 +152,7 @@ public class BackingtrackController extends Controller {
                 new Patternelement(
                         0,
                         settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        0,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Semi"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Semi"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        7,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordgroups().get(0).getMusicStructures().get(4),
                         settings.getChordcomplexities().get(3),
                         "Full"
                 )
@@ -195,11 +168,47 @@ public class BackingtrackController extends Controller {
         );
         allPatternelements.add(
                 new Patternelement(
-                        0,
+                        4,
                         settings.getChordgroups().get(0),
                         settings.getChordgroups().get(0).getMusicStructures().get(5),
                         settings.getChordcomplexities().get(3),
-                        "Semi"
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        -3,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(32),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(12),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        -5,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(15),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(4),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
                 )
         );
         allPatternelements.add(
@@ -210,16 +219,19 @@ public class BackingtrackController extends Controller {
                         settings.getChordcomplexities().get(3),
                         "Semi"
                 )
-        );allPatternelements.add(
+        );
+        allPatternelements.add(
                 new Patternelement(
-                        0,
+                        -5,
                         settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordgroups().get(0).getMusicStructures().get(15),
                         settings.getChordcomplexities().get(3),
-                        "Full"
+                        "Semi"
                 )
         );
-        for(int i=0; i<8; i++)sldSwing.get(i).setValue(0);     //new Random().nextInt(100));
+        double[] val = new double[]{100,100,0,0,0,0,0,0};
+        //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
+        for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
     }
 
     @Override
@@ -247,7 +259,7 @@ public class BackingtrackController extends Controller {
     //Opens a MIDI-composition
     public void onOpen(ActionEvent actionEvent){
         if(new File(settings.getDefault_location()).exists()) {
-            File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent);
+            File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent, true);
             if (selectedFile != null) {
                 backingtrack = new Backingtrack();
                 backingtrack.readMIDIinScore(selectedFile.getPath());
@@ -258,13 +270,15 @@ public class BackingtrackController extends Controller {
 
     //Saves composed backingtrack as MIDI-File
     public void onSave(ActionEvent actionEvent){
-        if(new File(settings.getDefault_location()).exists()) {
-            File selectedFile = midiFileChooser("Choose place for saving File", actionEvent);
-            if (selectedFile != null) {
-                backingtrack.writeScoreinMIDI(selectedFile.getPath());
-                msg(selectedFile.getName() + " saved.",MSG_S);
-            } else {msg("File could not be saved.", MSG_E);}
-        } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
+        if(backingtrack != null) {
+            if(new File(settings.getDefault_location()).exists()) {
+                File selectedFile = midiFileChooser("Choose place for saving File", actionEvent, false);
+                if (selectedFile != null) {
+                    backingtrack.writeScoreinMIDI(selectedFile.getPath());
+                    msg(selectedFile.getName() + " saved.", MSG_S);
+                } else {msg("File could not be saved.", MSG_E);}
+            } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
+        } else msg("No Backingtrack composed.", MSG_E);
     }
 
     //Plays composed backingtrack

@@ -168,25 +168,25 @@
   }],
   "tones": [{
     "name": "C",
-    "pitch": 60.0
+    "pitch": 60
   }, {
     "name": "D",
-    "pitch": 62.0
+    "pitch": 62
   }, {
     "name": "E",
-    "pitch": 64.0
+    "pitch": 64
   }, {
     "name": "F",
-    "pitch": 65.0
+    "pitch": 65
   }, {
     "name": "G",
-    "pitch": 67.0
+    "pitch": 67
   }, {
     "name": "A",
-    "pitch": 69.0
+    "pitch": 69
   }, {
     "name": "B",
-    "pitch": 71.0
+    "pitch": 71
   }],
   "chordcomplexities": [{
     "min": 1,

@@ -8,8 +8,7 @@
 package composer.ControllerClasses;
 
 import composer.DataClasses.*;
-import composer.Interfaces.MessageTypes;
-import composer.Interfaces.Regex;
+import composer.Interfaces.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -25,9 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static composer.Main.p;
-
-public abstract class Controller implements MessageTypes, JMC, Regex {
+public abstract class Controller implements JMC, Constants {
 
     //Response-Object for output-messages in UI
     protected Response r;
@@ -87,13 +84,14 @@ public abstract class Controller implements MessageTypes, JMC, Regex {
     }
 
     //Generates filechooser to access MIDI-files
-    public File midiFileChooser(String title, ActionEvent actionEvent){
+    public File midiFileChooser(String title, ActionEvent actionEvent, boolean open){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialDirectory(new File(new Settings().getDefault_location()));
         fileChooser.getExtensionFilters().add( new FileChooser.ExtensionFilter("MIDI Files", "*.mid"));
         Stage stg = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        return fileChooser.showOpenDialog(stg);
+        if(open)return fileChooser.showOpenDialog(stg);
+        else return fileChooser.showSaveDialog(stg);
     }
 
     //Returns all MusicStructures of a MusicStructureGroup-list. Example: Returns all chords of all chordgroups

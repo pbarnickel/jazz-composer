@@ -82,7 +82,7 @@ public class Settings implements JMC{
     //Returns Tone-Object by String of Tone-Name
     public Tone getToneByString(String toneString){
         int length = tones.size();
-        double pitch = 60;
+        int pitch = 60;
         for(int i=0; i<length; i++){
             if(tones.get(i).getName().equals(toneString.substring(0,1))){
                 pitch = tones.get(i).getPitch();
@@ -140,7 +140,7 @@ public class Settings implements JMC{
             for(int i=0; i<lengthJSONArrayTones; i++){
                 JSONObject jsonObjectTone = (JSONObject) jsonArrayTones.get(i);
                 String toneName = jsonObjectTone.get("name").toString();
-                Double tonePitch = Double.parseDouble(jsonObjectTone.get("pitch").toString());
+                Integer tonePitch = Integer.parseInt(jsonObjectTone.get("pitch").toString());
                 Tone tone = new Tone(toneName, tonePitch);
                 tones.add(tone);
             }
