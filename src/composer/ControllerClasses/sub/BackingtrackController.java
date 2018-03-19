@@ -48,6 +48,7 @@ public class BackingtrackController extends Controller {
     @FXML private TextField edtGeneralTone;
     @FXML private TextField edtGeneralRepeat;
     @FXML private Slider sldGeneralHumanizer;
+    @FXML private Slider sldGeneralDeviation;
 
     //Pattern
     @FXML private TableView<Patternelement> tblPattern;
@@ -295,14 +296,15 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            double humanazerTolerance = sldGeneralHumanizer.getValue();
+            double humanizerTolerance = sldGeneralHumanizer.getValue();
+            int deviation = (int) (sldGeneralDeviation.getValue()/100 * 12);
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
             ArrayList<Eighth> eighths = getEighthsProbabilities();
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanazerTolerance, eighths);
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }

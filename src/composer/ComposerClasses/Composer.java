@@ -8,6 +8,8 @@
 
 package composer.ComposerClasses;
 
+import composer.DataClasses.Chordcomplexity;
+import composer.DataClasses.Patternelement;
 import composer.DataClasses.Settings;
 import composer.Interfaces.Constants;
 import jm.JMC;
@@ -17,8 +19,7 @@ import jm.util.Read;
 import jm.util.View;
 import jm.util.Write;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class Composer implements JMC, Constants {
 
@@ -83,6 +84,57 @@ public class Composer implements JMC, Constants {
     //Returns a rest
     public int[] getRest(){
         return new int[]{REST};
+    }
+
+    //Returns a chord-usage - considering the deviation
+    public ArrayList<Integer> calcDeviationInUsage(int deviation, Patternelement current, Patternelement old){
+        int transposeDifference = current.getTranspose() - old.getTranspose();
+        ArrayList<Integer> currentUsage = current.getChord().getUsage();
+        int length = currentUsage.size();
+
+        //Find position to start usage considering deviation
+        int pos = 0;
+        labelFindPosition:
+        for(int i=deviation; i>=0; i--) {
+            for (int j = 0; j < length; j++) {
+                if ((currentUsage.get(j) + transposeDifference + i) == i ||
+                    (currentUsage.get(j) + transposeDifference + i) == (i + 12)){
+                    pos = j;
+                    break labelFindPosition;
+                }
+            }
+        }
+
+        //Shift usage as long as the founded item with matching deviation is the first list-item
+        Collections.rotate(currentUsage, length - pos);
+
+        //Scale down the pitch of items as long as items left are bigger than items on the right
+        for(int i=0; i<length; i++){
+            if(i < (length - 1) && currentUsage.get(i) > currentUsage.get(i+1)){
+                currentUsage.set(i, currentUsage.get(i) - 12);
+            } else break;
+        }
+
+        return currentUsage;
+    }
+
+    //Returns an usage of a chord considering the chordcomplexity
+    public ArrayList<Integer> generateChordcomplexity(Patternelement patternelement){
+        ArrayList<Integer> usage = patternelement.getChord().getUsage();
+        int complexity = new Random().nextInt(patternelement.getChordcomplexity().getMax() - patternelement.getChordcomplexity().getMin() + 1)
+                         + patternelement.getChordcomplexity().getMin();
+        int length = usage.size();
+        if(complexity <= length){
+            usage = new ArrayList<Integer>(usage.subList(0, complexity));
+        } else {
+            int pos = 0;
+            for(int i=length; i<complexity; i++){
+                usage.add(usage.get(pos) + 12);
+                pos++;
+            }
+        }
+
+        return usage;
     }
 
     //TODO: implement getRootBassNote with given pitch - 36 (3 octaves down)

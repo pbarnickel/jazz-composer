@@ -20,13 +20,10 @@
 
 package composer.ComposerClasses.sub;
 
-import com.sun.deploy.security.CPCallbackHandler;
 import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
-import jm.util.Play;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static composer.Main.p;
@@ -40,10 +37,11 @@ public class Backingtrack extends Composer {
     private int repeat;
     private ArrayList<Patternelement> pattern;
     private ArrayList<Eighth> eighths;
+    private int deviation;
 
     public Backingtrack(){}
 
-    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanizerTolerance, ArrayList<Eighth> eighths){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanizerTolerance, ArrayList<Eighth> eighths, int deviation){
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
         this.drums = new Part("Drums", DRUM, 2);
@@ -51,6 +49,7 @@ public class Backingtrack extends Composer {
         this.repeat = repeat;
         this.pattern = pattern;
         this.eighths = eighths;
+        this.deviation = deviation;
         this.humanizerTolerance = humanizerTolerance;
         initHumanizer(5);
 
@@ -72,10 +71,12 @@ public class Backingtrack extends Composer {
         for (int i=0; i<repeat; i++){
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
+                Patternelement oldPatternelement = pattern.get(j);
+                if(j>0)oldPatternelement = pattern.get(j-1);
                 if (pattern.get(j).getTactProportion().equals("Full")){
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))), oldPatternelement);
                 } else {
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))), oldPatternelement);
                     j++;
                 }
                 piano.addCPhrase(bar);
@@ -103,18 +104,18 @@ public class Backingtrack extends Composer {
     }
 
     //Generates a full bar and returns result in a CPhrase
-    public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart){
+    public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart, Patternelement oldPatternelement){
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
 
         //Select patternelement of bar-part by eighth-position → patternpart.size = {1..2} (1 x Full (1) --- or 2 x Semi (2))
-        Patternelement currentPatternelemnt;
+        Patternelement currentPatternelement;
         int lengthPatternpart = patternpart.size();
         if(startEighth < 4){
-            currentPatternelemnt = patternpart.get(0);
+            currentPatternelement = patternpart.get(0);
         } else {
-            currentPatternelemnt = patternpart.get(lengthPatternpart-1);
+            currentPatternelement = patternpart.get(lengthPatternpart-1);
         }
 
         //Generate bar-uses
@@ -124,12 +125,19 @@ public class Backingtrack extends Composer {
         CPhrase bar = new CPhrase();
         bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
 
+        //Generate a for bar specific deviation between this chord and the last one
+        int localDeviation = new Random().nextInt(deviation + 1);
+        ArrayList<Integer> usage = calcDeviationInUsage(localDeviation, currentPatternelement, oldPatternelement);
+
+        //Generate chordcomplexity
+        usage = generateChordcomplexity(currentPatternelement);
+
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
         //TODO: Consider Chordcomplexity and chord-alternatives
         for(int i=0; i<barUses.getBarUses().size(); i++){
             bar.addChord(
                     getUsageInContext(
-                        currentPatternelemnt.getChord().getUsage(),tone.getPitch() + currentPatternelemnt.getTranspose() + barUses.getBarUses().get(i).getProcedure()
+                        usage,tone.getPitch() + currentPatternelement.getTranspose() + barUses.getBarUses().get(i).getProcedure()
                     ),
                     barUses.getBarUses().get(i).getDuration()
             );

@@ -73,6 +73,10 @@
                            <Label layoutX="468.0" layoutY="18.0" styleClass="lbl-static" text="Computer" AnchorPane.leftAnchor="464.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="1131.0" layoutY="18.0" styleClass="lbl-static" text="Human" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Slider fx:id="sldGeneralHumanizer" layoutX="578.0" layoutY="30.0" prefHeight="18.0" prefWidth="544.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
+                           <Label layoutX="350.0" layoutY="70.0" prefHeight="48.0" prefWidth="114.0" styleClass="lbl" text="Deviation" />
+                           <Label layoutX="464.0" layoutY="70.0" prefHeight="48.0" prefWidth="104.0" styleClass="lbl-static" text="Low" />
+                           <Label layoutX="1130.0" layoutY="70.0" prefHeight="48.0" prefWidth="82.0" styleClass="lbl-static" text="High" AnchorPane.rightAnchor="15.0" />
+                           <Slider fx:id="sldGeneralDeviation" layoutX="580.0" layoutY="85.0" prefHeight="18.0" prefWidth="532.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
                         </children>
                      </AnchorPane>
                </content>
