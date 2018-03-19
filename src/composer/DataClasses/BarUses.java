@@ -2,7 +2,7 @@
     Description:    Helper-Class for Calculating matching uses considering the start eighth of bar;
     Author:         Philipp Barnickel
     Version:        1.0
-    Date:           22.02.2018
+    Date:           19.03.2018
  */
 
 package composer.DataClasses;
@@ -16,21 +16,23 @@ public class BarUses implements JMC {
     private ArrayList<BarUse> barUses;
     private double endRest;
 
-    public BarUses(int startEighth, int nrOfEighths){
+    public BarUses(int startEighth){
         barUses = new ArrayList<BarUse>();
 
         //Calculate scope for generation
         double possibleScope = WHOLE_NOTE - getStartTime(startEighth);
 
         //Generate a random nr of uses
-        int nrUses = new Random().nextInt(Math.min(3, nrOfEighths)) + 1;
+        int nrUses = new Random().nextInt(3) + 1;
 
         //Generate bar-uses by nr of uses
         if(possibleScope == WHOLE_NOTE && nrUses == 1){
             barUses.add(new BarUse(WHOLE_NOTE, 0));
+            possibleScope -= WHOLE_NOTE;
         } else {
             if(nrUses == 1){
                 barUses.add(new BarUse(possibleScope, 0));
+                possibleScope -= possibleScope;
             } else if(nrUses == 2){
                 int procedure = new Random().nextInt(3) - 1;
                 int procedure_2;
@@ -83,7 +85,7 @@ public class BarUses implements JMC {
     }
 
     //Returns the start time of
-    public double getStartTime(int position) {
+    private double getStartTime(int position) {
         double start = position / 2;
         start += (position % 2) * QUARTER_NOTE * 2 / 3;
         return start;

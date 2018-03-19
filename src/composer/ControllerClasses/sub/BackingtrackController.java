@@ -229,9 +229,9 @@ public class BackingtrackController extends Controller {
                         "Semi"
                 )
         );
-        double[] val = new double[]{100,100,0,0,0,0,0,0};
-        //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
-        for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
+        //double[] val = new double[]{100,100,0,0,0,0,0,0};
+        for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
+        //for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
     }
 
     @Override

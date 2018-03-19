@@ -68,15 +68,14 @@ public class Backingtrack extends Composer {
 
     //Generates piano part in score
     public void generatePianoPart(){
-
         CPhrase bar;
         for (int i=0; i<repeat; i++){
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
                 if (pattern.get(j).getTactProportion().equals("Full")){
-                    bar = generateBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
                 } else {
-                    bar = generateBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
                     j++;
                 }
                 piano.addCPhrase(bar);
@@ -86,7 +85,15 @@ public class Backingtrack extends Composer {
 
     //Generates bass part in score
     public void generateBassPart(){
-
+        Phrase bar = new Phrase();
+        for (int i=0; i<repeat; i++){
+            int lengthPattern = pattern.size();
+            for (int j=0; j<lengthPattern; j++){
+                Note note = new Note(C4, WHOLE_NOTE);
+                bar.addNote(note);
+                bass.addPhrase(bar);
+            }
+        }
     }
 
 
@@ -96,7 +103,7 @@ public class Backingtrack extends Composer {
     }
 
     //Generates a full bar and returns result in a CPhrase
-    public CPhrase generateBar(ArrayList<Patternelement> patternpart){
+    public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart){
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
@@ -111,13 +118,14 @@ public class Backingtrack extends Composer {
         }
 
         //Generate bar-uses
-        BarUses barUses = new BarUses(startEighth, eighths.size());
+        BarUses barUses = new BarUses(startEighth);
 
         //Add start-rest
         CPhrase bar = new CPhrase();
         bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
+        //TODO: Consider Chordcomplexity and chord-alternatives
         for(int i=0; i<barUses.getBarUses().size(); i++){
             bar.addChord(
                     getUsageInContext(
