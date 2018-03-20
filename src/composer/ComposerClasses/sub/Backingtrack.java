@@ -24,7 +24,9 @@ import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
 import jm.util.View;
+import jm.util.Write;
 
+import javax.sound.midi.MidiUnavailableException;
 import java.util.*;
 
 import static composer.Main.p;
@@ -40,10 +42,13 @@ public class Backingtrack extends Composer {
     private ArrayList<Eighth> eighths;
     private int deviation;
 
-    public Backingtrack(){}
+    public Backingtrack() throws MidiUnavailableException {
+        super();
+    }
 
     public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern,
-                        double humanizerTolerance, ArrayList<Eighth> eighths, int deviation, double dynamic){
+                        double humanizerTolerance, ArrayList<Eighth> eighths, int deviation, double dynamic) throws MidiUnavailableException {
+        super();
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
         this.drums = new Part("Drums", DRUM, 2);
@@ -66,7 +71,8 @@ public class Backingtrack extends Composer {
         score.addPart(drums);
         score.setTempo(tempo);
 
-        View.histogram(score);
+        //Write MIDI audio-file for listening compositions in GUI
+        Write.midi(score, settings.getDefault_location() + runtimeFile);
     }
 
     //Generates piano part in score

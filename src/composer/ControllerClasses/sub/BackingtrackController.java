@@ -29,7 +29,13 @@ import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import jm.music.data.*;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
+import static composer.Main.p;
 
 public class BackingtrackController extends Controller {
 
@@ -234,7 +240,7 @@ public class BackingtrackController extends Controller {
         double[] val = new double[]{100,0,0,0,100,0,0,0};
         for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
         sldGeneralHumanizer.setValue(20);
-        sldGeneralDynamic.setValue(20);
+        sldGeneralDynamic.setValue(40);
         //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
     }
 
@@ -257,11 +263,12 @@ public class BackingtrackController extends Controller {
 
     //Clears composition
     public void onClear(ActionEvent actionEvent){
+        backingtrack.initScore();
         msg("Composition cleared.",MSG_I);
     }
 
     //Opens a MIDI-composition
-    public void onOpen(ActionEvent actionEvent){
+    public void onOpen(ActionEvent actionEvent) throws MidiUnavailableException {
         if(new File(settings.getDefault_location()).exists()) {
             File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent, true);
             if (selectedFile != null) {
@@ -286,15 +293,35 @@ public class BackingtrackController extends Controller {
     }
 
     //Plays composed backingtrack
-    public void onPlay(ActionEvent actionEvent) {
+    public void onPlay(ActionEvent actionEvent) throws MidiUnavailableException, InvalidMidiDataException, IOException {
         if(backingtrack != null && backingtrack.getScore().getSize() > 0){
             backingtrack.playScore();
-            msg("Backing Track is played.",MSG_I);
-        } else msg("No Backing Track to play.",MSG_E);
+        } else msg("No Backingtrack to play.",MSG_E);
+    }
+
+    //Pauses composed backingtrack
+    public void onPause(ActionEvent actionEvent) {
+        if(backingtrack.getSequencer().isRunning()){
+            backingtrack.pauseScore();
+        } else msg("No Backingtrack playing.",MSG_E);
+    }
+
+    //Stops composed backingtrack
+    public void onStop(ActionEvent actionEvent) {
+        if(backingtrack.getSequencer().isOpen()){
+            backingtrack.stopScore();
+        } else msg("No Backingtrack to stop.",MSG_E);
+    }
+
+    //Shows statistics
+    public void onStatistics(ActionEvent actionEvent) {
+        if(backingtrack != null){
+            backingtrack.showStatistics();
+        } else msg("No composition-statistics.",MSG_E);
     }
 
     //Composes a backingtrack by user input
-    public void onCompose(ActionEvent actionEvent) {
+    public void onCompose(ActionEvent actionEvent) throws MidiUnavailableException {
         if(validateGeneral() && validatePattern() && validateSwing()){
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());

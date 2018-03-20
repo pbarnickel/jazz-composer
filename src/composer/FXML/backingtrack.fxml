@@ -37,7 +37,7 @@
          <Button layoutX="98.0" layoutY="148.0" mnemonicParsing="false" onAction="#onSave" styleClass="btn" text="💾" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="150.0" />
          <Label fx:id="lblOut" layoutX="119.0" layoutY="650.0" prefWidth="1159.0" styleClass="out" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" />
          <Button layoutX="1230.0" layoutY="148.0" mnemonicParsing="false" onAction="#onView" styleClass="btn" text="🎼" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" />
-         <Button layoutX="1182.0" layoutY="148.0" mnemonicParsing="false" onAction="#onPlay" styleClass="btn" text="🎶" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1011.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPlay" prefHeight="44.0" prefWidth="48.0" styleClass="btn" text="▶" AnchorPane.rightAnchor="264.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="50.0" layoutY="709.0" mnemonicParsing="false" onAction="#onCompose" prefHeight="44.0" prefWidth="1230.0" styleClass="btn" text="Compose" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
          <TabPane fx:id="tbpBackingtrack" layoutX="50.0" layoutY="218.0" prefHeight="487.0" prefWidth="1228.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="165.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="218.0">
            <tabs>
@@ -149,6 +149,9 @@
                </Tab>
            </tabs>
          </TabPane>
+         <Button layoutX="1176.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStatistics" styleClass="btn" text="📈" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1067.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPause" styleClass="btn" text="∎∎" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1123.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStop" styleClass="btn" text="⏹" AnchorPane.rightAnchor="158.0" AnchorPane.topAnchor="150.0" />
         </AnchorPane>
     </children>
 </VBox>

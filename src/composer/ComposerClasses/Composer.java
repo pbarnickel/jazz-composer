@@ -18,6 +18,11 @@ import jm.util.Read;
 import jm.util.View;
 import jm.util.Write;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequencer;
+import java.io.*;
 import java.util.*;
 
 import static composer.Main.p;
@@ -28,13 +33,20 @@ public class Composer implements JMC, Constants {
     protected Settings settings = new Settings();
     protected double humanizerTolerance;
     protected double dynamic;
+    protected String runtimeFile = "/runtime.mid";
+    protected Sequencer sequencer = MidiSystem.getSequencer();;
 
-    public Composer(){
+    public Composer() throws MidiUnavailableException {
+        //Loading settings
         settings.loadSettings();
     }
 
     public Score getScore(){
         return this.score;
+    }
+
+    public Sequencer getSequencer(){
+        return this.sequencer;
     }
 
     //Writes MIDI in score
@@ -50,6 +62,7 @@ public class Composer implements JMC, Constants {
     //Empties the score
     public void initScore() {
         this.score.empty();
+        int x = 0;
     }
 
     //Shows the score in JMusic-View
@@ -58,8 +71,30 @@ public class Composer implements JMC, Constants {
     }
 
     //Plays the score as MIDI
-    public void playScore() {
-        Play.midi(this.score);
+    public void playScore() throws MidiUnavailableException, IOException, InvalidMidiDataException {
+        if(sequencer.isOpen()){
+            sequencer.start();
+        } else {
+            sequencer.open();
+            InputStream is = new BufferedInputStream(new FileInputStream(new File(settings.getDefault_location() + runtimeFile)));
+            sequencer.setSequence(is);
+            sequencer.start();
+        }
+    }
+
+    //Pauses playing MIDI
+    public void pauseScore(){
+        sequencer.stop();
+    }
+
+    //Stops playing MIDI
+    public void stopScore(){
+        sequencer.close();
+    }
+
+    //Shows statistics of score
+    public void showStatistics(){
+        View.histogram(score);
     }
 
     //Returns random humanizer-factor for multiplication in algorithms considering the humanizer tolerance
