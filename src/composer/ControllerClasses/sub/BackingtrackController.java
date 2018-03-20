@@ -146,7 +146,7 @@ public class BackingtrackController extends Controller {
     @Override
     public void defaultInputs(){
         tglGeneralPiano.setSelected(true);
-        edtGeneralTempo.setText("120");
+        edtGeneralTempo.setText("140");
         edtGeneralTone.setText("C");
         edtGeneralRepeat.setText("3");
         allPatternelements.add(
@@ -296,7 +296,7 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            double humanizerTolerance = sldGeneralHumanizer.getValue();
+            int humanizerTolerance = (int) sldGeneralHumanizer.getValue();
             int deviation = (int) (sldGeneralDeviation.getValue()/100 * 12);
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();

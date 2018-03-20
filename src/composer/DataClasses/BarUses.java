@@ -67,6 +67,10 @@ public class BarUses implements JMC {
         return this.barUses;
     }
 
+    public BarUse getBarUse(int index){
+        return this.barUses.get(index);
+    }
+
     public double getEndRest(){
         return this.endRest;
     }

@@ -8,7 +8,6 @@
 
 package composer.ComposerClasses;
 
-import composer.DataClasses.Chordcomplexity;
 import composer.DataClasses.Patternelement;
 import composer.DataClasses.Settings;
 import composer.Interfaces.Constants;
@@ -25,7 +24,7 @@ public class Composer implements JMC, Constants {
 
     protected Score score = new Score();
     protected Settings settings = new Settings();
-    protected double humanizerTolerance;
+    protected int humanizerTolerance;
 
     public Composer(){
         settings.loadSettings();
@@ -60,15 +59,12 @@ public class Composer implements JMC, Constants {
         Play.midi(this.score);
     }
 
-    //Initializes the humanizer from slider and returns percentage of humanizer-tolerance. Input -> max. Tolerance
-    public void initHumanizer(double maxTolerance){
-        humanizerTolerance = humanizerTolerance * maxTolerance / 10000;
-    }
-
     //Returns random humanizer-factor for multiplication in algorithms considering the humanizer tolerance
     public double calcHumanizer(){
-        if(new Random().nextBoolean()) return 1 - humanizerTolerance;
-        else return 1 + humanizerTolerance;
+        double factor = new Random().nextInt((int) (humanizerTolerance + 1)) / 100.0;
+        factor *= 0.05;
+        if(new Random().nextBoolean()) return 1.0 - factor;
+        else return 1.0 + factor;
     }
 
     //Returns an usage array added with a root pitch

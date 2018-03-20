@@ -41,7 +41,7 @@ public class Backingtrack extends Composer {
 
     public Backingtrack(){}
 
-    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, double humanizerTolerance, ArrayList<Eighth> eighths, int deviation){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, int humanizerTolerance, ArrayList<Eighth> eighths, int deviation){
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
         this.drums = new Part("Drums", DRUM, 2);
@@ -51,7 +51,6 @@ public class Backingtrack extends Composer {
         this.eighths = eighths;
         this.deviation = deviation;
         this.humanizerTolerance = humanizerTolerance;
-        initHumanizer(5);
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -123,10 +122,7 @@ public class Backingtrack extends Composer {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
-        double sum = 0;
-        bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
-        sum += calcStartOfEighthInBarByPosition(startEighth);
-        p("  Rest: " + Double.toString(calcStartOfEighthInBarByPosition(startEighth)));
+        bar.addChord(getRest(), calcHumanizer() * calcStartOfEighthInBarByPosition(startEighth));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt(deviation + 1);
@@ -136,24 +132,18 @@ public class Backingtrack extends Composer {
         usage = generateChordcomplexity(currentPatternelement);
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
-        //TODO: Consider Chordcomplexity and chord-alternatives
         for(int i=0; i<barUses.getBarUses().size(); i++){
+            barUses.getBarUse(i).setDuration(barUses.getBarUse(i).getDuration() * calcHumanizer());
             bar.addChord(
                     getUsageInContext(
-                        usage,tone.getPitch() + currentPatternelement.getTranspose() + barUses.getBarUses().get(i).getProcedure()
+                        usage,tone.getPitch() + currentPatternelement.getTranspose() + barUses.getBarUse(i).getProcedure()
                     ),
-                    barUses.getBarUses().get(i).getDuration()
+                    barUses.getBarUse(i).getDuration()
             );
-            sum += barUses.getBarUses().get(i).getDuration();
-            p("  Use : " + Double.toString(barUses.getBarUses().get(i).getDuration()));
         }
 
         //Add end-rest
-        bar.addChord(getRest(), barUses.getEndRest());
-        sum += barUses.getEndRest();
-        p("  Rest: " + Double.toString(barUses.getEndRest()));
-        p("SUM:    " + Double.toString(sum));
-        p("-----------------------------------------------");
+        bar.addChord(getRest(), calcHumanizer() * barUses.getEndRest());
 
         return bar;
     }
