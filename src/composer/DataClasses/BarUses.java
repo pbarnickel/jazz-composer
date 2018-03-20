@@ -56,6 +56,10 @@ public class BarUses implements JMC {
         }
 
         //Calculate end-rest
+        while(possibleScope >= QUARTER_NOTE){
+            barUses.get(0).setDuration(barUses.get(0).getDuration() + QUARTER_NOTE);
+            possibleScope -= QUARTER_NOTE;
+        }
         endRest = possibleScope;
     }
 

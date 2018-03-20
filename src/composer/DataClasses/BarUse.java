@@ -23,4 +23,8 @@ public class BarUse {
     public int getProcedure(){
         return this.procedure;
     }
+
+    public void setDuration(double duration){
+        this.duration = duration;
+    }
 }

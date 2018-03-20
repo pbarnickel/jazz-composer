@@ -123,7 +123,10 @@ public class Backingtrack extends Composer {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
+        double sum = 0;
         bar.addChord(getRest(), calcStartOfEighthInBarByPosition(startEighth));
+        sum += calcStartOfEighthInBarByPosition(startEighth);
+        p("  Rest: " + Double.toString(calcStartOfEighthInBarByPosition(startEighth)));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt(deviation + 1);
@@ -141,10 +144,16 @@ public class Backingtrack extends Composer {
                     ),
                     barUses.getBarUses().get(i).getDuration()
             );
+            sum += barUses.getBarUses().get(i).getDuration();
+            p("  Use : " + Double.toString(barUses.getBarUses().get(i).getDuration()));
         }
 
         //Add end-rest
         bar.addChord(getRest(), barUses.getEndRest());
+        sum += barUses.getEndRest();
+        p("  Rest: " + Double.toString(barUses.getEndRest()));
+        p("SUM:    " + Double.toString(sum));
+        p("-----------------------------------------------");
 
         return bar;
     }
