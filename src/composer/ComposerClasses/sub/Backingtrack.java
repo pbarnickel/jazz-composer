@@ -133,7 +133,10 @@ public class Backingtrack extends Composer {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
-        bar.addChord(getRest(), generateHumanizer(5) * calcStartOfEighthInBarByPosition(startEighth));
+        double humanizer = generateHumanizer(5);
+        bar.addChord(getRest(), humanizer * calcStartOfEighthInBarByPosition(startEighth));
+        double sum = humanizer * calcStartOfEighthInBarByPosition(startEighth);
+        p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt(deviation + 1);
@@ -151,15 +154,21 @@ public class Backingtrack extends Composer {
                     ),
                     barUses.getBarUse(i).getDuration()
             );
+            sum += barUses.getBarUse(i).getDuration();
+            p(Double.toString(barUses.getBarUse(i).getDuration()));
         }
 
         //Add end-rest
-        bar.addChord(getRest(), generateHumanizer(5) * barUses.getEndRest());
+        humanizer = generateHumanizer(5);
+        bar.addChord(getRest(), humanizer * barUses.getEndRest());
+        sum += humanizer * barUses.getEndRest();
+        p(Double.toString(humanizer * barUses.getEndRest()));
+        p("SUM:   " + Double.toString(sum));
+        p("---------------------------------------------");
 
         //Set dynamic of bar
         int d = generateDynamic();
         bar.setDynamic(d);
-        p(Integer.toString(d));
 
         return bar;
     }
