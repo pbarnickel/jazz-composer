@@ -49,6 +49,7 @@ public class BackingtrackController extends Controller {
     @FXML private TextField edtGeneralRepeat;
     @FXML private Slider sldGeneralHumanizer;
     @FXML private Slider sldGeneralDeviation;
+    @FXML private Slider sldGeneralDynamic;
 
     //Pattern
     @FXML private TableView<Patternelement> tblPattern;
@@ -232,6 +233,8 @@ public class BackingtrackController extends Controller {
         );
         double[] val = new double[]{100,0,0,0,100,0,0,0};
         for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
+        sldGeneralHumanizer.setValue(20);
+        sldGeneralDynamic.setValue(20);
         //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
     }
 
@@ -296,15 +299,16 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            int humanizerTolerance = (int) sldGeneralHumanizer.getValue();
             int deviation = (int) (sldGeneralDeviation.getValue()/100 * 12);
+            double humanizerTolerance = sldGeneralHumanizer.getValue();
+            double dynamic = sldGeneralDynamic.getValue();
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
             instruments[0] = tglGeneralPiano.isSelected();
             instruments[1] = tglGeneralBass.isSelected();
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
             ArrayList<Eighth> eighths = getEighthsProbabilities();
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation);
+            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic);
             msg("Composition created successfully.", MSG_S);
         } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
     }

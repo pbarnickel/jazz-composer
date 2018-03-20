@@ -20,11 +20,14 @@ import jm.util.Write;
 
 import java.util.*;
 
+import static composer.Main.p;
+
 public class Composer implements JMC, Constants {
 
     protected Score score = new Score();
     protected Settings settings = new Settings();
-    protected int humanizerTolerance;
+    protected double humanizerTolerance;
+    protected double dynamic;
 
     public Composer(){
         settings.loadSettings();
@@ -60,9 +63,9 @@ public class Composer implements JMC, Constants {
     }
 
     //Returns random humanizer-factor for multiplication in algorithms considering the humanizer tolerance
-    public double calcHumanizer(){
+    public double generateHumanizer(int percentage){
         double factor = new Random().nextInt((int) (humanizerTolerance + 1)) / 100.0;
-        factor *= 0.05;
+        factor *= percentage / 100.0;
         if(new Random().nextBoolean()) return 1.0 - factor;
         else return 1.0 + factor;
     }
@@ -131,6 +134,19 @@ public class Composer implements JMC, Constants {
         }
 
         return usage;
+    }
+
+    //Returns a random dynamic-value
+    public int generateDynamic(){
+        int tolerance = new Random().nextInt(10) + 10;
+        double toleranceFactor = tolerance / 100.0;
+        if(new Random().nextBoolean()) toleranceFactor += 1.0;
+        else toleranceFactor = 1.0 - toleranceFactor;
+        toleranceFactor *= generateHumanizer(100) * dynamic / 100.0;
+        int value = (int) (toleranceFactor * 127);
+        if(value > 127) value = 127;
+        p(Integer.toString(value));
+        return value;
     }
 
     //TODO: implement getRootBassNote with given pitch - 36 (3 octaves down)

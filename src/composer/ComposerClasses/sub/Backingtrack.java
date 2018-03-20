@@ -23,6 +23,7 @@ package composer.ComposerClasses.sub;
 import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
+import jm.util.View;
 
 import java.util.*;
 
@@ -41,7 +42,8 @@ public class Backingtrack extends Composer {
 
     public Backingtrack(){}
 
-    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern, int humanizerTolerance, ArrayList<Eighth> eighths, int deviation){
+    public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern,
+                        double humanizerTolerance, ArrayList<Eighth> eighths, int deviation, double dynamic){
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
         this.drums = new Part("Drums", DRUM, 2);
@@ -51,6 +53,7 @@ public class Backingtrack extends Composer {
         this.eighths = eighths;
         this.deviation = deviation;
         this.humanizerTolerance = humanizerTolerance;
+        this.dynamic = dynamic;
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -62,6 +65,8 @@ public class Backingtrack extends Composer {
         score.addPart(bass);
         score.addPart(drums);
         score.setTempo(tempo);
+
+        View.histogram(score);
     }
 
     //Generates piano part in score
@@ -122,7 +127,7 @@ public class Backingtrack extends Composer {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
-        bar.addChord(getRest(), calcHumanizer() * calcStartOfEighthInBarByPosition(startEighth));
+        bar.addChord(getRest(), generateHumanizer(5) * calcStartOfEighthInBarByPosition(startEighth));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt(deviation + 1);
@@ -133,7 +138,7 @@ public class Backingtrack extends Composer {
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
         for(int i=0; i<barUses.getBarUses().size(); i++){
-            barUses.getBarUse(i).setDuration(barUses.getBarUse(i).getDuration() * calcHumanizer());
+            barUses.getBarUse(i).setDuration(barUses.getBarUse(i).getDuration() * generateHumanizer(5));
             bar.addChord(
                     getUsageInContext(
                         usage,tone.getPitch() + currentPatternelement.getTranspose() + barUses.getBarUse(i).getProcedure()
@@ -143,7 +148,12 @@ public class Backingtrack extends Composer {
         }
 
         //Add end-rest
-        bar.addChord(getRest(), calcHumanizer() * barUses.getEndRest());
+        bar.addChord(getRest(), generateHumanizer(5) * barUses.getEndRest());
+
+        //Set dynamic of bar
+        int d = generateDynamic();
+        bar.setDynamic(d);
+        p(Integer.toString(d));
 
         return bar;
     }
