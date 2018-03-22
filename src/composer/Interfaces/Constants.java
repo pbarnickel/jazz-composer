@@ -15,6 +15,7 @@ public interface Constants {
     String REG_TONE_EXTENDED = "[abcdefgabhCDEFGABH]{1}[#b]?";
     String REG_TEMPO = "-?\\d+";
     String REG_NUMBER = "[1-9][0-9]*";
+    String REG_NUMBER_0 = "[0-9]+";
     String REG_NAME = "[a-zA-Z]+[a-z-A-Z0-9 ]*";
     String REG_TRANSPOSE = "[-]*[0-9]+";
     String REG_TACT_PROPORTION = "Full|Semi";

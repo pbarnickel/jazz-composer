@@ -13,6 +13,7 @@ import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -20,10 +21,7 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
 
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -59,6 +57,7 @@ public class BackingtrackController extends Controller {
 
     //Pattern
     @FXML private TableView<Patternelement> tblPattern;
+    @FXML private TableColumn<Patternelement, String> colPatternOrder;
     @FXML private TableColumn<Patternelement, String> colPatternTranspose;
     @FXML private TableColumn<Patternelement, String> colPatternMode;
     @FXML private TableColumn<Patternelement, String> colPatternChordgroup;
@@ -116,6 +115,7 @@ public class BackingtrackController extends Controller {
         tglBtnPatternTactPropSemi.setUserData("Semi");
 
         //set up columns in table
+        colPatternOrder.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("orderAsString"));
         colPatternTranspose.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("transposeAsString"));
         colPatternChordgroup.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("groupName"));
         colPatternChord.setCellValueFactory(new PropertyValueFactory<Patternelement, String>("chordName"));
@@ -137,6 +137,7 @@ public class BackingtrackController extends Controller {
 
         //editable table
         tblPattern.setEditable(true);
+        colPatternOrder.setCellFactory(TextFieldTableCell.forTableColumn());
         colPatternTranspose.setCellFactory(TextFieldTableCell.forTableColumn());
         colPatternChordgroup.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordgroupsAsString));
         colPatternChordcomplexity.setCellFactory(ChoiceBoxTableCell.forTableColumn(allChordcomplexitiesAsString));
@@ -159,59 +160,6 @@ public class BackingtrackController extends Controller {
         allPatternelements.add(
                 new Patternelement(
                         0,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(4),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        4,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        -3,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(32),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(12),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        -5,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(15),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
                         0,
                         settings.getChordgroups().get(0),
                         settings.getChordgroups().get(0).getMusicStructures().get(4),
@@ -221,6 +169,67 @@ public class BackingtrackController extends Controller {
         );
         allPatternelements.add(
                 new Patternelement(
+                        1,
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        2,
+                        4,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(5),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        3,
+                        -3,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(32),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        4,
+                        2,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(12),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        5,
+                        -5,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(15),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        6,
+                        0,
+                        settings.getChordgroups().get(0),
+                        settings.getChordgroups().get(0).getMusicStructures().get(4),
+                        settings.getChordcomplexities().get(3),
+                        "Full"
+                )
+        );
+        allPatternelements.add(
+                new Patternelement(
+                        7,
                         2,
                         settings.getChordgroups().get(0),
                         settings.getChordgroups().get(0).getMusicStructures().get(5),
@@ -230,6 +239,7 @@ public class BackingtrackController extends Controller {
         );
         allPatternelements.add(
                 new Patternelement(
+                        8,
                         -5,
                         settings.getChordgroups().get(0),
                         settings.getChordgroups().get(0).getMusicStructures().get(15),
@@ -367,6 +377,26 @@ public class BackingtrackController extends Controller {
         tglBtnPatternTactPropFull.setDisable(!tactProp);
     }
 
+    //Changes the order attribute of patternelement
+    public void changePatternOrderCellEvent(TableColumn.CellEditEvent<Patternelement, String> patternelementStringCellEditEvent) {
+        String newOrder = patternelementStringCellEditEvent.getNewValue().toString();
+        Patternelement patternelementSelected = tblPattern.getSelectionModel().getSelectedItem();
+        if(newOrder.matches(REG_NUMBER_0)){
+            int order = Integer.parseInt(newOrder);
+            if(order < allPatternelements.size()){
+                if(order > patternelementSelected.getOrder()){
+                    allPatternelements.get(order).setOrder(order - 1);
+                    patternelementSelected.setOrder(order);
+                } else if(order < patternelementSelected.getOrder()){
+                    allPatternelements.get(order).setOrder(order + 1);
+                    patternelementSelected.setOrder(order);
+                }
+                tblPattern.refresh();
+                msg("Order changed.",MSG_S);
+            } else msg("Order could not be changed. Either not a valid number or not a possible order-number.",MSG_E);
+        }
+    }
+
     //Changes the transpose attribute of patternelement
     public void changePatternTransposeCellEvent(TableColumn.CellEditEvent patternelementIntegerCellEditEvent) {
         String newTranspose = patternelementIntegerCellEditEvent.getNewValue().toString();
@@ -425,6 +455,7 @@ public class BackingtrackController extends Controller {
         if(edtPatternTranspose.getText().matches(REG_TRANSPOSE)){
             if(chbPatternChordgroups.getValue() != null && chbPatternChord.getValue() != null
                 && chbPatternChordcomplexity.getValue() != null && tglGrpPatternTactProp.getSelectedToggle() != null){
+                int order = allPatternelements.size();
                 int transpose = Integer.parseInt(edtPatternTranspose.getText());
                 int indexGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), chbPatternChordgroups.getValue().toString());
                 int indexComplexity = settings.getIndexOfMusicElement(settings.getChordcomplexities(), chbPatternChordcomplexity.getValue().toString());
@@ -434,7 +465,7 @@ public class BackingtrackController extends Controller {
                 Chordcomplexity chordcomplexity = settings.getChordcomplexities().get(indexComplexity);
                 String tactProportion = tglGrpPatternTactProp.getSelectedToggle().getUserData().toString();
                 if(tactProportion.equals("Semi"))setTactProp();
-                Patternelement patternelement = new Patternelement(transpose, chordgroup, chord, chordcomplexity, tactProportion);
+                Patternelement patternelement = new Patternelement(order, transpose, chordgroup, chord, chordcomplexity, tactProportion);
                 allPatternelements.add(patternelement);
                 edtPatternTranspose.clear();
             } else msg(error + "All fields are required.",MSG_E);
@@ -445,7 +476,11 @@ public class BackingtrackController extends Controller {
     public void onPatternDelete(ActionEvent actionEvent) {
         Patternelement patternelement = tblPattern.getSelectionModel().getSelectedItem();
         if(patternelement != null){
+            int order = patternelement.getOrder();
+            int length = allPatternelements.size();
+            for(int i=order+1; i<length; i++) allPatternelements.get(i).setOrder(i - 1);
             allPatternelements.remove(patternelement);
+            tblPattern.refresh();
             msg("Patternelement deleted.", MSG_W);
         } else {msg("No Patternelement selected.", MSG_E);}
     }

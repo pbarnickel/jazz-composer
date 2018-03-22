@@ -13,19 +13,25 @@ package composer.DataClasses;
 
 public class Patternelement {
 
+    private int order;
     private int transpose;
     private MusicStructureGroup chordgroup;
     private MusicStructure chord;
     private Chordcomplexity chordcomplexity;
     private String tactProportion;
 
-    public Patternelement(int transpose, MusicStructureGroup chordgroup, MusicStructure chord, Chordcomplexity chordcomplexity, String tactProportion){
+    public Patternelement(int order, int transpose, MusicStructureGroup chordgroup, MusicStructure chord, Chordcomplexity chordcomplexity, String tactProportion){
+        this.order = order;
         this.transpose = transpose;
         this.chordgroup = chordgroup;
         this.chord = chord;
         this.chordcomplexity = chordcomplexity;
         this.tactProportion = tactProportion;
     }
+
+    public int getOrder(){ return this.order;}
+
+    public String getOrderAsString(){ return Integer.toString(this.order);}
 
     public int getTranspose(){ return this.transpose;}
 
@@ -38,6 +44,8 @@ public class Patternelement {
     public Chordcomplexity getChordcomplexity(){ return this.chordcomplexity;}
 
     public String getTactProportion(){ return this.tactProportion;}
+
+    public void setOrder(int order){ this.order = order;}
 
     public void setTranspose(int transpose){ this.transpose = transpose;}
 

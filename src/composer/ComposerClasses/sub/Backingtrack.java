@@ -23,7 +23,6 @@ package composer.ComposerClasses.sub;
 import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
-import jm.util.View;
 import jm.util.Write;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -81,12 +80,10 @@ public class Backingtrack extends Composer {
         for (int i=0; i<repeat; i++){
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
-                Patternelement oldPatternelement = pattern.get(j);
-                if(j>0)oldPatternelement = pattern.get(j-1);
                 if (pattern.get(j).getTactProportion().equals("Full")){
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))), oldPatternelement);
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
                 } else {
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))), oldPatternelement);
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
                     j++;
                 }
                 piano.addCPhrase(bar);
@@ -114,7 +111,12 @@ public class Backingtrack extends Composer {
     }
 
     //Generates a full bar and returns result in a CPhrase
-    public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart, Patternelement oldPatternelement){
+    public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart){
+
+        //Calculates pre-patternelement
+        Patternelement prePatternelement;
+        if(patternpart.get(0).getOrder()>0) prePatternelement = pattern.get(patternpart.get(0).getOrder() - 1);
+        else prePatternelement = pattern.get(0);
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
@@ -135,15 +137,19 @@ public class Backingtrack extends Composer {
         CPhrase bar = new CPhrase();
         double humanizer = generateHumanizer(5);
         bar.addChord(getRest(), humanizer * calcStartOfEighthInBarByPosition(startEighth));
-        double sum = humanizer * calcStartOfEighthInBarByPosition(startEighth);
-        p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
+        //double sum = humanizer * calcStartOfEighthInBarByPosition(startEighth);
+        //p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt(deviation + 1);
-        ArrayList<Integer> usage = calcDeviationInUsage(localDeviation, currentPatternelement, oldPatternelement);
+        ArrayList<Integer> usage = calcDeviationInUsage(localDeviation, currentPatternelement, prePatternelement);
+        currentPatternelement.getChord().setUsage(usage);
+        p(currentPatternelement.getChord().getUsageAsString());
 
         //Generate chordcomplexity
         usage = generateChordcomplexity(currentPatternelement);
+        for(int i=0; i<usage.size(); i++)p(Integer.toString(usage.get(i)));
+        p("-------------------------");
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
         for(int i=0; i<barUses.getBarUses().size(); i++){
@@ -154,17 +160,17 @@ public class Backingtrack extends Composer {
                     ),
                     barUses.getBarUse(i).getDuration()
             );
-            sum += barUses.getBarUse(i).getDuration();
-            p(Double.toString(barUses.getBarUse(i).getDuration()));
+            //sum += barUses.getBarUse(i).getDuration();
+            //p(Double.toString(barUses.getBarUse(i).getDuration()));
         }
 
         //Add end-rest
         humanizer = generateHumanizer(5);
         bar.addChord(getRest(), humanizer * barUses.getEndRest());
-        sum += humanizer * barUses.getEndRest();
-        p(Double.toString(humanizer * barUses.getEndRest()));
-        p("SUM:   " + Double.toString(sum));
-        p("---------------------------------------------");
+        //sum += humanizer * barUses.getEndRest();
+        //p(Double.toString(humanizer * barUses.getEndRest()));
+        //p("SUM:   " + Double.toString(sum));
+        //p("---------------------------------------------");
 
         //Set dynamic of bar
         int d = generateDynamic();

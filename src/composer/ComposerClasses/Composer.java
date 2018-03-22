@@ -121,9 +121,10 @@ public class Composer implements JMC, Constants {
     }
 
     //Returns a chord-usage - considering the deviation
-    public ArrayList<Integer> calcDeviationInUsage(int deviation, Patternelement current, Patternelement old){
-        int transposeDifference = current.getTranspose() - old.getTranspose();
-        ArrayList<Integer> currentUsage = current.getChord().getUsage();
+    public ArrayList<Integer> calcDeviationInUsage(int deviation, Patternelement current, Patternelement pre){
+        int transposeDifference = current.getTranspose() - pre.getTranspose();
+        ArrayList<Integer> currentUsage = new ArrayList<>();
+        currentUsage.addAll(current.getChord().getUsage());
         int length = currentUsage.size();
 
         //Find position to start usage considering deviation
@@ -154,7 +155,8 @@ public class Composer implements JMC, Constants {
 
     //Returns an usage of a chord considering the chordcomplexity
     public ArrayList<Integer> generateChordcomplexity(Patternelement patternelement){
-        ArrayList<Integer> usage = patternelement.getChord().getUsage();
+        ArrayList<Integer> usage = new ArrayList<>();
+        usage.addAll(patternelement.getChord().getUsage());
         int complexity = new Random().nextInt(patternelement.getChordcomplexity().getMax() - patternelement.getChordcomplexity().getMin() + 1)
                          + patternelement.getChordcomplexity().getMin();
         int length = usage.size();
@@ -180,7 +182,6 @@ public class Composer implements JMC, Constants {
         toleranceFactor *= generateHumanizer(100) * dynamic / 100.0;
         int value = (int) (toleranceFactor * 127);
         if(value > 127) value = 127;
-        p(Integer.toString(value));
         return value;
     }
 
