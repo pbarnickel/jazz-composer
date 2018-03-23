@@ -40,6 +40,7 @@ public class Backingtrack extends Composer {
     private ArrayList<Patternelement> pattern;
     private ArrayList<Eighth> eighths;
     private int deviation;
+    private boolean style;
 
     public Backingtrack() throws MidiUnavailableException {
         super();
@@ -58,6 +59,7 @@ public class Backingtrack extends Composer {
         this.deviation = deviation;
         this.humanizerTolerance = humanizerTolerance;
         this.dynamic = dynamic;
+        this.style = false;
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -95,10 +97,15 @@ public class Backingtrack extends Composer {
     public void generateBassPart(){
         Phrase bar = new Phrase();
         for (int i=0; i<repeat; i++){
+            this.style = new Random().nextBoolean();
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
-                Note note = new Note(C4, WHOLE_NOTE);
-                bar.addNote(note);
+                if(pattern.get(j).getTactProportion().equals("Full")){
+                    bar = generateBassBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                } else {
+                    bar = generateBassBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    j++;
+                }
                 bass.addPhrase(bar);
             }
         }
@@ -110,7 +117,7 @@ public class Backingtrack extends Composer {
 
     }
 
-    //Generates a full bar and returns result in a CPhrase
+    //Generates a full piano-bar and returns result in a CPhrase
     public CPhrase generatePianoBar(ArrayList<Patternelement> patternpart){
 
         //Calculates pre-patternelement
@@ -175,6 +182,20 @@ public class Backingtrack extends Composer {
         //Set dynamic of bar
         int d = generateDynamic();
         bar.setDynamic(d);
+
+        return bar;
+    }
+
+    //Generates a full bass-bar and returns result in a Phrase
+    public Phrase generateBassBar(ArrayList<Patternelement> patternpart){
+        Phrase bar = new Phrase();
+
+        //[TRUE] → Walking-Bass, [FALSE] → Standard-Bass
+        if(style){
+
+        } else {
+
+        }
 
         return bar;
     }

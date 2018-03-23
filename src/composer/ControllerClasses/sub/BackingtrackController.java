@@ -154,6 +154,8 @@ public class BackingtrackController extends Controller {
     @Override
     public void defaultInputs(){
         tglGeneralPiano.setSelected(true);
+        tglGeneralBass.setSelected(true);
+        tglGeneralDrums.setSelected(true);
         edtGeneralTempo.setText("140");
         edtGeneralTone.setText("C");
         edtGeneralRepeat.setText("3");
@@ -262,6 +264,10 @@ public class BackingtrackController extends Controller {
 
     //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
+        if(backingtrack != null && backingtrack.getSequencer().isRunning()){
+            backingtrack.getSequencer().stop();
+            backingtrack.getSequencer().close();
+        }
         changeScene("menu", actionEvent);
     }
 
@@ -333,6 +339,10 @@ public class BackingtrackController extends Controller {
     //Composes a backingtrack by user input
     public void onCompose(ActionEvent actionEvent) throws MidiUnavailableException {
         if(validateGeneral() && validatePattern() && validateSwing()){
+            if(backingtrack != null && backingtrack.getSequencer().isRunning()){
+                backingtrack.getSequencer().stop();
+                backingtrack.getSequencer().close();
+            }
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));

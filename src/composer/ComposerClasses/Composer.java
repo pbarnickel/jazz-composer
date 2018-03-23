@@ -62,7 +62,6 @@ public class Composer implements JMC, Constants {
     //Empties the score
     public void initScore() {
         this.score.empty();
-        int x = 0;
     }
 
     //Shows the score in JMusic-View
