@@ -9,7 +9,7 @@ Java application to compose jazz music.
 
 ### 2.1 The menu
 
-Wenn Sie den _jazz-composer_ starten, gelangen Sie zunächst in das Menü. Hier haben Sie verschiedene Optionen:
+By starting the _jazz-composer_, you'll reach at first the menu. From here you have different options:
 - Manage settings in `⚙`
 - Create Jazz-Backingtrack in `Create Backingtrack`
 - Show informations about the project in `About`
