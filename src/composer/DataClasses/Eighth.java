@@ -1,8 +1,8 @@
 package composer.DataClasses;
 
 public class Eighth {
-    int position;
-    Range range;
+    private int position;
+    private Range range;
 
     public Eighth(int position, Range range){
         this.position = position;

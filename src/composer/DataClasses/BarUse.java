@@ -8,10 +8,10 @@
 package composer.DataClasses;
 
 public class BarUse {
-    double duration;
-    int procedure;
+    private double duration;
+    private int procedure;
 
-    public BarUse(double duration, int procedure){
+    BarUse(double duration, int procedure){
         this.duration = duration;
         this.procedure = procedure;
     }

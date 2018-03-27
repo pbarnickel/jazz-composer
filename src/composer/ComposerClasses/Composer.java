@@ -10,10 +10,10 @@ package composer.ComposerClasses;
 
 import composer.DataClasses.Patternelement;
 import composer.DataClasses.Settings;
+import composer.DataClasses.Tone;
 import composer.Interfaces.Constants;
 import jm.JMC;
 import jm.music.data.*;
-import jm.util.Play;
 import jm.util.Read;
 import jm.util.View;
 import jm.util.Write;
@@ -33,8 +33,9 @@ public class Composer implements JMC, Constants {
     protected Settings settings = new Settings();
     protected double humanizerTolerance;
     protected double dynamic;
+    protected Tone tone;
     protected String runtimeFile = "/runtime.mid";
-    protected Sequencer sequencer = MidiSystem.getSequencer();;
+    private Sequencer sequencer = MidiSystem.getSequencer();
 
     public Composer() throws MidiUnavailableException {
         //Loading settings
@@ -88,6 +89,7 @@ public class Composer implements JMC, Constants {
 
     //Stops playing MIDI
     public void stopScore(){
+        sequencer.stop();
         sequencer.close();
     }
 
@@ -184,5 +186,44 @@ public class Composer implements JMC, Constants {
         return value;
     }
 
-    //TODO: implement getRootBassNote with given pitch - 36 (3 octaves down)
+    //Returns a bass-note (3 octaves decremented)
+    public Note getBassNote(int pitch){
+        return new Note(pitch - 24, QUARTER_NOTE);
+    }
+
+    //Returns a bass-phrase of a full-bar-used chord
+    public Phrase generateWalkingBass(Patternelement patternelement, int rootPitchOfNext){
+        Phrase bar = new Phrase();
+        int root = patternelement.getChord().getUsage().get(0);
+        int transpose = this.tone.getPitch() + patternelement.getTranspose();
+        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(0) + transpose));
+        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(1) + transpose));
+        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(2) + transpose));
+        bar.addNote(getBassNote(rootPitchOfNext - 1));
+        //bar.addNote(getBassNote(REST));
+        return bar;
+    }
+
+    //Returns a ride-phrase
+    public Phrase generateRide(){
+        Phrase bar = new Phrase();
+        int ride = 51;
+        bar.addNote(new Note(ride, QUARTER_NOTE));
+        bar.addNote(new Note(ride, QUARTER_NOTE_TRIPLET));
+        bar.addNote(new Note(ride, EIGHTH_NOTE_TRIPLET));
+        bar.addNote(new Note(ride, QUARTER_NOTE));
+        bar.addNote(new Note(ride, QUARTER_NOTE));
+        return bar;
+    }
+
+    //Returns a snare-phrase
+    public Phrase generateSnare(){
+        Phrase bar = new Phrase();
+        int snare = 38;
+        for(int i=0; i<4; i++){
+            bar.addNote(new Note(REST, QUARTER_NOTE_TRIPLET));
+            bar.addNote(new Note(snare, EIGHTH_NOTE_TRIPLET, (int)(Math.random()*60)));
+        }
+        return bar;
+    }
 }

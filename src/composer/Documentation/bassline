@@ -14,3 +14,26 @@ https://www.learnjazzstandards.com/blog/learning-jazz/bass/write-walking-bass-li
         • A half step before the following note
         • A half step above the following note
     4. Fill in the blanks
+
+class JazzBass implements JMC{
+
+	public static Phrase bassLine(int rootPitch) {
+		// build the bass line from the rootPitch
+	 	Phrase phr = new Phrase();
+	 	phr.addNote(new Note(rootPitch, C));
+	 	phr.addNote(new Note(rootPitch - 2, C));
+	 	phr.addNote(new Note(rootPitch - 3, C));
+	 	phr.addNote(new Note(rootPitch - 5, C));
+		return phr;
+	}
+
+	public static Phrase bassLine2(int rootPitch) {
+		// build the bass line from the rootPitch
+	 	Phrase phr = new Phrase();
+	 	phr.addNote(new Note(rootPitch, C));
+	 	phr.addNote(new Note(rootPitch + 4, C));
+	 	phr.addNote(new Note(rootPitch + 7, C));
+	 	phr.addNote(new Note(rootPitch + 4, C));
+		return phr;
+	}
+}

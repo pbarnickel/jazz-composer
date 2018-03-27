@@ -23,6 +23,7 @@ package composer.ComposerClasses.sub;
 import composer.ComposerClasses.Composer;
 import composer.DataClasses.*;
 import jm.music.data.*;
+import jm.util.View;
 import jm.util.Write;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -34,8 +35,8 @@ public class Backingtrack extends Composer {
 
     private Part piano;
     private Part bass;
-    private Part drums;
-    private Tone tone;
+    private Part drums_ride;
+    private Part drums_snare;
     private int repeat;
     private ArrayList<Patternelement> pattern;
     private ArrayList<Eighth> eighths;
@@ -51,7 +52,8 @@ public class Backingtrack extends Composer {
         super();
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
-        this.drums = new Part("Drums", DRUM, 2);
+        this.drums_ride = new Part("Drums Ride", DRUM, 2);
+        this.drums_snare = new Part("Drums Snare", DRUM, 2);
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
@@ -69,7 +71,8 @@ public class Backingtrack extends Composer {
         //Final operations
         score.addPart(piano);
         score.addPart(bass);
-        score.addPart(drums);
+        score.addPart(drums_ride);
+        score.addPart(drums_snare);
         score.setTempo(tempo);
 
         //Write MIDI audio-file for listening compositions in GUI
@@ -95,15 +98,15 @@ public class Backingtrack extends Composer {
 
     //Generates bass part in score
     public void generateBassPart(){
-        Phrase bar = new Phrase();
+        Phrase bar;
         for (int i=0; i<repeat; i++){
             this.style = new Random().nextBoolean();
             int lengthPattern = pattern.size();
             for (int j=0; j<lengthPattern; j++){
                 if(pattern.get(j).getTactProportion().equals("Full")){
-                    bar = generateBassBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j))));
+                    bar = generateBassBar(pattern.get(j));
                 } else {
-                    bar = generateBassBar(new ArrayList<Patternelement>(Arrays.asList(pattern.get(j), pattern.get(j+1))));
+                    bar = generateBassBar(pattern.get(j));
                     j++;
                 }
                 bass.addPhrase(bar);
@@ -114,7 +117,21 @@ public class Backingtrack extends Composer {
 
     //Generates drums part in score
     public void generateDrumsPart(){
-
+        Phrase bar;
+        for(int i=0; i<repeat; i++){
+            int length = 0;
+            int lengthPattern = pattern.size();
+            for(int j=0; j<lengthPattern; j++){
+                length++;
+                if(pattern.get(j).getTactProportion().equals("Semi")) j++;
+            }
+            for(int j=0; j<length; j++){
+                bar = generateRide();
+                drums_ride.addPhrase(bar);
+                bar = generateSnare();
+                drums_snare.addPhrase(bar);
+            }
+        }
     }
 
     //Generates a full piano-bar and returns result in a CPhrase
@@ -151,12 +168,12 @@ public class Backingtrack extends Composer {
         int localDeviation = new Random().nextInt(deviation + 1);
         ArrayList<Integer> usage = calcDeviationInUsage(localDeviation, currentPatternelement, prePatternelement);
         currentPatternelement.getChord().setUsage(usage);
-        p(currentPatternelement.getChord().getUsageAsString());
+        //p(currentPatternelement.getChord().getUsageAsString());
 
         //Generate chordcomplexity
         usage = generateChordcomplexity(currentPatternelement);
-        for(int i=0; i<usage.size(); i++)p(Integer.toString(usage.get(i)));
-        p("-------------------------");
+        //for(int i=0; i<usage.size(); i++)p(Integer.toString(usage.get(i)));
+        //p("-------------------------");
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
         for(int i=0; i<barUses.getBarUses().size(); i++){
@@ -187,14 +204,27 @@ public class Backingtrack extends Composer {
     }
 
     //Generates a full bass-bar and returns result in a Phrase
-    public Phrase generateBassBar(ArrayList<Patternelement> patternpart){
+    public Phrase generateBassBar(Patternelement patternelement){
         Phrase bar = new Phrase();
+
+        //TODO build phrase for [true|false]
+        //TODO Consider dynamics
+        //TODO Define bass depth pitch
+
+        int nextRootPitch;
+        if(patternelement.getOrder() < pattern.size() - 1) {
+            Patternelement next = pattern.get(patternelement.getOrder() + 1);
+            int a = next.getChord().getUsage().get(0);
+            int b = next.getTranspose();
+            int c = tone.getPitch();
+            nextRootPitch = a + b + c;
+        } else nextRootPitch = patternelement.getChord().getUsage().get(0) + tone.getPitch() + patternelement.getTranspose();
+        bar = generateWalkingBass(patternelement, nextRootPitch);
+        View.internal(bar);
 
         //[TRUE] → Walking-Bass, [FALSE] → Standard-Bass
         if(style){
-
         } else {
-
         }
 
         return bar;
