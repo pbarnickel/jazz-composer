@@ -27,7 +27,6 @@ public class Range {
 
     //Checks if an integer-value is in a range
     public boolean isInRange(int i){
-        // 0 <= 21 <= 24
         return start <= i && i <= end;
     }
 }

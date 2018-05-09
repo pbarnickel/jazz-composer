@@ -52,8 +52,8 @@ public class Backingtrack extends Composer {
         super();
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
-        this.drums_ride = new Part("Drums Ride", DRUM, 2);
-        this.drums_snare = new Part("Drums Snare", DRUM, 2);
+        this.drums_ride = new Part("Drums Ride", 0,9);
+        this.drums_snare = new Part("Drums Snare", 0,9);
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;

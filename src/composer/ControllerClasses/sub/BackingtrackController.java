@@ -357,7 +357,7 @@ public class BackingtrackController extends Controller {
             ArrayList<Eighth> eighths = getEighthsProbabilities();
             backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic);
             msg("Composition created successfully.", MSG_S);
-        } else {msg("Composition not successful. Configuration not completed.",MSG_E);}
+        } else {msg("Composition not successful. Configuration incomplete or faulty.",MSG_E);}
     }
 
     /*************************************** GENERAL ******************************************************************/
