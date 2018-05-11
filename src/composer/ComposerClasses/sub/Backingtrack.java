@@ -100,14 +100,15 @@ public class Backingtrack extends Composer {
     public void generateBassPart(){
         Phrase bar;
         for (int i=0; i<repeat; i++){
-            this.style = new Random().nextBoolean();
+            style = new Random().nextBoolean();
+            p("################ " + String.valueOf(style) + " ######################");
             int lengthPattern = pattern.size();
-            for (int j=0; j<lengthPattern; j++){
+            for (int j=1; j<lengthPattern; j++){
                 if(pattern.get(j).getTactProportion().equals("Full")){
                     bar = generateBassBar(pattern.get(j));
                 } else {
                     bar = generateBassBar(pattern.get(j));
-                    j++;
+                    //j++;
                 }
                 bass.addPhrase(bar);
             }
@@ -205,26 +206,31 @@ public class Backingtrack extends Composer {
 
     //Generates a full bass-bar and returns result in a Phrase
     public Phrase generateBassBar(Patternelement patternelement){
-        Phrase bar = new Phrase();
-
-        //TODO build phrase for [true|false]
         //TODO Consider dynamics
-        //TODO Define bass depth pitch
+        //TODO Consider humanizer
 
+        Phrase bar;
         int nextRootPitch;
+        int a, b, c;
         if(patternelement.getOrder() < pattern.size() - 1) {
             Patternelement next = pattern.get(patternelement.getOrder() + 1);
-            int a = next.getChord().getUsage().get(0);
-            int b = next.getTranspose();
-            int c = tone.getPitch();
+            a = next.getChord().getUsage().get(0);
+            b = next.getTranspose();
+            c = tone.getPitch();
             nextRootPitch = a + b + c;
-        } else nextRootPitch = patternelement.getChord().getUsage().get(0) + tone.getPitch() + patternelement.getTranspose();
-        bar = generateWalkingBass(patternelement, nextRootPitch);
-        View.internal(bar);
+        } else {
+            a = patternelement.getChord().getUsage().get(0);
+            b = patternelement.getTranspose();
+            c = tone.getPitch();
+            nextRootPitch = a + b + c;
+        }
+        //View.internal(bar);
 
         //[TRUE] → Walking-Bass, [FALSE] → Standard-Bass
         if(style){
+            bar = generateWalkingBass(patternelement, nextRootPitch);
         } else {
+            bar = generateNormalBass(patternelement, nextRootPitch);
         }
 
         return bar;

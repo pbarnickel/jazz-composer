@@ -249,7 +249,7 @@ public class BackingtrackController extends Controller {
                         "Semi"
                 )
         );
-        double[] val = new double[]{100,0,0,0,100,0,0,0};
+        double[] val = new double[]{100,0,0,0,0,0,0,0};
         for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
         sldGeneralHumanizer.setValue(20);
         sldGeneralDynamic.setValue(40);
