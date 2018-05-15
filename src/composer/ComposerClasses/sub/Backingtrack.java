@@ -37,18 +37,20 @@ public class Backingtrack extends Composer {
     private Part bass;
     private Part drums_ride;
     private Part drums_snare;
+    private Part piano_melody;
     private int repeat;
     private ArrayList<Patternelement> pattern;
     private ArrayList<Eighth> eighths;
     private int deviation;
     private boolean style;
+    private Melody melody;
 
     public Backingtrack() throws MidiUnavailableException {
         super();
     }
 
     public Backingtrack(Boolean instruments[], int tempo, Tone tone, int repeat, ArrayList<Patternelement> pattern,
-                        double humanizerTolerance, ArrayList<Eighth> eighths, int deviation, double dynamic) throws MidiUnavailableException {
+                        double humanizerTolerance, ArrayList<Eighth> eighths, int deviation, double dynamic, Melody melody) throws MidiUnavailableException {
         super();
         this.piano = new Part("Piano", PIANO, 0);
         this.bass = new Part("Bass", BASS, 1);
@@ -62,6 +64,7 @@ public class Backingtrack extends Composer {
         this.humanizerTolerance = humanizerTolerance;
         this.dynamic = dynamic;
         this.style = false;
+        this.melody = melody;
 
         //generate parts
         if(instruments[0])generatePianoPart();
@@ -100,8 +103,9 @@ public class Backingtrack extends Composer {
     public void generateBassPart(){
         Phrase bar;
         for (int i=0; i<repeat; i++){
+            //Changes the style between walking and normal bass randomly
             style = new Random().nextBoolean();
-            p("################ " + String.valueOf(style) + " ######################");
+            //p("################ " + String.valueOf(style) + " ######################");
             int lengthPattern = pattern.size();
             for (int j=1; j<lengthPattern; j++){
                 if(pattern.get(j).getTactProportion().equals("Full")){
@@ -160,7 +164,7 @@ public class Backingtrack extends Composer {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
-        double humanizer = generateHumanizer(5);
+        double humanizer = generateHumanizer(20);
         bar.addChord(getRest(), humanizer * calcStartOfEighthInBarByPosition(startEighth));
         //double sum = humanizer * calcStartOfEighthInBarByPosition(startEighth);
         //p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));

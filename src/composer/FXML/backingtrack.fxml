@@ -26,7 +26,7 @@
 <VBox fx:id="vboxBackingtrack" prefHeight="858.0" prefWidth="1328.0" styleClass="root" stylesheets="@../CSS/styles.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="composer.ControllerClasses.sub.BackingtrackController">
     <children>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="829.0" prefWidth="1195.0" VBox.vgrow="ALWAYS">
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="468.0" layoutY="98.0" prefHeight="110.0" prefWidth="241.0" styleClass="hdr" text="Create Backingtrack" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="110.0" prefWidth="241.0" styleClass="hdr" text="Compose Backingtrack" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <font>
                     <Font size="48.0" />
                 </font>
@@ -146,6 +146,38 @@
                            <Slider fx:id="sldSwing7" layoutX="143.0" layoutY="340.0" prefHeight="18.0" prefWidth="1072.0" />
                            <Slider fx:id="sldSwing8" layoutX="143.0" layoutY="384.0" prefHeight="18.0" prefWidth="1072.0" />
                         </children></AnchorPane>
+                 </content>
+               </Tab>
+               <Tab text="Melody">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <ToggleButton fx:id="tglMelodyMelody" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="64.0" layoutY="14.0" prefHeight="47.0" prefWidth="271.0" styleClass="tgl-lbl" text="Melody" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="356.0" layoutY="15.0" prefHeight="48.0" prefWidth="145.0" styleClass="lbl" text="Inversion" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="496.0" layoutY="15.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" AnchorPane.leftAnchor="495.0" />
+                           <Slider fx:id="sldMelodyInversion" layoutX="594.0" layoutY="30.0" prefHeight="18.0" prefWidth="524.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="30.0" />
+                           <Label layoutX="1114.0" layoutY="28.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="350.0" layoutY="76.0" prefHeight="48.0" prefWidth="146.0" styleClass="lbl" text="Sort of Pitches" />
+                           <Label layoutX="495.0" layoutY="76.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Low" AnchorPane.leftAnchor="496.0" />
+                           <Label layoutX="1146.0" layoutY="76.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl-static" text="High" AnchorPane.rightAnchor="15.0" />
+                           <Slider fx:id="sldMelodySortOfPitches" layoutX="594.0" layoutY="91.0" prefHeight="18.0" prefWidth="522.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" />
+                           <Label layoutX="350.0" layoutY="137.0" prefHeight="48.0" prefWidth="147.0" styleClass="lbl" text="Jumper" />
+                           <Label layoutX="495.0" layoutY="137.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Rare" AnchorPane.leftAnchor="497.0" />
+                           <Label layoutX="1147.0" layoutY="137.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="15.0" />
+                           <Slider fx:id="sldMelodyJumper" layoutX="594.0" layoutY="152.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" />
+                           <Label layoutX="350.0" layoutY="199.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Major" />
+                           <ChoiceBox fx:id="chbMelodyMajorScalegroup" layoutX="617.0" layoutY="200.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
+                           <Label layoutX="350.0" layoutY="260.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Minor" />
+                           <Label layoutX="500.0" layoutY="199.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="500.0" layoutY="260.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="907.0" layoutY="200.0" styleClass="lbl" text="Scale" />
+                           <ChoiceBox fx:id="chbMelodyMajorScale" layoutX="971.0" layoutY="200.0" prefHeight="48.0" prefWidth="243.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
+                           <ChoiceBox fx:id="chbMelodyMinorScalegroup" layoutX="617.0" layoutY="260.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
+                           <Label layoutX="907.0" layoutY="260.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl" text="Scale" />
+                           <ChoiceBox fx:id="chbMelodyMinorScale" layoutX="970.0" layoutY="260.0" prefHeight="48.0" prefWidth="241.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
+                        </children>
+                     </AnchorPane>
                  </content>
                </Tab>
            </tabs>

@@ -16,7 +16,7 @@ public class MenuController extends Controller {
 
     public void gotoSettings(ActionEvent actionEvent) throws IOException {changeScene("settings", actionEvent);}
 
-    public void gotoBackingTrack(ActionEvent actionEvent) throws IOException {changeScene("backingtrack", actionEvent);}
+    public void gotoComposeBackingtrack(ActionEvent actionEvent) throws IOException {changeScene("backingtrack", actionEvent);}
 
     public void gotoAbout(ActionEvent actionEvent) throws IOException {changeScene("about", actionEvent);}
 

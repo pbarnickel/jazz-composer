@@ -34,6 +34,7 @@ public abstract class Controller implements JMC, Constants {
 
     //Lists for tables and choice-boxes, used in sub-controller-classes
     protected ObservableList<MusicStructure> chords;
+    protected ObservableList<MusicStructure> scales;
     protected ObservableList<MusicStructure> allChords;
     protected ObservableList<MusicStructure> allScales;
     protected ObservableList<MusicStructureGroup> allChordgroups;
@@ -41,6 +42,7 @@ public abstract class Controller implements JMC, Constants {
     protected ObservableList<Chordcomplexity> allChordcomplexities;
     protected ObservableList<Tone> allTones;
     protected ObservableList<String> chordsAsString;
+    protected ObservableList<String> scalesAsString;
     protected ObservableList<String> allChordgroupsAsString;
     protected ObservableList<String> allScalegroupsAsString;
     protected ObservableList<String> allChordcomplexitiesAsString;

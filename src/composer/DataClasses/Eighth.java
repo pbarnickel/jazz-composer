@@ -1,3 +1,10 @@
+/*
+    Description:    Data-model-class for eighths with position and range.
+    Author:         Philipp Barnickel
+    Version:        1.0
+    Date:           15.05.2018
+ */
+
 package composer.DataClasses;
 
 public class Eighth {

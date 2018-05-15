@@ -13,21 +13,17 @@ import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import jm.music.data.*;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -84,6 +80,16 @@ public class BackingtrackController extends Controller {
     @FXML private Slider sldSwing7;
     @FXML private Slider sldSwing8;
 
+    //Melody
+    @FXML private ToggleButton tglMelodyMelody;
+    @FXML private Slider sldMelodyInversion;
+    @FXML private Slider sldMelodySortOfPitches;
+    @FXML private Slider sldMelodyJumper;
+    @FXML private ChoiceBox chbMelodyMajorScalegroup;
+    @FXML private ChoiceBox chbMelodyMajorScale;
+    @FXML private ChoiceBox chbMelodyMinorScalegroup;
+    @FXML private ChoiceBox chbMelodyMinorScale;
+
     public void initialize(){
         //general
         settings = new Settings();
@@ -91,10 +97,13 @@ public class BackingtrackController extends Controller {
 
         //load lists
         chords = FXCollections.observableArrayList();
+        scales = FXCollections.observableArrayList();
         chordsAsString = FXCollections.observableArrayList();
         allChords = FXCollections.observableArrayList(getAllItems(settings.getChordgroups()));
         allChordgroups = FXCollections.observableArrayList(settings.getChordgroups());
+        allScalegroups = FXCollections.observableArrayList(settings.getScalegroups());
         allChordgroupsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups()));
+        allScalegroupsAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups()));
         allChordcomplexities = FXCollections.observableArrayList(settings.getChordcomplexities());
         allChordcomplexitiesAsString = FXCollections.observableArrayList(getStrings(settings.getChordcomplexities()));
         allPatternelements = FXCollections.observableArrayList();
@@ -109,6 +118,26 @@ public class BackingtrackController extends Controller {
                 chords = FXCollections.observableArrayList(settings.getChordgroups().get(indexOfGroup).getMusicStructures());
                 chordsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
                 chbPatternChord.setItems(chordsAsString);
+            }
+        });
+        chbMelodyMajorScalegroup.setItems(allScalegroupsAsString);
+        chbMelodyMinorScalegroup.setItems(allScalegroupsAsString);
+        chbMelodyMajorScalegroup.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
+                scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
+                scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
+                chbMelodyMajorScale.setItems(scalesAsString);
+            }
+        });
+        chbMelodyMinorScalegroup.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
+                scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
+                scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
+                chbMelodyMinorScale.setItems(scalesAsString);
             }
         });
         tglBtnPatternTactPropFull.setUserData("Full");
@@ -355,8 +384,25 @@ public class BackingtrackController extends Controller {
             instruments[2] = tglGeneralDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
             ArrayList<Eighth> eighths = getEighthsProbabilities();
-            backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic);
-            msg("Composition created successfully.", MSG_S);
+            Melody melody = new Melody();
+            if(tglMelodyMelody.isSelected()) {
+                if(validateMelody()) {
+                    int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                    int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                    MusicStructure majorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                    indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                    indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                    MusicStructure minorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                    melody = new Melody(sldMelodyInversion.getValue(), sldMelodySortOfPitches.getValue(), sldMelodyJumper.getValue(), majorScale, minorScale);
+                    backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic, melody);
+                    msg("Composition created successfully.", MSG_S);
+                } else {
+                    msg("Composition not successful. Configuration incomplete or faulty.", MSG_E);
+                }
+            } else {
+                backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic, melody);
+                msg("Composition created successfully.", MSG_S);
+            }
         } else {msg("Composition not successful. Configuration incomplete or faulty.",MSG_E);}
     }
 
@@ -504,7 +550,7 @@ public class BackingtrackController extends Controller {
 
     /******************************************* SWING ****************************************************************/
 
-    //Validates general configuration of create backingtrack
+    //Validates swing configuration of backingtrack
     public boolean validateSwing(){
         int length = sldSwing.size();
         for (int i=0; i<length; i++){
@@ -532,5 +578,16 @@ public class BackingtrackController extends Controller {
             }
         }
         return eighths;
+    }
+
+    /******************************************* Melody ****************************************************************/
+
+    //Validates melody configuration of backingtrack
+    public boolean validateMelody(){
+        if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
+            && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null){
+            return true;
+        }
+        return false;
     }
 }

@@ -194,11 +194,10 @@ public class Composer implements JMC, Constants {
     //Returns a bass-phrase of a full-bar-used chord in a walking-bass style
     public Phrase generateWalkingBass(Patternelement patternelement, int rootPitchOfNext){
         Phrase bar = new Phrase();
-        //int root = patternelement.getChord().getUsage().get(0);
         int transpose = this.tone.getPitch() + patternelement.getTranspose();
         bar.addNote(getBassNote(patternelement.getChord().getUsage().get(0) + transpose));
-        bar.addNote(getBassNote(24));       //REST makes a shrill sound play, so 24 - 24 = 0
-        bar.addNote(getBassNote(24));       //REST makes a shrill sound play, so 24 - 24 = 0
+        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(1) + transpose));
+        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(0) + transpose));
         bar.addNote(getBassNote(rootPitchOfNext - 1));
         return bar;
     }
@@ -206,10 +205,11 @@ public class Composer implements JMC, Constants {
     //Returns a bass-phrase of a full-bar-used chord in a normal style
     public Phrase generateNormalBass(Patternelement patternelement, int rootPitchOfNext){
         Phrase bar = new Phrase();
+        //int root = patternelement.getChord().getUsage().get(0);
         int transpose = this.tone.getPitch() + patternelement.getTranspose();
         bar.addNote(getBassNote(patternelement.getChord().getUsage().get(0) + transpose));
-        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(1) + transpose));
-        bar.addNote(getBassNote(patternelement.getChord().getUsage().get(2) + transpose));
+        bar.addNote(getBassNote(24));       //REST makes a shrill sound play, so 24 - 24 = 0
+        bar.addNote(getBassNote(24));       //REST makes a shrill sound play, so 24 - 24 = 0
         bar.addNote(getBassNote(rootPitchOfNext - 1));
         return bar;
     }
