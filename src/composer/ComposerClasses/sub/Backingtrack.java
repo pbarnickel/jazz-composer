@@ -56,6 +56,7 @@ public class Backingtrack extends Composer {
         this.bass = new Part("Bass", BASS, 1);
         this.drums_ride = new Part("Drums Ride", 0,9);
         this.drums_snare = new Part("Drums Snare", 0,9);
+        this.piano_melody = new Part("Piano Melody", TRUMPET, 2);
         this.tone = tone;
         this.repeat = repeat;
         this.pattern = pattern;
@@ -70,12 +71,14 @@ public class Backingtrack extends Composer {
         if(instruments[0])generatePianoPart();
         if(instruments[1])generateBassPart();
         if(instruments[2])generateDrumsPart();
+        if(melody.getMajorScale() != null)generateMelodyPart();
 
         //Final operations
         score.addPart(piano);
         score.addPart(bass);
         score.addPart(drums_ride);
         score.addPart(drums_snare);
+        score.addPart(piano_melody);
         score.setTempo(tempo);
 
         //Write MIDI audio-file for listening compositions in GUI
@@ -132,9 +135,32 @@ public class Backingtrack extends Composer {
             }
             for(int j=0; j<length; j++){
                 bar = generateRide();
+                //Set dynamic of bar
+                int d = generateDynamic();
+                bar.setDynamic(d);
                 drums_ride.addPhrase(bar);
+                //Set dynamic of bar
+                d = generateDynamic();
+                bar.setDynamic(d);
                 bar = generateSnare();
                 drums_snare.addPhrase(bar);
+            }
+        }
+    }
+
+    //Generates melody part in score
+    public void generateMelodyPart(){
+        Phrase bar;
+        for(int i=0; i<repeat; i++){
+            int lengthPattern = pattern.size();
+            for (int j=0; j<lengthPattern; j++){
+                if (pattern.get(j).getTactProportion().equals("Full")){
+                    bar = generateMelodyBar(pattern.get(j));
+                } else {
+                    bar = generateMelodyBar(pattern.get(j));
+                    j++;
+                }
+                piano_melody.addPhrase(bar);
             }
         }
     }
@@ -236,6 +262,36 @@ public class Backingtrack extends Composer {
         } else {
             bar = generateNormalBass(patternelement, nextRootPitch);
         }
+
+        //Set dynamic of bar
+        int d = generateDynamic();
+        bar.setDynamic(d);
+
+        return bar;
+    }
+
+    //Generates a full piano-melody-bar and returns result as a Phrase
+    public Phrase generateMelodyBar(Patternelement patternelement){
+        Phrase bar = new Phrase();
+        int a,b,c;
+        int nextRootPitch;
+        if(patternelement.getOrder() < pattern.size() - 1) {
+            Patternelement next = pattern.get(patternelement.getOrder() + 1);
+            a = next.getChord().getUsage().get(0);
+            b = next.getTranspose();
+            c = tone.getPitch();
+            nextRootPitch = a + b + c;
+        } else {
+            a = patternelement.getChord().getUsage().get(0);
+            b = patternelement.getTranspose();
+            c = tone.getPitch();
+            nextRootPitch = a + b + c;
+        }
+        bar = generateMelody(patternelement, nextRootPitch);
+
+        //Set dynamic of bar
+        int d = generateDynamic();
+        bar.setDynamic(d);
 
         return bar;
     }

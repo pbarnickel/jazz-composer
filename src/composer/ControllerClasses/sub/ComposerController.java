@@ -31,7 +31,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import static composer.Main.p;
 
-public class BackingtrackController extends Controller {
+public class ComposerController extends Controller {
 
     private Backingtrack backingtrack;
     private String error = "Composition unsuccessful. ";
@@ -41,14 +41,10 @@ public class BackingtrackController extends Controller {
     @FXML private Label lblOut;
 
     //General
-    @FXML private ToggleButton tglGeneralPiano;
-    @FXML private ToggleButton tglGeneralBass;
-    @FXML private ToggleButton tglGeneralDrums;
     @FXML private TextField edtGeneralTempo;
     @FXML private TextField edtGeneralTone;
     @FXML private TextField edtGeneralRepeat;
     @FXML private Slider sldGeneralHumanizer;
-    @FXML private Slider sldGeneralDeviation;
     @FXML private Slider sldGeneralDynamic;
 
     //Pattern
@@ -69,6 +65,24 @@ public class BackingtrackController extends Controller {
     @FXML private ToggleButton tglBtnPatternTactPropSemi;
     @FXML private ToggleButton tglBtnPatternTactPropFull;
 
+    //Backingtrack
+    @FXML private ToggleButton tglBackingtrackPiano;
+    @FXML private ToggleButton tglBackingtrackBass;
+    @FXML private ToggleButton tglBackingtrackDrums;
+    @FXML private Slider sldBackingtrackDeviation;
+    @FXML private Slider sldBackingtrackWalkingBass;
+
+    //Melody
+    @FXML private ToggleButton tglMelodyMelody;
+    @FXML private Slider sldMelodyInversion;
+    @FXML private Slider sldMelodySortOfPitches;
+    @FXML private Slider sldMelodyJumper;
+    @FXML private Slider sldMelodyBebop;
+    @FXML private ChoiceBox chbMelodyMajorScalegroup;
+    @FXML private ChoiceBox chbMelodyMajorScale;
+    @FXML private ChoiceBox chbMelodyMinorScalegroup;
+    @FXML private ChoiceBox chbMelodyMinorScale;
+
     //Swing
     private ArrayList<Slider> sldSwing;
     @FXML private Slider sldSwing1;
@@ -79,16 +93,6 @@ public class BackingtrackController extends Controller {
     @FXML private Slider sldSwing6;
     @FXML private Slider sldSwing7;
     @FXML private Slider sldSwing8;
-
-    //Melody
-    @FXML private ToggleButton tglMelodyMelody;
-    @FXML private Slider sldMelodyInversion;
-    @FXML private Slider sldMelodySortOfPitches;
-    @FXML private Slider sldMelodyJumper;
-    @FXML private ChoiceBox chbMelodyMajorScalegroup;
-    @FXML private ChoiceBox chbMelodyMajorScale;
-    @FXML private ChoiceBox chbMelodyMinorScalegroup;
-    @FXML private ChoiceBox chbMelodyMinorScale;
 
     public void initialize(){
         //general
@@ -182,9 +186,9 @@ public class BackingtrackController extends Controller {
     //Default user inputs for faster testing
     @Override
     public void defaultInputs(){
-        tglGeneralPiano.setSelected(true);
-        tglGeneralBass.setSelected(true);
-        tglGeneralDrums.setSelected(true);
+        tglBackingtrackPiano.setSelected(true);
+        tglBackingtrackBass.setSelected(true);
+        tglBackingtrackDrums.setSelected(true);
         edtGeneralTempo.setText("140");
         edtGeneralTone.setText("C");
         edtGeneralRepeat.setText("3");
@@ -282,6 +286,11 @@ public class BackingtrackController extends Controller {
         for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
         sldGeneralHumanizer.setValue(20);
         sldGeneralDynamic.setValue(40);
+        tglMelodyMelody.setSelected(true);
+        chbMelodyMajorScalegroup.setValue(settings.getScalegroups().get(0).getName());
+        chbMelodyMinorScalegroup.setValue(settings.getScalegroups().get(0).getName());
+        chbMelodyMajorScale.setValue(settings.getScalegroups().get(0).getMusicStructures().get(0).getName());
+        chbMelodyMinorScale.setValue(settings.getScalegroups().get(0).getMusicStructures().get(0).getName());
         //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
     }
 
@@ -375,13 +384,15 @@ public class BackingtrackController extends Controller {
             Boolean instruments[] = new Boolean[3];
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
             int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            int deviation = (int) (sldGeneralDeviation.getValue()/100 * 12);
+            int deviation = (int) (sldBackingtrackDeviation.getValue()/100 * 12);
             double humanizerTolerance = sldGeneralHumanizer.getValue();
             double dynamic = sldGeneralDynamic.getValue();
+            double walkingBass = sldBackingtrackWalkingBass.getValue();
+            double bebop = sldMelodyBebop.getValue();
             Tone tone = settings.getToneByString(edtGeneralTone.getText());
-            instruments[0] = tglGeneralPiano.isSelected();
-            instruments[1] = tglGeneralBass.isSelected();
-            instruments[2] = tglGeneralDrums.isSelected();
+            instruments[0] = tglBackingtrackPiano.isSelected();
+            instruments[1] = tglBackingtrackBass.isSelected();
+            instruments[2] = tglBackingtrackDrums.isSelected();
             ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
             ArrayList<Eighth> eighths = getEighthsProbabilities();
             Melody melody = new Melody();
@@ -410,11 +421,9 @@ public class BackingtrackController extends Controller {
 
     //Validates general configuration of create backingtrack
     public boolean validateGeneral(){
-        if(tglGeneralPiano.isSelected() || tglGeneralBass.isSelected() || tglGeneralDrums.isSelected()){
-            if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE_EXTENDED)
-                    && edtGeneralRepeat.getText().matches(REG_NUMBER))return true;
-            else msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);
-        } else msg(error + "No instruments active.", MSG_E);
+        if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE_EXTENDED)
+           && edtGeneralRepeat.getText().matches(REG_NUMBER)) return true;
+        else msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);
         return false;
     }
 
@@ -423,7 +432,8 @@ public class BackingtrackController extends Controller {
     //Checks if elements are included in the pattern
     public boolean validatePattern(){
         if(allPatternelements.size()>0)return true;
-        else return false;
+        else msg(error + "No pattern configuration.", MSG_E);
+        return false;
     }
 
     //If 'Semi' patternelement is added -> the next patternelement has to be 'Semi' too. This is implemented by disabling
@@ -548,6 +558,25 @@ public class BackingtrackController extends Controller {
         if(patternelement != null)patternelement.getChord().play(rootPitch, true);
     }
 
+    /*************************************** BACKINGTRACK ******************************************************************/
+
+    //Validates backintrack configuration
+    public boolean validateBackingtrack(){
+        if(tglBackingtrackPiano.isSelected() || tglBackingtrackBass.isSelected() || tglBackingtrackDrums.isSelected()) return true;
+        else msg(error + "No instruments active.", MSG_E);
+        return false;
+    }
+
+    /******************************************* Melody ****************************************************************/
+
+    //Validates melody configuration
+    public boolean validateMelody(){
+        if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
+           && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null)
+            return true;
+        return false;
+    }
+
     /******************************************* SWING ****************************************************************/
 
     //Validates swing configuration of backingtrack
@@ -578,16 +607,5 @@ public class BackingtrackController extends Controller {
             }
         }
         return eighths;
-    }
-
-    /******************************************* Melody ****************************************************************/
-
-    //Validates melody configuration of backingtrack
-    public boolean validateMelody(){
-        if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
-            && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null){
-            return true;
-        }
-        return false;
     }
 }

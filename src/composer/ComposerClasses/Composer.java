@@ -186,6 +186,23 @@ public class Composer implements JMC, Constants {
         return value;
     }
 
+    //Returns a piano-melody-phrase of a full-bar-used chord
+    public Phrase generateMelody(Patternelement patternelement, int rootPitchOfNext){
+        Phrase bar = new Phrase();
+        int transpose = this.tone.getPitch() + patternelement.getTranspose();
+        int length = patternelement.getChord().getUsage().size();
+        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
+        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
+        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
+        bar.addNote(getMelodyNote(rootPitchOfNext - 1, QUARTER_NOTE));
+        return bar;
+    }
+
+    //Returns a piano-melody-note (1 octave incremented)
+    public Note getMelodyNote(int pitch, double duration){
+        return new Note(pitch + 12, duration);
+    }
+
     //Returns a bass-note (2 octaves decremented)
     public Note getBassNote(int pitch){
         return new Note(pitch - 24, QUARTER_NOTE);
