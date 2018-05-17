@@ -20,6 +20,8 @@ public class Tone extends MusicElement {
 
     public int getPitch(){ return this.pitch;}
 
+    public String getName(){ return this.name;}
+
     public void setPitch(int pitch){ this.pitch = pitch;}
 
     //Returns pitch as String for dynamically UI-outputs

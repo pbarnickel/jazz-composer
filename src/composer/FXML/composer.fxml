@@ -32,12 +32,12 @@
                 </font>
             </Label>
             <Button layoutX="21.0" layoutY="686.0" mnemonicParsing="false" onAction="#gotoMenu" prefHeight="47.0" prefWidth="59.0" styleClass="btn" text="←" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" />
-         <Button layoutX="146.0" layoutY="148.0" mnemonicParsing="false" onAction="#onClear" styleClass="btn" text="❌" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1230.0" layoutY="150.0" mnemonicParsing="false" onAction="#onClear" styleClass="btn" text="❌" AnchorPane.leftAnchor="1230.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="50.0" layoutY="148.0" mnemonicParsing="false" onAction="#onOpen" styleClass="btn" text="📂" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="98.0" layoutY="148.0" mnemonicParsing="false" onAction="#onSave" styleClass="btn" text="💾" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="150.0" />
          <Label fx:id="lblOut" layoutX="119.0" layoutY="650.0" prefWidth="1159.0" styleClass="out" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="50.0" />
-         <Button layoutX="1230.0" layoutY="148.0" mnemonicParsing="false" onAction="#onView" styleClass="btn" text="🎼" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="150.0" />
-         <Button layoutX="1011.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPlay" prefHeight="44.0" prefWidth="48.0" styleClass="btn" text="▶" AnchorPane.rightAnchor="264.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1175.0" layoutY="150.0" mnemonicParsing="false" onAction="#onView" styleClass="btn" text="🎼" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="961.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPlay" prefHeight="44.0" prefWidth="48.0" styleClass="btn" text="▶" AnchorPane.rightAnchor="319.0" AnchorPane.topAnchor="150.0" />
          <Button layoutX="50.0" layoutY="709.0" mnemonicParsing="false" onAction="#onCompose" prefHeight="44.0" prefWidth="1230.0" styleClass="btn" text="Compose" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
          <TabPane fx:id="tbpBackingtrack" layoutX="50.0" layoutY="218.0" prefHeight="487.0" prefWidth="1228.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="165.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="218.0">
            <tabs>
@@ -141,7 +141,7 @@
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
                            <ToggleButton fx:id="tglMelodyMelody" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="64.0" layoutY="14.0" prefHeight="47.0" prefWidth="271.0" styleClass="tgl-lbl" text="Melody (Trumpet)" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="64.0" layoutY="14.0" prefHeight="47.0" prefWidth="271.0" styleClass="tgl-lbl" text="Trumpet Melody" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="356.0" layoutY="15.0" prefHeight="48.0" prefWidth="145.0" styleClass="lbl" text="Inversion" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="496.0" layoutY="15.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" AnchorPane.leftAnchor="495.0" AnchorPane.topAnchor="15.0" />
                            <Slider fx:id="sldMelodyInversion" layoutX="594.0" layoutY="30.0" prefHeight="18.0" prefWidth="524.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="30.0" />
@@ -198,9 +198,10 @@
                </Tab>
            </tabs>
          </TabPane>
-         <Button layoutX="1176.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStatistics" styleClass="btn" text="📈" AnchorPane.topAnchor="150.0" />
-         <Button layoutX="1067.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPause" styleClass="btn" text="∎∎" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="150.0" />
-         <Button layoutX="1123.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStop" styleClass="btn" text="⏹" AnchorPane.rightAnchor="158.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1121.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStatistics" styleClass="btn" text="📈" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1015.0" layoutY="150.0" mnemonicParsing="false" onAction="#onPause" styleClass="btn" text="∎∎" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="1069.0" layoutY="150.0" mnemonicParsing="false" onAction="#onStop" styleClass="btn" text="⏹" AnchorPane.rightAnchor="213.0" AnchorPane.topAnchor="150.0" />
+         <Button layoutX="159.0" layoutY="150.0" mnemonicParsing="false" onAction="#onExport" styleClass="btn" text="🡵" />
         </AnchorPane>
     </children>
 </VBox>

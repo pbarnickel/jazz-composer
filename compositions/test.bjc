@@ -1,0 +1,115 @@
+{
+	"general": {
+		"tone": {
+			"name": "C#",
+			"pitch": 61
+		},
+		"repeat": 3,
+		"tempo": 140,
+		"dynamic": 40.0,
+		"humanizerTolerance": 20.0
+	},
+	"melody": {
+		"sortOfPitches": 0.0,
+		"inversion": 0.0,
+		"bebop": 0.0,
+		"trumpet": true,
+		"jumper": 0.0
+	},
+	"swing": [{
+		"range": {
+			"start": 0,
+			"end": 99
+		},
+		"position": 0
+	}],
+	"pattern": [{
+		"mode": "Major",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "7-11-0-4",
+		"chord": "Major 7",
+		"transpose": 0,
+		"chordcomplexity": "Full",
+		"order": 0
+	}, {
+		"mode": "Minor",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "-2-0-3-7",
+		"chord": "Minor 7",
+		"transpose": 2,
+		"chordcomplexity": "Full",
+		"order": 1
+	}, {
+		"mode": "Minor",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "-2-0-3-7",
+		"chord": "Minor 7",
+		"transpose": 4,
+		"chordcomplexity": "Full",
+		"order": 2
+	}, {
+		"mode": "Major",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "0-4-8-10",
+		"chord": "7#5",
+		"transpose": -3,
+		"chordcomplexity": "Full",
+		"order": 3
+	}, {
+		"mode": "Minor",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "7-10-0-2-3",
+		"chord": "Minor 9",
+		"transpose": 2,
+		"chordcomplexity": "Full",
+		"order": 4
+	}, {
+		"mode": "Major",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "7-9-10-0-2-4",
+		"chord": "13",
+		"transpose": -5,
+		"chordcomplexity": "Full",
+		"order": 5
+	}, {
+		"mode": "Major",
+		"tactProportion": "Full",
+		"chordgroup": "Basic",
+		"usage": "7-11-0-4",
+		"chord": "Major 7",
+		"transpose": 0,
+		"chordcomplexity": "Full",
+		"order": 6
+	}, {
+		"mode": "Minor",
+		"tactProportion": "Semi",
+		"chordgroup": "Basic",
+		"usage": "-2-0-3-7",
+		"chord": "Minor 7",
+		"transpose": 2,
+		"chordcomplexity": "Full",
+		"order": 7
+	}, {
+		"mode": "Major",
+		"tactProportion": "Semi",
+		"chordgroup": "Basic",
+		"usage": "7-9-10-0-2-4",
+		"chord": "13",
+		"transpose": -5,
+		"chordcomplexity": "Full",
+		"order": 8
+	}],
+	"backingtrack": {
+		"bass": true,
+		"piano": true,
+		"walkingBass": 0.0,
+		"deviation": 0,
+		"drums": true
+	}
+}

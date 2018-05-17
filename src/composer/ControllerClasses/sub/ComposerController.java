@@ -1,5 +1,5 @@
 /*
-    Description:    Controller for Backingtrack-UI.
+    Description:    Controller for Composer-UI.
     Author:         Philipp Barnickel
     Version:        1.0
     Date:           02.02.2018
@@ -7,7 +7,7 @@
 
 package composer.ControllerClasses.sub;
 
-import composer.ComposerClasses.sub.Backingtrack;
+import composer.DataClasses.Composer;
 import composer.ControllerClasses.Controller;
 import composer.DataClasses.*;
 import javafx.beans.value.ChangeListener;
@@ -24,16 +24,14 @@ import java.util.*;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import jm.music.data.*;
+import javafx.stage.FileChooser;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
-import static composer.Main.p;
-
 public class ComposerController extends Controller {
 
-    private Backingtrack backingtrack;
+    private Composer composer;
     private String error = "Composition unsuccessful. ";
     private boolean tactProp;
 
@@ -294,6 +292,8 @@ public class ComposerController extends Controller {
         //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
     }
 
+    /*********************************** Common methods ****************************************/
+
     @Override
     //Writes a message in output-label
     public void msg(String message, int type) {
@@ -302,119 +302,157 @@ public class ComposerController extends Controller {
 
     //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
-        if(backingtrack != null && backingtrack.getSequencer().isRunning()){
-            backingtrack.getSequencer().stop();
-            backingtrack.getSequencer().close();
+        if(composer != null && composer.getSequencer().isRunning()){
+            composer.getSequencer().stop();
+            composer.getSequencer().close();
         }
         changeScene("menu", actionEvent);
     }
 
+    //Updates Composer-UI after reading a BJC-Project-File
+    public void updateComposerUI(){
+        //General
+        edtGeneralTempo.setText(Integer.toString(composer.getGeneral().getTempo()));
+        edtGeneralTone.setText(settings.getToneByPitch(composer.getGeneral().getTone().getPitch()));
+    }
+
+    /****************************** File methods ************************************************/
+
+    //Exports a composition as MIDI-File
+    public void onExport(ActionEvent actionEvent){
+        if(composer != null) {
+            if(new File(settings.getDefault_location()).exists()) {
+                File selectedFile = chooseFile("Choose place for saving File", actionEvent, false, "MIDI-File", "*.mid");
+                if (selectedFile != null) {
+                    composer.writeScoreinMIDI(selectedFile.getPath());
+                    msg(selectedFile.getName() + " saved.", MSG_S);
+                } else {msg("File could not be saved.", MSG_E);}
+            } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
+        } else msg("No Composition to export.", MSG_E);
+    }
+
+    //Opens BJC-Project
+    public void onOpen(ActionEvent actionEvent) throws MidiUnavailableException {
+        if(new File(settings.getDefault_location()).exists()) {
+            File selectedFile = chooseFile("Choose the BJC-File to open", actionEvent, true, "BJC-Project-File", "*.bjc");
+            if (selectedFile != null) {
+                composer = new Composer();
+                composer.readBJCProjectFile(selectedFile.getPath());
+                msg(selectedFile.getName() + " is not a valid BJC-Project-File.",MSG_E);
+            } else {msg("File could not be loaded.", MSG_E);}
+        } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
+    }
+
+    //Saves a composition as BJC-Project
+    public void onSave(ActionEvent actionEvent){
+        if(composer != null){
+            if(new File(settings.getDefault_location()).exists()) {
+                File selectedFile = chooseFile("Choose place for saving BJC-Project-File", actionEvent, false, "BJC-Project-File", "*.bjc");
+                if(selectedFile != null){
+                    composer.writeBJCProjectFile(selectedFile.getPath());
+                    msg(selectedFile.getName() + " saved.", MSG_S);
+                } else msg("File could not be saved.", MSG_E);
+            } else msg("Default path not valid. Change this in the settings.", MSG_E);
+        } else msg("No composition to save.", MSG_E);
+    }
+
+    /****************************** Audio-Player, Statistics, ... *********************************/
+
+    //Plays composition
+    public void onPlay(ActionEvent actionEvent) throws MidiUnavailableException, InvalidMidiDataException, IOException {
+        if(composer != null && composer.getScore().getSize() > 0){
+            composer.playScore();
+        } else msg("No composition to play.",MSG_E);
+    }
+
+    //Pauses playing composition
+    public void onPause(ActionEvent actionEvent) {
+        if(composer.getSequencer().isRunning()){
+            composer.pauseScore();
+        } else msg("No composition playing.",MSG_E);
+    }
+
+    //Stops playing composition
+    public void onStop(ActionEvent actionEvent) {
+        if(composer.getSequencer().isOpen()){
+            composer.stopScore();
+        } else msg("No composition to stop.",MSG_E);
+    }
+
+    //Shows statistics
+    public void onStatistics(ActionEvent actionEvent) {
+        if(composer != null){
+            composer.showStatistics();
+        } else msg("No composition-statistics.",MSG_E);
+    }
+
     //Views JMusic composition-overview
     public void onView(ActionEvent actionEvent) {
-        if(backingtrack != null)backingtrack.showScore();
+        if(composer != null)composer.showScore();
         else msg("No composition to view.",MSG_E);
     }
 
     //Clears composition
     public void onClear(ActionEvent actionEvent){
-        backingtrack.initScore();
+        composer.initScore();
         msg("Composition cleared.",MSG_I);
     }
 
-    //Opens a MIDI-composition
-    public void onOpen(ActionEvent actionEvent) throws MidiUnavailableException {
-        if(new File(settings.getDefault_location()).exists()) {
-            File selectedFile = midiFileChooser("Choose the MIDI-File to open", actionEvent, true);
-            if (selectedFile != null) {
-                backingtrack = new Backingtrack();
-                backingtrack.readMIDIinScore(selectedFile.getPath());
-                msg(selectedFile.getName() + " loaded.", MSG_S);
-            } else {msg("File could not be loaded.", MSG_E);}
-        } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
-    }
+    /******************************* COMPOSE ******************************************/
 
-    //Saves composed backingtrack as MIDI-File
-    public void onSave(ActionEvent actionEvent){
-        if(backingtrack != null) {
-            if(new File(settings.getDefault_location()).exists()) {
-                File selectedFile = midiFileChooser("Choose place for saving File", actionEvent, false);
-                if (selectedFile != null) {
-                    backingtrack.writeScoreinMIDI(selectedFile.getPath());
-                    msg(selectedFile.getName() + " saved.", MSG_S);
-                } else {msg("File could not be saved.", MSG_E);}
-            } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
-        } else msg("No Backingtrack composed.", MSG_E);
-    }
-
-    //Plays composed backingtrack
-    public void onPlay(ActionEvent actionEvent) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-        if(backingtrack != null && backingtrack.getScore().getSize() > 0){
-            backingtrack.playScore();
-        } else msg("No Backingtrack to play.",MSG_E);
-    }
-
-    //Pauses composed backingtrack
-    public void onPause(ActionEvent actionEvent) {
-        if(backingtrack.getSequencer().isRunning()){
-            backingtrack.pauseScore();
-        } else msg("No Backingtrack playing.",MSG_E);
-    }
-
-    //Stops composed backingtrack
-    public void onStop(ActionEvent actionEvent) {
-        if(backingtrack.getSequencer().isOpen()){
-            backingtrack.stopScore();
-        } else msg("No Backingtrack to stop.",MSG_E);
-    }
-
-    //Shows statistics
-    public void onStatistics(ActionEvent actionEvent) {
-        if(backingtrack != null){
-            backingtrack.showStatistics();
-        } else msg("No composition-statistics.",MSG_E);
-    }
-
-    //Composes a backingtrack by user input
+    //Composes a Jazz-composition by user input
     public void onCompose(ActionEvent actionEvent) throws MidiUnavailableException {
-        if(validateGeneral() && validatePattern() && validateSwing()){
-            if(backingtrack != null && backingtrack.getSequencer().isRunning()){
-                backingtrack.getSequencer().stop();
-                backingtrack.getSequencer().close();
-            }
-            Boolean instruments[] = new Boolean[3];
+
+        if(validateGeneral() && validatePattern() && validateSwing() && (validateMelody() || validateBackingtrack())){
+            msg("Composition successful.",MSG_S);
+
+            if(composer != null && composer.getSequencer().isRunning())
+                composer.stopScore();
+
+            //General
             int tempo = Integer.parseInt(edtGeneralTempo.getText());
-            int repeat = Integer.parseInt((edtGeneralRepeat.getText()));
-            int deviation = (int) (sldBackingtrackDeviation.getValue()/100 * 12);
+            Tone tone = settings.getToneByString(edtGeneralTone.getText());
+            int repeat = Integer.parseInt(edtGeneralRepeat.getText());
             double humanizerTolerance = sldGeneralHumanizer.getValue();
             double dynamic = sldGeneralDynamic.getValue();
+            General general = new General(tempo, repeat, humanizerTolerance, dynamic, tone);
+
+            //Pattern
+            ArrayList<Patternelement> patternelements = new ArrayList<Patternelement>(tblPattern.getItems());
+            Pattern pattern = new Pattern(patternelements);
+
+            //Backingtrack
+            boolean piano = tglBackingtrackPiano.isSelected();
+            boolean bass = tglBackingtrackBass.isSelected();
+            boolean drums = tglBackingtrackDrums.isSelected();
+            int deviation = (int) (sldBackingtrackDeviation.getValue()/100 * 12);
             double walkingBass = sldBackingtrackWalkingBass.getValue();
-            double bebop = sldMelodyBebop.getValue();
-            Tone tone = settings.getToneByString(edtGeneralTone.getText());
-            instruments[0] = tglBackingtrackPiano.isSelected();
-            instruments[1] = tglBackingtrackBass.isSelected();
-            instruments[2] = tglBackingtrackDrums.isSelected();
-            ArrayList<Patternelement> pattern = new ArrayList<Patternelement>(tblPattern.getItems());
+            Backingtrack backingtrack = new Backingtrack(piano, bass, drums, deviation, walkingBass);
+
+            //Melody
+            boolean state = tglMelodyMelody.isSelected();
+            Melody melody;
+            if(state) {
+                double inversion = sldMelodyInversion.getValue();
+                double sortOfPitches = sldMelodySortOfPitches.getValue();
+                double jumper = sldMelodyJumper.getValue();
+                double bebop = sldMelodyBebop.getValue();
+                int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                MusicStructure majorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                MusicStructure minorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                melody = new Melody(state, inversion, sortOfPitches, jumper, bebop, majorScale, minorScale);
+            } else melody = new Melody(state);
+
+            //Swing
             ArrayList<Eighth> eighths = getEighthsProbabilities();
-            Melody melody = new Melody();
-            if(tglMelodyMelody.isSelected()) {
-                if(validateMelody()) {
-                    int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
-                    int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
-                    MusicStructure majorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
-                    indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
-                    indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
-                    MusicStructure minorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
-                    melody = new Melody(sldMelodyInversion.getValue(), sldMelodySortOfPitches.getValue(), sldMelodyJumper.getValue(), majorScale, minorScale);
-                    backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic, melody);
-                    msg("Composition created successfully.", MSG_S);
-                } else {
-                    msg("Composition not successful. Configuration incomplete or faulty.", MSG_E);
-                }
-            } else {
-                backingtrack = new Backingtrack(instruments, tempo, tone, repeat, pattern, humanizerTolerance, eighths, deviation, dynamic, melody);
-                msg("Composition created successfully.", MSG_S);
-            }
-        } else {msg("Composition not successful. Configuration incomplete or faulty.",MSG_E);}
+            Swing swing = new Swing(eighths);
+
+            composer = new Composer(general, pattern, backingtrack, melody, swing);
+
+        } else msg(error + "Configuration incomplete or faulty",MSG_E);
     }
 
     /*************************************** GENERAL ******************************************************************/
@@ -571,15 +609,18 @@ public class ComposerController extends Controller {
 
     //Validates melody configuration
     public boolean validateMelody(){
-        if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
-           && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null)
-            return true;
+        if(tglMelodyMelody.isSelected()){
+            if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
+               && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null) {
+                return true;
+            }
+        }
         return false;
     }
 
     /******************************************* SWING ****************************************************************/
 
-    //Validates swing configuration of backingtrack
+    //Validates swing configuration
     public boolean validateSwing(){
         int length = sldSwing.size();
         for (int i=0; i<length; i++){

@@ -13,8 +13,6 @@ public class Pattern {
 
     private ArrayList<Patternelement> pattern;
 
-    public Pattern(){}
-
     public Pattern(ArrayList pattern){
         this.pattern = pattern;
     }

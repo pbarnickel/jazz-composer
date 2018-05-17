@@ -12,12 +12,10 @@ public class Backingtrack {
     private boolean piano;
     private boolean bass;
     private boolean drums;
-    private double deviation;
+    private int deviation;
     private double walkingBass;
 
-    public Backingtrack(){}
-
-    public Backingtrack(boolean piano, boolean bass, boolean drums, double deviation, double walkingBass){
+    public Backingtrack(boolean piano, boolean bass, boolean drums, int deviation, double walkingBass){
         this.piano = piano;
         this.bass = bass;
         this.drums = drums;
@@ -28,7 +26,7 @@ public class Backingtrack {
     public boolean getPiano() {return this.piano;}
     public boolean getBass() {return this.bass;}
     public boolean getDrums() {return this.drums;}
-    public double getDeviation() {return this.deviation;}
+    public int getDeviation() {return this.deviation;}
     public double getWalkingBass() {return this.walkingBass;}
 
 }

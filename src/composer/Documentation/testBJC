@@ -1,0 +1,29 @@
+##### BJC-Project-File #####
+$GENERAL
+tempo: 120
+tone: 60
+repeat: 3
+humanizerTolerance: 20.1
+dynamic: 30.5
+$PATTERN
+[0,1,Major,Basic,Major 7,Full,0-4-7-11,Full]
+[0,1,Major,Basic,Major 7,Full,0-4-7-11,Full]
+[0,1,Major,Basic,Major 7,Full,0-4-7-11,Full]
+[0,1,Major,Basic,Major 7,Full,0-4-7-11,Full]
+$BACKINGTRACK
+piano: 1
+bass: 0
+drums: 0
+deviation: 12.0
+walkingBass: 14.0
+$MELODY
+trumpet: 1
+inversion: 0.0
+sortOfPitches: 50.9
+jumper: 19.0
+bebop: 79.8
+majorScale: [Basic,Major]
+minorScale: [Basic,Minor]
+$Swing
+[0-10,11-20,...]
+############################

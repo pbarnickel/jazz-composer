@@ -15,8 +15,6 @@ public class General {
     private double dynamic;
     private Tone tone;
 
-    public General(){}
-
     public General(int tempo, int repeat, double humanizerTolerance, double dynamic, Tone tone){
         this.tempo = tempo;
         this.repeat = repeat;

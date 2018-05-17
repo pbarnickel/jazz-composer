@@ -13,8 +13,6 @@ public class Swing {
 
     private ArrayList<Eighth> eighths;
 
-    public Swing(){}
-
     public Swing(ArrayList eighths){
         this.eighths = eighths;
     }

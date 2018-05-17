@@ -86,11 +86,11 @@ public abstract class Controller implements JMC, Constants {
     }
 
     //Generates filechooser to access MIDI-files
-    public File midiFileChooser(String title, ActionEvent actionEvent, boolean open){
+    public File chooseFile(String title, ActionEvent actionEvent, boolean open, String description, String extension){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialDirectory(new File(new Settings().getDefault_location()));
-        fileChooser.getExtensionFilters().add( new FileChooser.ExtensionFilter("MIDI Files", "*.mid"));
+        fileChooser.getExtensionFilters().add( new FileChooser.ExtensionFilter(description, extension));
         Stage stg = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         if(open)return fileChooser.showOpenDialog(stg);
         else return fileChooser.showSaveDialog(stg);
