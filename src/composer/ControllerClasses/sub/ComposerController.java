@@ -116,10 +116,14 @@ public class ComposerController extends Controller {
         chbPatternChordgroups.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                int indexOfGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), newValue.toString());
-                chords = FXCollections.observableArrayList(settings.getChordgroups().get(indexOfGroup).getMusicStructures());
-                chordsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
-                chbPatternChord.setItems(chordsAsString);
+                if(newValue != null) {
+                    int indexOfGroup = settings.getIndexOfMusicElement(settings.getChordgroups(), newValue.toString());
+                    if (indexOfGroup > -1) {
+                        chords = FXCollections.observableArrayList(settings.getChordgroups().get(indexOfGroup).getMusicStructures());
+                        chordsAsString = FXCollections.observableArrayList(getStrings(settings.getChordgroups().get(indexOfGroup).getMusicStructures()));
+                        chbPatternChord.setItems(chordsAsString);
+                    }
+                }
             }
         });
         chbMelodyMajorScalegroup.setItems(allScalegroupsAsString);
@@ -127,19 +131,27 @@ public class ComposerController extends Controller {
         chbMelodyMajorScalegroup.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
-                scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
-                scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
-                chbMelodyMajorScale.setItems(scalesAsString);
+                if(newValue != null) {
+                    int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
+                    if(indexOfGroup > -1) {
+                        scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
+                        scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
+                        chbMelodyMajorScale.setItems(scalesAsString);
+                    }
+                }
             }
         });
         chbMelodyMinorScalegroup.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
-                scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
-                scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
-                chbMelodyMinorScale.setItems(scalesAsString);
+                if(newValue != null) {
+                    int indexOfGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), newValue.toString());
+                    if (indexOfGroup > -1) {
+                        scales = FXCollections.observableArrayList(settings.getScalegroups().get(indexOfGroup).getMusicStructures());
+                        scalesAsString = FXCollections.observableArrayList(getStrings(settings.getScalegroups().get(indexOfGroup).getMusicStructures()));
+                        chbMelodyMinorScale.setItems(scalesAsString);
+                    }
+                }
             }
         });
         tglBtnPatternTactPropFull.setUserData("Full");
@@ -184,112 +196,7 @@ public class ComposerController extends Controller {
     //Default user inputs for faster testing
     @Override
     public void defaultInputs(){
-        tglBackingtrackPiano.setSelected(true);
-        tglBackingtrackBass.setSelected(true);
-        tglBackingtrackDrums.setSelected(true);
-        edtGeneralTempo.setText("140");
-        edtGeneralTone.setText("C");
-        edtGeneralRepeat.setText("3");
-        allPatternelements.add(
-                new Patternelement(
-                        0,
-                        0,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(4),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        1,
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        2,
-                        4,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        3,
-                        -3,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(32),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        4,
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(12),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        5,
-                        -5,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(15),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        6,
-                        0,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(4),
-                        settings.getChordcomplexities().get(3),
-                        "Full"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        7,
-                        2,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(5),
-                        settings.getChordcomplexities().get(3),
-                        "Semi"
-                )
-        );
-        allPatternelements.add(
-                new Patternelement(
-                        8,
-                        -5,
-                        settings.getChordgroups().get(0),
-                        settings.getChordgroups().get(0).getMusicStructures().get(15),
-                        settings.getChordcomplexities().get(3),
-                        "Semi"
-                )
-        );
-        double[] val = new double[]{100,0,0,0,0,0,0,0};
-        for(int i=0; i<8; i++)sldSwing.get(i).setValue(val[i]);
-        sldGeneralHumanizer.setValue(20);
-        sldGeneralDynamic.setValue(40);
-        tglMelodyMelody.setSelected(true);
-        chbMelodyMajorScalegroup.setValue(settings.getScalegroups().get(0).getName());
-        chbMelodyMinorScalegroup.setValue(settings.getScalegroups().get(0).getName());
-        chbMelodyMajorScale.setValue(settings.getScalegroups().get(0).getMusicStructures().get(0).getName());
-        chbMelodyMinorScale.setValue(settings.getScalegroups().get(0).getMusicStructures().get(0).getName());
-        //for(int i=0; i<8; i++)sldSwing.get(i).setValue(new Random().nextInt(100));
+        //TODO Folder with examples
     }
 
     /*********************************** Common methods ****************************************/
@@ -313,7 +220,41 @@ public class ComposerController extends Controller {
     public void updateComposerUI(){
         //General
         edtGeneralTempo.setText(Integer.toString(composer.getGeneral().getTempo()));
-        edtGeneralTone.setText(settings.getToneByPitch(composer.getGeneral().getTone().getPitch()));
+        edtGeneralTone.setText(composer.getGeneral().getTone().getName());
+        edtGeneralRepeat.setText(Integer.toString(composer.getGeneral().getRepeat()));
+        sldGeneralDynamic.setValue(composer.getGeneral().getDynamic());
+        sldGeneralHumanizer.setValue(composer.getGeneral().getHumanizerTolerance());
+
+        //Pattern
+        allPatternelements = FXCollections.observableArrayList(composer.getPattern().getPatternelements());
+        tblPattern.setItems(allPatternelements);
+
+        //Backingtrack
+        tglBackingtrackPiano.setSelected(composer.getBackingtrack().getPiano());
+        tglBackingtrackBass.setSelected(composer.getBackingtrack().getBass());
+        tglBackingtrackDrums.setSelected(composer.getBackingtrack().getDrums());
+        sldBackingtrackDeviation.setValue(composer.getBackingtrack().getDeviation().getRowData());
+        sldBackingtrackWalkingBass.setValue(composer.getBackingtrack().getWalkingBass());
+
+        //Melody
+        tglMelodyMelody.setSelected(composer.getMelody().getState());
+        sldMelodyInversion.setValue(composer.getMelody().getInversion());
+        sldMelodySortOfPitches.setValue(composer.getMelody().getSortOfPitches());
+        sldMelodyJumper.setValue(composer.getMelody().getJumper());
+        sldMelodyBebop.setValue(composer.getMelody().getBebop());
+        int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMajorScale().getGroup());
+        chbMelodyMajorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
+        chbMelodyMajorScale.setValue(composer.getMelody().getMajorScale().getName());
+        indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMinorScale().getGroup());
+        chbMelodyMinorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
+        chbMelodyMinorScale.setValue(composer.getMelody().getMinorScale().getName());
+
+        //Swing
+        int length = composer.getSwing().getSize();
+        for(int i=0; i<length; i++){
+            Eighth eighth = composer.getSwing().getEighth(i);
+            sldSwing.get(eighth.getPosition()).setValue(eighth.getRowData());
+        }
     }
 
     /****************************** File methods ************************************************/
@@ -328,7 +269,7 @@ public class ComposerController extends Controller {
                     msg(selectedFile.getName() + " saved.", MSG_S);
                 } else {msg("File could not be saved.", MSG_E);}
             } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
-        } else msg("No Composition to export.", MSG_E);
+        } else msg("No Composition to export. Click on 'Compose'.", MSG_E);
     }
 
     //Opens BJC-Project
@@ -338,7 +279,8 @@ public class ComposerController extends Controller {
             if (selectedFile != null) {
                 composer = new Composer();
                 composer.readBJCProjectFile(selectedFile.getPath());
-                msg(selectedFile.getName() + " is not a valid BJC-Project-File.",MSG_E);
+                updateComposerUI();
+                msg(selectedFile.getName() + " loaded.",MSG_S);
             } else {msg("File could not be loaded.", MSG_E);}
         } else {msg("Default path not valid. Change this in the settings.",MSG_E);}
     }
@@ -353,7 +295,7 @@ public class ComposerController extends Controller {
                     msg(selectedFile.getName() + " saved.", MSG_S);
                 } else msg("File could not be saved.", MSG_E);
             } else msg("Default path not valid. Change this in the settings.", MSG_E);
-        } else msg("No composition to save.", MSG_E);
+        } else msg("No composition to save. Click on 'Compose'.", MSG_E);
     }
 
     /****************************** Audio-Player, Statistics, ... *********************************/
@@ -362,39 +304,83 @@ public class ComposerController extends Controller {
     public void onPlay(ActionEvent actionEvent) throws MidiUnavailableException, InvalidMidiDataException, IOException {
         if(composer != null && composer.getScore().getSize() > 0){
             composer.playScore();
-        } else msg("No composition to play.",MSG_E);
+        } else msg("No composition to play. Click on 'Compose'.",MSG_E);
     }
 
     //Pauses playing composition
     public void onPause(ActionEvent actionEvent) {
         if(composer.getSequencer().isRunning()){
             composer.pauseScore();
-        } else msg("No composition playing.",MSG_E);
+        } else msg("No composition playing. Click on 'Compose'.",MSG_E);
     }
 
     //Stops playing composition
     public void onStop(ActionEvent actionEvent) {
         if(composer.getSequencer().isOpen()){
             composer.stopScore();
-        } else msg("No composition to stop.",MSG_E);
+        } else msg("No composition to stop. Click on 'Compose'.",MSG_E);
     }
 
     //Shows statistics
     public void onStatistics(ActionEvent actionEvent) {
         if(composer != null){
             composer.showStatistics();
-        } else msg("No composition-statistics.",MSG_E);
+        } else msg("No composition-statistics. Click on 'Compose'.",MSG_E);
     }
 
     //Views JMusic composition-overview
     public void onView(ActionEvent actionEvent) {
         if(composer != null)composer.showScore();
-        else msg("No composition to view.",MSG_E);
+        else msg("No composition to view. Click on 'Compose'.",MSG_E);
     }
 
     //Clears composition
     public void onClear(ActionEvent actionEvent){
-        composer.initScore();
+        if(composer != null) {
+            composer.initScore();
+        }
+
+        //General
+        edtGeneralTempo.clear();
+        edtGeneralTone.clear();
+        edtGeneralRepeat.clear();
+        sldGeneralHumanizer.setValue(0);
+        sldGeneralDynamic.setValue(0);
+
+        //Pattern
+        allPatternelements = FXCollections.observableArrayList();
+        tblPattern.setItems(allPatternelements);
+        edtPatternTranspose.clear();
+        chbPatternChordgroups.setValue(null);
+        chbPatternChord.setValue(null);
+        chbPatternChordcomplexity.setValue(null);
+        tglBtnPatternTactPropSemi.setSelected(false);
+        tglBtnPatternTactPropFull.setSelected(false);
+
+        //Backingtrack
+        tglBackingtrackPiano.setSelected(false);
+        tglBackingtrackBass.setSelected(false);
+        tglBackingtrackDrums.setSelected(false);
+        sldBackingtrackDeviation.setValue(0);
+        sldBackingtrackWalkingBass.setValue(0);
+
+        //Melody
+        tglMelodyMelody.setSelected(false);
+        sldMelodyInversion.setValue(0);
+        sldMelodySortOfPitches.setValue(0);
+        sldMelodyJumper.setValue(0);
+        sldMelodyBebop.setValue(0);
+        chbMelodyMajorScalegroup.setValue(null);
+        chbMelodyMajorScale.setValue(null);
+        chbMelodyMinorScalegroup.setValue(null);
+        chbMelodyMinorScale.setValue(null);
+
+        //Swing
+        int length = sldSwing.size();
+        for(int i=0; i<length; i++){
+            sldSwing.get(i).setValue(0);
+        }
+
         msg("Composition cleared.",MSG_I);
     }
 
@@ -425,14 +411,14 @@ public class ComposerController extends Controller {
             boolean piano = tglBackingtrackPiano.isSelected();
             boolean bass = tglBackingtrackBass.isSelected();
             boolean drums = tglBackingtrackDrums.isSelected();
-            int deviation = (int) (sldBackingtrackDeviation.getValue()/100 * 12);
+            Deviation deviation = new Deviation(sldBackingtrackDeviation.getValue());
             double walkingBass = sldBackingtrackWalkingBass.getValue();
             Backingtrack backingtrack = new Backingtrack(piano, bass, drums, deviation, walkingBass);
 
             //Melody
             boolean state = tglMelodyMelody.isSelected();
             Melody melody;
-            if(state) {
+            if(state && validateMelody()) {
                 double inversion = sldMelodyInversion.getValue();
                 double sortOfPitches = sldMelodySortOfPitches.getValue();
                 double jumper = sldMelodyJumper.getValue();
@@ -452,7 +438,7 @@ public class ComposerController extends Controller {
 
             composer = new Composer(general, pattern, backingtrack, melody, swing);
 
-        } else msg(error + "Configuration incomplete or faulty",MSG_E);
+        }
     }
 
     /*************************************** GENERAL ******************************************************************/
@@ -460,8 +446,9 @@ public class ComposerController extends Controller {
     //Validates general configuration of create backingtrack
     public boolean validateGeneral(){
         if(edtGeneralTempo.getText().matches(REG_TEMPO) && edtGeneralTone.getText().matches(REG_TONE_EXTENDED)
-           && edtGeneralRepeat.getText().matches(REG_NUMBER)) return true;
-        else msg(error + "Tempo [0..n], Tone [C-B] or Repeat [1..n] not valid.",MSG_E);
+           && edtGeneralRepeat.getText().matches(REG_NUMBER) && Integer.parseInt(edtGeneralTempo.getText())>1
+           && Integer.parseInt(edtGeneralTempo.getText())<=300 && Integer.parseInt(edtGeneralRepeat.getText())<=100) return true;
+        else msg(error + "Tempo [1..300], Tone [[C-B] combined with [#b]] or Repeat [1..100] not valid.",MSG_E);
         return false;
     }
 
@@ -469,9 +456,24 @@ public class ComposerController extends Controller {
 
     //Checks if elements are included in the pattern
     public boolean validatePattern(){
-        if(allPatternelements.size()>0)return true;
-        else msg(error + "No pattern configuration.", MSG_E);
-        return false;
+        int length = allPatternelements.size();
+        if(length>0){
+            for(int i=0; i<length; i++){
+                if(allPatternelements.get(i).getTactProportion().equals("Semi")){
+                    if(i == (length-1) || allPatternelements.get(i+1).getTactProportion().equals("Full")){
+                        msg(error + "A Semi-Tact-Proportion must be followed by another Semi-Tact-Proportion.",MSG_E);
+                        return false;
+                    } else {
+                        i++;
+                    }
+                }
+            }
+        }
+        else {
+            msg(error + "No pattern configuration.", MSG_E);
+            return false;
+        }
+        return true;
     }
 
     //If 'Semi' patternelement is added -> the next patternelement has to be 'Semi' too. This is implemented by disabling
@@ -601,7 +603,7 @@ public class ComposerController extends Controller {
     //Validates backintrack configuration
     public boolean validateBackingtrack(){
         if(tglBackingtrackPiano.isSelected() || tglBackingtrackBass.isSelected() || tglBackingtrackDrums.isSelected()) return true;
-        else msg(error + "No instruments active.", MSG_E);
+        else msg(error + "No instruments active. If the trumpet melody is active, it must be configured.", MSG_E);
         return false;
     }
 
@@ -613,7 +615,7 @@ public class ComposerController extends Controller {
             if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
                && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null) {
                 return true;
-            }
+            } else msg(error + "Melody configuration is not completed.", MSG_E);
         }
         return false;
     }
@@ -626,6 +628,7 @@ public class ComposerController extends Controller {
         for (int i=0; i<length; i++){
             if(sldSwing.get(i).getValue()>0)return true;
         }
+        msg(error + "There must be at least one upbeat in the swing configuration greater than 0.",MSG_E);
         return false;
     }
 
@@ -642,7 +645,7 @@ public class ComposerController extends Controller {
             if(sldSwing.get(i).getValue() > 0) {
                 percentage = sldSwing.get(i).getValue() / sum * 100;
                 Range range = new Range((int) start, (int) (start + percentage - 1));
-                Eighth eighth = new Eighth(i, range);
+                Eighth eighth = new Eighth(i, sldSwing.get(i).getValue(), range);
                 eighths.add(eighth);
                 start += percentage;
             }

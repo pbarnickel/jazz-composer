@@ -11,30 +11,34 @@ import java.util.ArrayList;
 
 public class Pattern {
 
-    private ArrayList<Patternelement> pattern;
+    private ArrayList<Patternelement> patternelements;
 
-    public Pattern(ArrayList pattern){
-        this.pattern = pattern;
+    public Pattern(ArrayList patternelements){
+        this.patternelements = patternelements;
     }
 
-    public  int getSize(){
-        return pattern.size();
+    public int getSize(){
+        return patternelements.size();
+    }
+
+    public ArrayList<Patternelement> getPatternelements(){
+        return patternelements;
     }
 
     public void addPatternelement(Patternelement patternelement){
-        pattern.add(patternelement);
+        patternelements.add(patternelement);
     }
 
     public void delPatternelement(int i){
-        pattern.remove(i);
+        patternelements.remove(i);
     }
 
     public Patternelement getPatternelement(int i){
-        return pattern.get(i);
+        return patternelements.get(i);
     }
 
     public ArrayList<Patternelement> getPattern(){
-        return pattern;
+        return patternelements;
     }
 
 }

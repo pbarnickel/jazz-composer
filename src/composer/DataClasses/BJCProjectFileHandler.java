@@ -64,7 +64,7 @@ public class BJCProjectFileHandler {
         jsonObjectBackingtrack.put("piano", composer.getBackingtrack().getPiano());
         jsonObjectBackingtrack.put("bass", composer.getBackingtrack().getBass());
         jsonObjectBackingtrack.put("drums", composer.getBackingtrack().getDrums());
-        jsonObjectBackingtrack.put("deviation", composer.getBackingtrack().getDeviation());
+        jsonObjectBackingtrack.put("deviation", composer.getBackingtrack().getDeviation().getRowData());
         jsonObjectBackingtrack.put("walkingBass", composer.getBackingtrack().getWalkingBass());
         jsonObjectRoot.put("backingtrack", jsonObjectBackingtrack);
 
@@ -78,9 +78,11 @@ public class BJCProjectFileHandler {
         JSONObject jsonObjectMelodyMajorScale = new JSONObject();
         jsonObjectMelodyMajorScale.put("scalegroup", composer.getMelody().getMajorScale().getGroup());
         jsonObjectMelodyMajorScale.put("scale", composer.getMelody().getMajorScale().getName());
+        jsonObjectMelody.put("majorScale", jsonObjectMelodyMajorScale);
         JSONObject jsonObjectMelodyMinorScale = new JSONObject();
         jsonObjectMelodyMinorScale.put("scalegroup", composer.getMelody().getMinorScale().getGroup());
         jsonObjectMelodyMinorScale.put("scale", composer.getMelody().getMinorScale().getName());
+        jsonObjectMelody.put("minorScale", jsonObjectMelodyMinorScale);
         jsonObjectRoot.put("melody", jsonObjectMelody);
 
         //Swing
@@ -89,6 +91,7 @@ public class BJCProjectFileHandler {
         for(int i=0; i<length; i++){
             JSONObject jsonObjectSwingEighth = new JSONObject();
             jsonObjectSwingEighth.put("position", composer.getSwing().getEighth(i).getPosition());
+            jsonObjectSwingEighth.put("rowData", composer.getSwing().getEighth(i).getRowData());
             JSONObject jsonObjectSwingEighthRange = new JSONObject();
             jsonObjectSwingEighthRange.put("start", composer.getSwing().getEighth(i).getRange().getStart());
             jsonObjectSwingEighthRange.put("end", composer.getSwing().getEighth(i).getRange().getEnd());
@@ -109,6 +112,7 @@ public class BJCProjectFileHandler {
 
     public Composer readBJC(String path) throws MidiUnavailableException {
 
+        Composer composer = null;
         JSONParser parser = new JSONParser();
 
         try {
@@ -155,7 +159,7 @@ public class BJCProjectFileHandler {
             boolean piano = Boolean.parseBoolean(jsonObjectBackingtrack.get("piano").toString());
             boolean bass = Boolean.parseBoolean(jsonObjectBackingtrack.get("bass").toString());
             boolean drums = Boolean.parseBoolean(jsonObjectBackingtrack.get("drums").toString());
-            int deviation = Integer.parseInt(jsonObjectBackingtrack.get("deviation").toString());
+            Deviation deviation = new Deviation(Double.parseDouble(jsonObjectBackingtrack.get("deviation").toString()));
             double walkingBass = Double.parseDouble(jsonObjectBackingtrack.get("walkingBass").toString());
             Backingtrack backingtrack = new Backingtrack(piano, bass, drums, deviation, walkingBass);
 
@@ -183,16 +187,17 @@ public class BJCProjectFileHandler {
             for(int i=0; i<length; i++){
                 JSONObject jsonObjectSwingEighth = (JSONObject) jsonArraySwing.get(i);
                 int position = Integer.parseInt(jsonObjectSwingEighth.get("position").toString());
+                double rowData = Double.parseDouble(jsonObjectSwingEighth.get("rowData").toString());
                 JSONObject jsonObjectSwingEighthRange = (JSONObject) jsonObjectSwingEighth.get("range");
                 int start = Integer.parseInt(jsonObjectSwingEighthRange.get("start").toString());
                 int end = Integer.parseInt(jsonObjectSwingEighthRange.get("end").toString());
                 Range range = new Range(start, end);
-                Eighth eighth = new Eighth(position, range);
+                Eighth eighth = new Eighth(position, rowData, range);
                 eighths.add(eighth);
             }
             Swing swing = new Swing(eighths);
 
-            int x = 1;
+            composer = new Composer(general, pattern, backingtrack, melody, swing);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -202,6 +207,6 @@ public class BJCProjectFileHandler {
             e.printStackTrace();
         }
 
-        return new Composer();
+        return composer;
     }
 }

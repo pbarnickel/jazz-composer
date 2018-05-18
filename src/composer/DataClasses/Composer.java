@@ -143,13 +143,13 @@ public class Composer implements JMC, Constants {
     //Reads a BJC-Project-File as Composer-object
     public void readBJCProjectFile(String path) throws MidiUnavailableException {
         Composer composer = bjcProjectFileHandler.readBJC(path);
-
-        //If loading of BJC-File was successful -> use data
-        /*this.general = composer.getGeneral();
-        this.pattern = composer.getPattern();
-        this.backingtrack = composer.getBackingtrack();
-        this.melody = composer.getMelody();
-        this.swing = composer.getSwing();*/
+        if(composer != null) {
+            this.general = composer.general;
+            this.pattern = composer.pattern;
+            this.backingtrack = composer.backingtrack;
+            this.melody = composer.melody;
+            this.swing = composer.swing;
+        }
     }
 
     public General getGeneral() {return general;}
@@ -272,10 +272,14 @@ public class Composer implements JMC, Constants {
         int complexity = new Random().nextInt(patternelement.getChordcomplexity().getMax() - patternelement.getChordcomplexity().getMin() + 1)
                 + patternelement.getChordcomplexity().getMin();
         int length = usage.size();
+
+        //If complexity is smaller or equal than length -> the usage gets a cut or stays
         if(complexity <= length){
             usage = new ArrayList<Integer>(usage.subList(0, complexity));
         } else {
             int pos = 0;
+
+            //Adds the new usage-pitches until the length of usage is as long as complexity
             for(int i=length; i<complexity; i++){
                 usage.add(usage.get(pos) + 12);
                 pos++;
@@ -479,7 +483,7 @@ public class Composer implements JMC, Constants {
         //p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
 
         //Generate a for bar specific deviation between this chord and the last one
-        int localDeviation = new Random().nextInt( backingtrack.getDeviation() + 1);
+        int localDeviation = new Random().nextInt( backingtrack.getDeviation().getNormData() + 1);
         ArrayList<Integer> usage = calcDeviationInUsage(localDeviation, currentPatternelement, prePatternelement);
         currentPatternelement.getChord().setUsage(usage);
         //p(currentPatternelement.getChord().getUsageAsString());

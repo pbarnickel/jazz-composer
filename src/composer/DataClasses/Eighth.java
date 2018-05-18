@@ -9,15 +9,21 @@ package composer.DataClasses;
 
 public class Eighth {
     private int position;
+    private double rowData;
     private Range range;
 
-    public Eighth(int position, Range range){
+    public Eighth(int position, double rowData, Range range){
         this.position = position;
+        this.rowData = rowData;
         this.range = range;
     }
 
     public int getPosition(){
         return this.position;
+    }
+
+    public double getRowData(){
+        return this.rowData;
     }
 
     public Range getRange(){

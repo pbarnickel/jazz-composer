@@ -96,23 +96,6 @@ public class Settings implements JMC{
         return new Tone(toneString, pitch);
     }
 
-    //Returns a Tone as String by Pitch
-    public String getToneByPitch(int pitch){
-        int length = tones.size();
-        String tone = "C";
-        for(int i=0; i<length; i++){
-            if((tones.get(i).getPitch() - pitch) <= 1){
-                tone = tones.get(i).getName();
-                if((tones.get(i).getPitch() - pitch) == 1){
-                    tone += "#";
-                } else if((tones.get(i).getPitch() - pitch) == -1){
-                    tone += "b";
-                }
-            }
-        }
-        return tone;
-    }
-
     //Loads default-settings
     public void loadDefaultSettings() throws IOException {
         Files.copy(new File(getPathForDefaultSettings()).toPath(), new File(getPathForSettings()).toPath(), REPLACE_EXISTING);
