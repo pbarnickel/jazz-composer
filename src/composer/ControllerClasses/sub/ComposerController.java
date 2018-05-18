@@ -24,7 +24,6 @@ import java.util.*;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.FileChooser;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
@@ -33,6 +32,7 @@ public class ComposerController extends Controller {
 
     private Composer composer;
     private String error = "Composition unsuccessful. ";
+    private String sampleFile = "/sample_jazz_c_sharp_major.bjc";
     private boolean tactProp;
 
     //Common
@@ -190,13 +190,23 @@ public class ComposerController extends Controller {
         sldSwing = new ArrayList<Slider>(Arrays.asList(sldSwing1, sldSwing2, sldSwing3, sldSwing4, sldSwing5, sldSwing6, sldSwing7, sldSwing8));
 
         //load default user inputs
-        defaultInputs();
+        //defaultInputs();
     }
 
     //Default user inputs for faster testing
     @Override
     public void defaultInputs(){
-        //TODO Folder with examples
+        try {
+            composer = new Composer();
+            File f = new File(settings.getDefault_location() + sampleFile);
+            if(f.exists() && !f.isDirectory()) {
+                composer.readBJCProjectFile(settings.getDefault_location() + sampleFile);
+                updateComposerUI();
+                msg( settings.getDefault_location() + sampleFile+ " loaded.",MSG_S);
+            } else msg("Sample-File could not be loaded.",MSG_E);
+        } catch (MidiUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     /*********************************** Common methods ****************************************/
@@ -309,16 +319,20 @@ public class ComposerController extends Controller {
 
     //Pauses playing composition
     public void onPause(ActionEvent actionEvent) {
-        if(composer.getSequencer().isRunning()){
-            composer.pauseScore();
-        } else msg("No composition playing. Click on 'Compose'.",MSG_E);
+        if(composer != null) {
+            if (composer.getSequencer().isRunning()) {
+                composer.pauseScore();
+            } else msg("No composition playing. Click on 'Compose'.", MSG_E);
+        } else msg("No composition to stop. Click on 'Compose'.", MSG_E);
     }
 
     //Stops playing composition
     public void onStop(ActionEvent actionEvent) {
-        if(composer.getSequencer().isOpen()){
-            composer.stopScore();
-        } else msg("No composition to stop. Click on 'Compose'.",MSG_E);
+        if(composer != null) {
+            if (composer.getSequencer().isOpen()) {
+                composer.stopScore();
+            } else msg("No composition to stop. Click on 'Compose'.", MSG_E);
+        } else msg("No composition to stop. Click on 'Compose'.", MSG_E);
     }
 
     //Shows statistics

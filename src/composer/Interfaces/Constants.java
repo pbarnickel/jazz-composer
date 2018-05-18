@@ -1,3 +1,10 @@
+/*
+    Description:    Interface for Constants
+    Author:         Philipp Barnickel
+    Version:        1.0
+    Date:           18.05.2018
+ */
+
 package composer.Interfaces;
 
 public interface Constants {
