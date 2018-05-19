@@ -623,11 +623,8 @@ public class Composer implements JMC, Constants {
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
-
-        //Select matching patternelement considering the startEighth
-        Patternelement currentPatternelement = patternelement;
-        if(possibleScope == HALF_NOTE && startEighth >= 4){
-            patternelement = pattern.getPatternelement(patternelement.getOrder() + 1);
+        if(possibleScope == HALF_NOTE){
+            if(startEighth > 3) startEighth -= 4;
         }
 
         //Add start-rest
@@ -660,7 +657,7 @@ public class Composer implements JMC, Constants {
                 probRest = new Random().nextInt(100);
                 //Note
                 if (probRest > probabilityOfRest) {
-                    pitch = getRandomTrumpetPitch(currentPatternelement.getChord(), patternelement.getTranspose(), patternelement.getMode());
+                    pitch = getRandomTrumpetPitch(patternelement.getChord(), patternelement.getTranspose(), patternelement.getMode());
                     bar.addNote(getMelodyNote(pitch, duration));
                 }
                 //Rest

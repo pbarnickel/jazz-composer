@@ -188,6 +188,12 @@ public class ComposerController extends Controller {
         //add sliders to slider array
         sldSwing = new ArrayList<Slider>(Arrays.asList(sldSwing1, sldSwing2, sldSwing3, sldSwing4, sldSwing5, sldSwing6, sldSwing7, sldSwing8));
 
+        //Enable / Disable
+        onBackingtrackPiano(new ActionEvent());
+        onBackingtrackBass(new ActionEvent());
+        onMelodyMelody(new ActionEvent());
+        onMelodyMelodyByScale(new ActionEvent());
+
         //load default user inputs
         //defaultInputs();
     }
@@ -265,6 +271,12 @@ public class ComposerController extends Controller {
             Eighth eighth = composer.getSwing().getEighth(i);
             sldSwing.get(eighth.getPosition()).setValue(eighth.getRowData());
         }
+
+        //Enable / Disable
+        onBackingtrackPiano(new ActionEvent());
+        onBackingtrackBass(new ActionEvent());
+        onMelodyMelody(new ActionEvent());
+        onMelodyMelodyByScale(new ActionEvent());
     }
 
     /****************************** File methods ************************************************/
@@ -623,6 +635,24 @@ public class ComposerController extends Controller {
         return false;
     }
 
+    //Disable / Enable Backingtrack-piano configuration
+    public void onBackingtrackPiano(ActionEvent actionEvent) {
+        if(!tglBackingtrackPiano.isSelected()){
+            sldBackingtrackDeviation.setDisable(true);
+        } else {
+            sldBackingtrackDeviation.setDisable(false);
+        }
+    }
+
+    //Disable / Enable Backingtrack-bass configuration
+    public void onBackingtrackBass(ActionEvent actionEvent) {
+        if(!tglBackingtrackBass.isSelected()){
+            sldBackingtrackWalkingBass.setDisable(true);
+        } else {
+            sldBackingtrackWalkingBass.setDisable(false);
+        }
+    }
+
     /******************************************* Melody ****************************************************************/
 
     //Validates melody configuration
@@ -638,6 +668,38 @@ public class ComposerController extends Controller {
             }
         }
         return false;
+    }
+
+    //Disable / Enable Melody configuration
+    public void onMelodyMelody(ActionEvent actionEvent) {
+        if(!tglMelodyMelody.isSelected()){
+            sldMelodySortOfPitches.setDisable(true);
+            sldMelodyBebop.setDisable(true);
+            tglMelodyMelodyByScale.setDisable(true);
+        } else {
+            sldMelodySortOfPitches.setDisable(false);
+            sldMelodyBebop.setDisable(false);
+            tglMelodyMelodyByScale.setDisable(false);
+        }
+    }
+
+    //Disable / Enable MelodyByScale configuration
+    public void onMelodyMelodyByScale(ActionEvent actionEvent) {
+        if(!tglMelodyMelodyByScale.isSelected()){
+            chbMelodyMajorScalegroup.setValue(null);
+            chbMelodyMajorScale.setValue(null);
+            chbMelodyMinorScalegroup.setValue(null);
+            chbMelodyMinorScale.setValue(null);
+            chbMelodyMajorScalegroup.setDisable(true);
+            chbMelodyMajorScale.setDisable(true);
+            chbMelodyMinorScalegroup.setDisable(true);
+            chbMelodyMinorScale.setDisable(true);
+        } else {
+            chbMelodyMajorScalegroup.setDisable(false);
+            chbMelodyMajorScale.setDisable(false);
+            chbMelodyMinorScalegroup.setDisable(false);
+            chbMelodyMinorScale.setDisable(false);
+        }
     }
 
     /******************************************* SWING ****************************************************************/

@@ -118,9 +118,9 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                           <ToggleButton fx:id="tglBackingtrackPiano" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <ToggleButton fx:id="tglBackingtrackPiano" mnemonicParsing="false" onAction="#onBackingtrackPiano" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Label prefHeight="47.0" prefWidth="270.0" styleClass="tgl-lbl" text="Piano" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
-                           <ToggleButton fx:id="tglBackingtrackBass" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+                           <ToggleButton fx:id="tglBackingtrackBass" mnemonicParsing="false" onAction="#onBackingtrackBass" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
                            <Label prefHeight="47.0" prefWidth="270.0" styleClass="tgl-lbl" text="Drums" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="125.0" />
                            <ToggleButton fx:id="tglBackingtrackDrums" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="125.0" />
                            <Label prefHeight="47.0" prefWidth="270.0" styleClass="tgl-lbl" text="Bass" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="70.0" />
@@ -140,7 +140,7 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                           <ToggleButton fx:id="tglMelodyMelody" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <ToggleButton fx:id="tglMelodyMelody" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onMelodyMelody" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="64.0" layoutY="14.0" prefHeight="47.0" prefWidth="271.0" styleClass="tgl-lbl" text="Trumpet Melody" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="351.0" layoutY="15.0" prefHeight="48.0" prefWidth="146.0" styleClass="lbl" text="Sort of Pitches" />
                            <Label layoutX="497.0" layoutY="15.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Low" AnchorPane.leftAnchor="497.0" />
@@ -160,7 +160,7 @@
                            <Label layoutX="501.0" layoutY="75.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" />
                            <Label layoutX="1147.0" layoutY="75.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="14.0" />
                            <Slider fx:id="sldMelodyBebop" layoutX="595.0" layoutY="90.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="595.0" AnchorPane.rightAnchor="109.0" />
-                           <ToggleButton fx:id="tglMelodyMelodyByScale" layoutX="15.0" layoutY="134.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" />
+                           <ToggleButton fx:id="tglMelodyMelodyByScale" layoutX="15.0" layoutY="134.0" mnemonicParsing="false" onAction="#onMelodyMelodyByScale" styleClass="tgl" AnchorPane.leftAnchor="15.0" />
                            <Label layoutX="65.0" layoutY="134.0" prefHeight="48.0" prefWidth="272.0" styleClass="tgl-lbl" text="Melody by Scale" />
                         </children>
                      </AnchorPane>
