@@ -33,7 +33,8 @@ public interface Constants {
     //############ OTHER VALUES ######################
     int OV_HUMANIZER_PERCENTAGE = 3;
     int OV_MAX_NR_OF_BAR_USES_PIANO = 3;
-    int OV_MAX_NR_OF_BAR_USES_TRUMPET = 4;
-    Range OV_TRUMPET_BEBOP_NR_OF_USES_IN_BAR = new Range(6,8);
-    Range OV_TRUMPET_NORMAL_NR_OF_USES_IN_BAR = new Range(0,6);
+    int OV_PROBABILITY_OF_REST_IN_NORMAL_TRUMPET = 30;
+    int OV_PROBABILITY_OF_REST_IN_BEBOP_TRUMPET = 15;
+    Range OV_RANGE_USES_IN_NORMAL_TRUMPET = new Range(1,5);
+    Range OV_RANGE_USES_IN_BEBOP_TRUMPET = new Range(5,10);
 }

@@ -593,10 +593,10 @@ public class Composer implements JMC, Constants {
         durations.add(EIGHTH_NOTE);
         durations.add(QUARTER_NOTE_TRIPLET);
         if(randomStyle(melody.getBebop())){
-            bar = generateTrumpet(patternelement, goalPitch, new Range(1,5), durations, 15);
-        } else {
             durations.add(QUARTER_NOTE);
-            bar = generateTrumpet(patternelement, goalPitch, new Range(5,10), durations, 30);
+            bar = generateTrumpet(patternelement, goalPitch, OV_RANGE_USES_IN_BEBOP_TRUMPET, durations, OV_PROBABILITY_OF_REST_IN_BEBOP_TRUMPET);
+        } else {
+            bar = generateTrumpet(patternelement, goalPitch, OV_RANGE_USES_IN_NORMAL_TRUMPET, durations, OV_PROBABILITY_OF_REST_IN_NORMAL_TRUMPET);
         }
 
         //Set humanizer-factor in bar
