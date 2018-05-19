@@ -17,11 +17,11 @@
 		},
 		"bebop": 24.90118577075099,
 		"trumpet": true,
+		"melodyByScale": true,
 		"majorScale": {
 			"scalegroup": "Basic",
 			"scale": "Major"
-		},
-		"jumper": 42.88537549407115
+		}
 	},
 	"swing": [{
 		"rowData": 100.0,

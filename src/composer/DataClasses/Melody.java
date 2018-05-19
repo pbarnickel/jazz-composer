@@ -10,13 +10,15 @@ package composer.DataClasses;
 public class Melody {
 
     private boolean state;
+    private boolean melodyByScale;
     private double sortOfPitches;
     private double bebop;
     private MusicStructure majorScale;
     private MusicStructure minorScale;
 
-    public Melody(boolean state, double sortOfPitches, double bebop, MusicStructure majorScale, MusicStructure minorScale){
+    public Melody(boolean state, boolean melodyByScale, double sortOfPitches, double bebop, MusicStructure majorScale, MusicStructure minorScale){
         this.state = state;
+        this.melodyByScale = melodyByScale;
         this.sortOfPitches = sortOfPitches;
         this.bebop = bebop;
         this.majorScale = majorScale;
@@ -28,6 +30,7 @@ public class Melody {
     }
 
     public boolean getState() {return this.state;}
+    public boolean getMelodyByScale() {return this.melodyByScale;}
     public double getSortOfPitches() {return this.sortOfPitches;}
     public double getBebop() {return this.bebop;}
     public MusicStructure getMajorScale() {return majorScale;}

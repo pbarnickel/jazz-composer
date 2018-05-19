@@ -588,10 +588,15 @@ public class Composer implements JMC, Constants {
         } else next = patternelement;
         goalPitch = next.getChord().getUsage().get(0) + next.getTranspose() + general.getTone().getPitch();
 
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(EIGHTH_NOTE_TRIPLET);
+        durations.add(EIGHTH_NOTE);
+        durations.add(QUARTER_NOTE_TRIPLET);
         if(randomStyle(melody.getBebop())){
-            bar = generateBebopTrumpet(patternelement, goalPitch);
+            bar = generateTrumpet(patternelement, goalPitch, new Range(1,5), durations, 15);
         } else {
-            bar = generateBebopTrumpet(patternelement, goalPitch);
+            durations.add(QUARTER_NOTE);
+            bar = generateTrumpet(patternelement, goalPitch, new Range(5,10), durations, 30);
         }
 
         //Set humanizer-factor in bar
@@ -607,18 +612,20 @@ public class Composer implements JMC, Constants {
     }
 
     //Returns a trumpet-phrase of a bar in a bebop-trumpet style
-    public Phrase generateBebopTrumpet(Patternelement patternelement, int goalPitch){
+    public Phrase generateTrumpet(Patternelement patternelement, int goalPitch, Range rangeOfUses, ArrayList<Double> durations, int probabilityOfRest){
         Phrase bar = new Phrase();
         double possibleScope = WHOLE_NOTE;
         if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
         int transpose = general.getTone().getPitch() + patternelement.getTranspose();
         int length = patternelement.getChord().getUsage().size();
+        int uses = new Random().nextInt(rangeOfUses.getEnd() - rangeOfUses.getStart() + 1);
+        uses += rangeOfUses.getStart();
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
 
         //Select matching patternelement considering the startEighth
-        Patternelement currentPatternelement;
+        Patternelement currentPatternelement = patternelement;
         if(possibleScope == HALF_NOTE && startEighth >= 4){
             patternelement = pattern.getPatternelement(patternelement.getOrder() + 1);
         }
@@ -628,64 +635,149 @@ public class Composer implements JMC, Constants {
         bar.add(new Note(getRest()[0], rest));
         possibleScope -= rest;
 
-        ArrayList<Double> durations = new ArrayList<>();
-        durations.add(EIGHTH_NOTE_TRIPLET);
-        durations.add(QUARTER_NOTE_TRIPLET);
-        durations.add(EIGHTH_NOTE);
-        durations.add(QUARTER_NOTE);
-
-        double duration;
+        //Reserve pre-note
         int len = durations.size();
-        double duration_end = durations.get(new Random().nextInt(len));
+        double duration_end;
+        do {
+            duration_end = durations.get(new Random().nextInt(len));
+        } while(duration_end > possibleScope);
+        uses--;
         possibleScope -= duration_end;
+
+        //Main part
+        double biggestDuration = durations.get(0);
+        double duration;
         int pitch;
-
-        while(possibleScope >= QUARTER_NOTE) {
-            duration = durations.get(new Random().nextInt(len));
-            if (new Random().nextBoolean()){
-                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
-                bar.addNote(getMelodyNote(pitch, duration));
+        int probRest;
+        for(int i=1; i<len; i++) if(durations.get(i) > biggestDuration) biggestDuration = durations.get(i);
+        while(uses > 0){
+            if(possibleScope >= biggestDuration || possibleScope < EIGHTH_NOTE_TRIPLET) {
+                duration = durations.get(new Random().nextInt(len));
+                if(possibleScope < EIGHTH_NOTE_TRIPLET) {
+                    duration = possibleScope;
+                    uses = 0;
+                }
+                probRest = new Random().nextInt(100);
+                //Note
+                if (probRest > probabilityOfRest) {
+                    pitch = getRandomTrumpetPitch(currentPatternelement.getChord(), patternelement.getTranspose(), patternelement.getMode());
+                    bar.addNote(getMelodyNote(pitch, duration));
+                }
+                //Rest
+                else {
+                    bar.addNote(new Note(getRest()[0], duration));
+                }
+                possibleScope -= duration;
+                uses--;
             } else {
-                bar.addNote(new Note(getRest()[0], duration));
+                //Remove old biggestDuration and identify new one in durations-list
+                for (int i = 1; i < len; i++) {
+                    if (durations.get(i) == biggestDuration) {
+                        durations.remove(i);
+                        len--;
+                    }
+                }
+                biggestDuration = durations.get(0);
+                for (int i = 1; i < len; i++)
+                    if (durations.get(i) > biggestDuration) biggestDuration = durations.get(i);
             }
-            possibleScope -= duration;
         }
 
-        if(possibleScope >= QUARTER_NOTE_TRIPLET){
-            if (new Random().nextBoolean()){
-                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
-                bar.addNote(getMelodyNote(pitch, QUARTER_NOTE_TRIPLET));
-            } else {
-                bar.addNote(new Note(getRest()[0], QUARTER_NOTE_TRIPLET));
-            }
-            possibleScope -= QUARTER_NOTE_TRIPLET;
-        } else if(possibleScope >= EIGHTH_NOTE){
-            if (new Random().nextBoolean()){
-                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
-                bar.addNote(getMelodyNote(pitch, EIGHTH_NOTE));
-            } else {
-                bar.addNote(new Note(getRest()[0], EIGHTH_NOTE));
-            }
-            possibleScope -= EIGHTH_NOTE;
-        } else if(possibleScope >= EIGHTH_NOTE_TRIPLET){
-            if (new Random().nextBoolean()){
-                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
-                bar.addNote(getMelodyNote(pitch, EIGHTH_NOTE_TRIPLET));
-            } else {
-                bar.addNote(new Note(getRest()[0], EIGHTH_NOTE_TRIPLET));
-            }
-            possibleScope -= EIGHTH_NOTE_TRIPLET;
-        }
-
+        //Last note
         bar.addNote(getMelodyNote(goalPitch - 1, duration_end));
+
+        //Add end-rest
         bar.addNote(new Note(getRest()[0], possibleScope));
+
+        //TODO sortOfPitch only first until second last
+        //Sort pitches -> decided randomly
+        if(randomStyle(melody.getSortOfPitches())){
+            for(int i=0; i<bar.length(); i++){
+                int pitchLow = bar.getLowestPitch();
+                p(Integer.toString(pitchLow));
+                for(int j=0; j<bar.length(); j++){
+                    if(bar.getNote(j).getPitch() == pitchLow){
+                        bar.removeNote(j);
+                    }
+                }
+            }
+            p(".......................");
+            for(int i=0; i<bar.length(); i++){
+                p(Integer.toString(bar.getNote(i).getPitch()));
+            }
+            p("-----------------------------------");
+        }
 
         return bar;
     }
 
-    //Returns a trumpet-phrase of a bar in a normal-trumpet style
-    public Phrase generateNormalTrumpet(Patternelement patternelement, int goalPitch){
-        Phrase bar = new Phrase();
-        return bar;
+    //Returns a random pitch by a root-pitch from the matching scale
+    public int getRandomTrumpetPitch(MusicStructure chord, int rootPitch, String mode){
+
+        //Scale-specific calculations
+        int pitch;
+        MusicStructure scale;
+        if(melody.getMelodyByScale()) {
+            scale = melody.getMajorScale();
+            if (mode.equals("Minor")) scale = melody.getMinorScale();
+        } else scale = chord;
+        int length = scale.getUsage().size();
+
+        //Pitch-specific calculations
+        int rand = new Random().nextInt(length);
+        pitch = rootPitch + general.getTone().getPitch();
+        pitch += scale.getUsage().get(rand);
+
+        return pitch;
+    }
+
+    //Sorts all trumpet-pitches out of the last because this points on the next patternelement
+    public Phrase sortTrumpetPitches(Phrase phrase){
+        Phrase copy = phrase;
+        Phrase newPhrase = new Phrase();
+        int length = phrase.length();
+
+        //Remove last Note
+        Note last = phrase.getNote(length-1);
+        copy.removeLastNote();
+        Note secondLast = null;
+        if(last.getPitch() == getRest()[0]){
+            secondLast = phrase.getNote(length-2);
+            copy.removeLastNote();
+        }
+
+        while(copy.length() > 0){
+            //If Note
+            if(copy.getNote(0).getPitch() != getRest()[0]){
+
+            }
+            //If Rest
+            else {
+                newPhrase.addNote(copy.getNote(0));
+            }
+        }
+
+        /*for(int i=0; i<(length-limit); i++){
+            //If Rest
+            if(phrase.getNote(i).getPitch() == getRest()[0]){
+                newPhrase.addNote(phrase.getNote(i));
+            }
+            //If Note
+            else {
+                int pitch;
+                for(int j=1; j<(length-limit); j++){
+                    //Sort Pitches ASC
+                    if(new Random().nextBoolean()){
+
+                    }
+                    //Sort Pitches DESC
+                    else {
+
+                    }
+                }
+            }
+        }*/
+
+        return newPhrase;
     }
 }

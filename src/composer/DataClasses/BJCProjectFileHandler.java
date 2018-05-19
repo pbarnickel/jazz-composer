@@ -71,16 +71,19 @@ public class BJCProjectFileHandler {
         //Melody
         JSONObject jsonObjectMelody = new JSONObject();
         jsonObjectMelody.put("trumpet", composer.getMelody().getState());
+        jsonObjectMelody.put("melodyByScale", composer.getMelody().getMelodyByScale());
         jsonObjectMelody.put("sortOfPitches", composer.getMelody().getSortOfPitches());
         jsonObjectMelody.put("bebop", composer.getMelody().getBebop());
-        JSONObject jsonObjectMelodyMajorScale = new JSONObject();
-        jsonObjectMelodyMajorScale.put("scalegroup", composer.getMelody().getMajorScale().getGroup());
-        jsonObjectMelodyMajorScale.put("scale", composer.getMelody().getMajorScale().getName());
-        jsonObjectMelody.put("majorScale", jsonObjectMelodyMajorScale);
-        JSONObject jsonObjectMelodyMinorScale = new JSONObject();
-        jsonObjectMelodyMinorScale.put("scalegroup", composer.getMelody().getMinorScale().getGroup());
-        jsonObjectMelodyMinorScale.put("scale", composer.getMelody().getMinorScale().getName());
-        jsonObjectMelody.put("minorScale", jsonObjectMelodyMinorScale);
+        if(composer.getMelody().getMajorScale() != null && composer.getMelody().getMinorScale() != null) {
+            JSONObject jsonObjectMelodyMajorScale = new JSONObject();
+            jsonObjectMelodyMajorScale.put("scalegroup", composer.getMelody().getMajorScale().getGroup());
+            jsonObjectMelodyMajorScale.put("scale", composer.getMelody().getMajorScale().getName());
+            jsonObjectMelody.put("majorScale", jsonObjectMelodyMajorScale);
+            JSONObject jsonObjectMelodyMinorScale = new JSONObject();
+            jsonObjectMelodyMinorScale.put("scalegroup", composer.getMelody().getMinorScale().getGroup());
+            jsonObjectMelodyMinorScale.put("scale", composer.getMelody().getMinorScale().getName());
+            jsonObjectMelody.put("minorScale", jsonObjectMelodyMinorScale);
+        }
         jsonObjectRoot.put("melody", jsonObjectMelody);
 
         //Swing
@@ -164,17 +167,22 @@ public class BJCProjectFileHandler {
             //Melody
             JSONObject jsonObjectMelody = (JSONObject) jsonObjectRoot.get("melody");
             boolean trumpet = Boolean.parseBoolean(jsonObjectMelody.get("trumpet").toString());
+            boolean melodyByScale = Boolean.parseBoolean(jsonObjectMelody.get("melodyByScale").toString());
             double sortOfPitches = Double.parseDouble(jsonObjectMelody.get("sortOfPitches").toString());
             double bebop = Double.parseDouble(jsonObjectMelody.get("bebop").toString());
-            JSONObject jsonObjectMelodyMajorScale = (JSONObject) jsonObjectMelody.get("majorScale");
-            int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMajorScale.get("scalegroup").toString());
-            int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexScalegroup).getMusicStructures(), jsonObjectMelodyMajorScale.get("scale").toString());
-            MusicStructure majorScale = settings.getScalegroups().get(indexScalegroup).getMusicStructures().get(indexScale);
-            JSONObject jsonObjectMelodyMinorScale = (JSONObject) jsonObjectMelody.get("minorScale");
-            indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMinorScale.get("scalegroup").toString());
-            indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexScalegroup).getMusicStructures(), jsonObjectMelodyMinorScale.get("scale").toString());
-            MusicStructure minorScale = settings.getScalegroups().get(indexScalegroup).getMusicStructures().get(indexScale);
-            Melody melody = new Melody(trumpet, sortOfPitches, bebop, majorScale, minorScale);
+            MusicStructure majorScale = null;
+            MusicStructure minorScale = null;
+            if(jsonObjectMelody.get("majorScale") != null && jsonObjectMelody.get("minorScale") != null) {
+                JSONObject jsonObjectMelodyMajorScale = (JSONObject) jsonObjectMelody.get("majorScale");
+                int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMajorScale.get("scalegroup").toString());
+                int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexScalegroup).getMusicStructures(), jsonObjectMelodyMajorScale.get("scale").toString());
+                majorScale = settings.getScalegroups().get(indexScalegroup).getMusicStructures().get(indexScale);
+                JSONObject jsonObjectMelodyMinorScale = (JSONObject) jsonObjectMelody.get("minorScale");
+                indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMinorScale.get("scalegroup").toString());
+                indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexScalegroup).getMusicStructures(), jsonObjectMelodyMinorScale.get("scale").toString());
+                minorScale = settings.getScalegroups().get(indexScalegroup).getMusicStructures().get(indexScale);
+            }
+            Melody melody = new Melody(trumpet, melodyByScale, sortOfPitches, bebop, majorScale, minorScale);
 
             //Swing
             JSONArray jsonArraySwing = (JSONArray) jsonObjectRoot.get("swing");

@@ -72,6 +72,7 @@ public class ComposerController extends Controller {
 
     //Melody
     @FXML private ToggleButton tglMelodyMelody;
+    @FXML private ToggleButton tglMelodyMelodyByScale;
     @FXML private Slider sldMelodySortOfPitches;
     @FXML private Slider sldMelodyBebop;
     @FXML private ChoiceBox chbMelodyMajorScalegroup;
@@ -246,14 +247,17 @@ public class ComposerController extends Controller {
 
         //Melody
         tglMelodyMelody.setSelected(composer.getMelody().getState());
+        tglMelodyMelodyByScale.setSelected(composer.getMelody().getMelodyByScale());
         sldMelodySortOfPitches.setValue(composer.getMelody().getSortOfPitches());
         sldMelodyBebop.setValue(composer.getMelody().getBebop());
-        int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMajorScale().getGroup());
-        chbMelodyMajorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
-        chbMelodyMajorScale.setValue(composer.getMelody().getMajorScale().getName());
-        indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMinorScale().getGroup());
-        chbMelodyMinorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
-        chbMelodyMinorScale.setValue(composer.getMelody().getMinorScale().getName());
+        if(composer.getMelody().getMelodyByScale()) {
+            int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMajorScale().getGroup());
+            chbMelodyMajorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
+            chbMelodyMajorScale.setValue(composer.getMelody().getMajorScale().getName());
+            indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), composer.getMelody().getMinorScale().getGroup());
+            chbMelodyMinorScalegroup.setValue(allScalegroupsAsString.get(indexGroup));
+            chbMelodyMinorScale.setValue(composer.getMelody().getMinorScale().getName());
+        }
 
         //Swing
         int length = composer.getSwing().getSize();
@@ -376,6 +380,7 @@ public class ComposerController extends Controller {
 
         //Melody
         tglMelodyMelody.setSelected(false);
+        tglMelodyMelodyByScale.setSelected(false);
         sldMelodySortOfPitches.setValue(0);
         sldMelodyBebop.setValue(0);
         chbMelodyMajorScalegroup.setValue(null);
@@ -425,17 +430,22 @@ public class ComposerController extends Controller {
 
             //Melody
             boolean state = tglMelodyMelody.isSelected();
+            boolean melodyByScale = tglMelodyMelodyByScale.isSelected();
             Melody melody;
             if(state && validateMelody()) {
                 double sortOfPitches = sldMelodySortOfPitches.getValue();
                 double bebop = sldMelodyBebop.getValue();
-                int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
-                int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
-                MusicStructure majorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
-                indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
-                indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
-                MusicStructure minorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
-                melody = new Melody(state, sortOfPitches, bebop, majorScale, minorScale);
+                MusicStructure majorScale = null;
+                MusicStructure minorScale = null;
+                if(melodyByScale) {
+                    int indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                    int indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                    majorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                    indexGroup = settings.getIndexOfMusicElement(settings.getScalegroups(), chbMelodyMajorScalegroup.getValue().toString());
+                    indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexGroup).getMusicStructures(), chbMelodyMajorScale.getValue().toString());
+                    minorScale = settings.getScalegroups().get(indexGroup).getMusicStructures().get(indexScale);
+                }
+                melody = new Melody(state, melodyByScale, sortOfPitches, bebop, majorScale, minorScale);
             } else melody = new Melody(state);
 
             //Swing
@@ -618,10 +628,14 @@ public class ComposerController extends Controller {
     //Validates melody configuration
     public boolean validateMelody(){
         if(tglMelodyMelody.isSelected()){
-            if(chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
-               && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null) {
+            if(tglMelodyMelodyByScale.isSelected()) {
+                if (chbMelodyMajorScalegroup.getValue() != null && chbMelodyMajorScale.getValue() != null
+                        && chbMelodyMinorScalegroup.getValue() != null && chbMelodyMinorScale.getValue() != null) {
+                    return true;
+                } else msg(error + "Melody configuration is not completed.", MSG_E);
+            } else {
                 return true;
-            } else msg(error + "Melody configuration is not completed.", MSG_E);
+            }
         }
         return false;
     }

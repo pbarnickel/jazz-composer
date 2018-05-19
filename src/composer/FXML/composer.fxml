@@ -160,6 +160,8 @@
                            <Label layoutX="501.0" layoutY="75.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" />
                            <Label layoutX="1147.0" layoutY="75.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="14.0" />
                            <Slider fx:id="sldMelodyBebop" layoutX="595.0" layoutY="90.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="595.0" AnchorPane.rightAnchor="109.0" />
+                           <ToggleButton fx:id="tglMelodyMelodyByScale" layoutX="15.0" layoutY="134.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" />
+                           <Label layoutX="65.0" layoutY="134.0" prefHeight="48.0" prefWidth="272.0" styleClass="tgl-lbl" text="Melody by Scale" />
                         </children>
                      </AnchorPane>
                  </content>
