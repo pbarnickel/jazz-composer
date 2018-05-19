@@ -1,5 +1,5 @@
 /*
-    Description:    Helper-Class for Calculating matching uses considering the start eighth of bar;
+    Description:    Helper-Class for Calculating matching uses considering the start eighth of piano-bar in backingtrack;
     Author:         Philipp Barnickel
     Version:        1.0
     Date:           19.03.2018
@@ -7,12 +7,13 @@
 
 package composer.DataClasses;
 
+import composer.Interfaces.Constants;
 import jm.JMC;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BarUses implements JMC {
+public class BarUses implements JMC, Constants {
     private ArrayList<BarUse> barUses;
     private double endRest;
 
@@ -23,7 +24,7 @@ public class BarUses implements JMC {
         double possibleScope = WHOLE_NOTE - getStartTime(startEighth);
 
         //Generate a random nr of uses
-        int nrUses = new Random().nextInt(3) + 1;
+        int nrUses = new Random().nextInt(OV_MAX_NR_OF_BAR_USES_PIANO) + 1;
 
         //Generate bar-uses by nr of uses
         if(possibleScope == WHOLE_NOTE && nrUses == 1){

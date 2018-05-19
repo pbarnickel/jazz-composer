@@ -71,9 +71,7 @@ public class BJCProjectFileHandler {
         //Melody
         JSONObject jsonObjectMelody = new JSONObject();
         jsonObjectMelody.put("trumpet", composer.getMelody().getState());
-        jsonObjectMelody.put("inversion", composer.getMelody().getInversion());
         jsonObjectMelody.put("sortOfPitches", composer.getMelody().getSortOfPitches());
-        jsonObjectMelody.put("jumper", composer.getMelody().getJumper());
         jsonObjectMelody.put("bebop", composer.getMelody().getBebop());
         JSONObject jsonObjectMelodyMajorScale = new JSONObject();
         jsonObjectMelodyMajorScale.put("scalegroup", composer.getMelody().getMajorScale().getGroup());
@@ -166,9 +164,7 @@ public class BJCProjectFileHandler {
             //Melody
             JSONObject jsonObjectMelody = (JSONObject) jsonObjectRoot.get("melody");
             boolean trumpet = Boolean.parseBoolean(jsonObjectMelody.get("trumpet").toString());
-            double inversion = Double.parseDouble(jsonObjectMelody.get("inversion").toString());
             double sortOfPitches = Double.parseDouble(jsonObjectMelody.get("sortOfPitches").toString());
-            double jumper = Double.parseDouble(jsonObjectMelody.get("jumper").toString());
             double bebop = Double.parseDouble(jsonObjectMelody.get("bebop").toString());
             JSONObject jsonObjectMelodyMajorScale = (JSONObject) jsonObjectMelody.get("majorScale");
             int indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMajorScale.get("scalegroup").toString());
@@ -178,7 +174,7 @@ public class BJCProjectFileHandler {
             indexScalegroup = settings.getIndexOfMusicElement(settings.getScalegroups(), jsonObjectMelodyMinorScale.get("scalegroup").toString());
             indexScale = settings.getIndexOfMusicElement(settings.getScalegroups().get(indexScalegroup).getMusicStructures(), jsonObjectMelodyMinorScale.get("scale").toString());
             MusicStructure minorScale = settings.getScalegroups().get(indexScalegroup).getMusicStructures().get(indexScale);
-            Melody melody = new Melody(trumpet, inversion, sortOfPitches, jumper, bebop, majorScale, minorScale);
+            Melody melody = new Melody(trumpet, sortOfPitches, bebop, majorScale, minorScale);
 
             //Swing
             JSONArray jsonArraySwing = (JSONArray) jsonObjectRoot.get("swing");

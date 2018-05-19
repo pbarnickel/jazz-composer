@@ -142,32 +142,24 @@
                         <children>
                            <ToggleButton fx:id="tglMelodyMelody" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="tgl" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="64.0" layoutY="14.0" prefHeight="47.0" prefWidth="271.0" styleClass="tgl-lbl" text="Trumpet Melody" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="356.0" layoutY="15.0" prefHeight="48.0" prefWidth="145.0" styleClass="lbl" text="Inversion" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="496.0" layoutY="15.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" AnchorPane.leftAnchor="495.0" AnchorPane.topAnchor="15.0" />
-                           <Slider fx:id="sldMelodyInversion" layoutX="594.0" layoutY="30.0" prefHeight="18.0" prefWidth="524.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="30.0" />
-                           <Label layoutX="1114.0" layoutY="28.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           <Label layoutX="350.0" layoutY="76.0" prefHeight="48.0" prefWidth="146.0" styleClass="lbl" text="Sort of Pitches" />
-                           <Label layoutX="495.0" layoutY="76.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Low" AnchorPane.leftAnchor="496.0" />
-                           <Label layoutX="1146.0" layoutY="76.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl-static" text="High" AnchorPane.rightAnchor="15.0" />
-                           <Slider fx:id="sldMelodySortOfPitches" layoutX="594.0" layoutY="91.0" prefHeight="18.0" prefWidth="522.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" />
-                           <Label layoutX="350.0" layoutY="137.0" prefHeight="48.0" prefWidth="147.0" styleClass="lbl" text="Jumper" />
-                           <Label layoutX="495.0" layoutY="137.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Rare" AnchorPane.leftAnchor="497.0" />
-                           <Label layoutX="1147.0" layoutY="137.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="15.0" />
-                           <Slider fx:id="sldMelodyJumper" layoutX="594.0" layoutY="152.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" />
-                           <Label layoutX="350.0" layoutY="259.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Major" />
-                           <ChoiceBox fx:id="chbMelodyMajorScalegroup" layoutX="617.0" layoutY="260.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
-                           <Label layoutX="350.0" layoutY="320.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Minor" />
-                           <Label layoutX="500.0" layoutY="259.0" styleClass="lbl" text="Scalegroup" />
-                           <Label layoutX="500.0" layoutY="320.0" styleClass="lbl" text="Scalegroup" />
-                           <Label layoutX="907.0" layoutY="260.0" styleClass="lbl" text="Scale" />
-                           <ChoiceBox fx:id="chbMelodyMajorScale" layoutX="970.0" layoutY="260.0" prefHeight="48.0" prefWidth="243.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
-                           <ChoiceBox fx:id="chbMelodyMinorScalegroup" layoutX="617.0" layoutY="320.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
-                           <Label layoutX="907.0" layoutY="320.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl" text="Scale" />
-                           <ChoiceBox fx:id="chbMelodyMinorScale" layoutX="972.0" layoutY="320.0" prefHeight="48.0" prefWidth="241.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
-                           <Label layoutX="350.0" layoutY="200.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Bebop" />
-                           <Label layoutX="500.0" layoutY="200.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" />
-                           <Label layoutX="1146.0" layoutY="200.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="15.0" />
-                           <Slider fx:id="sldMelodyBebop" layoutX="594.0" layoutY="215.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="594.0" AnchorPane.rightAnchor="110.0" />
+                           <Label layoutX="351.0" layoutY="15.0" prefHeight="48.0" prefWidth="146.0" styleClass="lbl" text="Sort of Pitches" />
+                           <Label layoutX="497.0" layoutY="15.0" prefHeight="48.0" prefWidth="73.0" styleClass="lbl-static" text="Low" AnchorPane.leftAnchor="497.0" />
+                           <Label layoutX="1148.0" layoutY="15.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl-static" text="High" AnchorPane.rightAnchor="14.0" />
+                           <Slider fx:id="sldMelodySortOfPitches" layoutX="595.0" layoutY="30.0" prefHeight="18.0" prefWidth="522.0" AnchorPane.leftAnchor="595.0" AnchorPane.rightAnchor="109.0" />
+                           <Label layoutX="351.0" layoutY="134.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Major" />
+                           <ChoiceBox fx:id="chbMelodyMajorScalegroup" layoutX="618.0" layoutY="135.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
+                           <Label layoutX="351.0" layoutY="195.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Minor" />
+                           <Label layoutX="501.0" layoutY="134.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="501.0" layoutY="195.0" styleClass="lbl" text="Scalegroup" />
+                           <Label layoutX="908.0" layoutY="135.0" styleClass="lbl" text="Scale" />
+                           <ChoiceBox fx:id="chbMelodyMajorScale" layoutX="971.0" layoutY="135.0" prefHeight="48.0" prefWidth="243.0" styleClass="chb" AnchorPane.rightAnchor="14.0" />
+                           <ChoiceBox fx:id="chbMelodyMinorScalegroup" layoutX="618.0" layoutY="195.0" prefHeight="48.0" prefWidth="290.0" styleClass="chb" />
+                           <Label layoutX="908.0" layoutY="195.0" prefHeight="48.0" prefWidth="66.0" styleClass="lbl" text="Scale" />
+                           <ChoiceBox fx:id="chbMelodyMinorScale" layoutX="973.0" layoutY="195.0" prefHeight="48.0" prefWidth="241.0" styleClass="chb" AnchorPane.rightAnchor="14.0" />
+                           <Label layoutX="351.0" layoutY="75.0" prefHeight="48.0" prefWidth="150.0" styleClass="lbl" text="Bebop" />
+                           <Label layoutX="501.0" layoutY="75.0" prefHeight="48.0" prefWidth="72.0" styleClass="lbl-static" text="Rare" />
+                           <Label layoutX="1147.0" layoutY="75.0" styleClass="lbl-static" text="Often" AnchorPane.rightAnchor="14.0" />
+                           <Slider fx:id="sldMelodyBebop" layoutX="595.0" layoutY="90.0" prefHeight="18.0" prefWidth="520.0" AnchorPane.leftAnchor="595.0" AnchorPane.rightAnchor="109.0" />
                         </children>
                      </AnchorPane>
                  </content>
@@ -176,7 +168,7 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                           <Label layoutX="15.0" layoutY="14.0" styleClass="lbl" text="Set the probability of each Eighth-Note in a bar as upbeat." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="14.0" styleClass="lbl" text="Set the probability of each Eighth-Note as start-upbeat in a bar." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="63.0" styleClass="lbl-list-item" text="1st Eighth" AnchorPane.leftAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="107.0" prefWidth="120.0" styleClass="lbl-list-item" text="2nd Eighth" AnchorPane.leftAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="151.0" prefHeight="24.0" styleClass="lbl-list-item" text="3rd Eighth" AnchorPane.leftAnchor="15.0" />

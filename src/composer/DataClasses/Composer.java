@@ -39,8 +39,6 @@ public class Composer implements JMC, Constants {
     private Part drums_ride;
     private Part drums_snare;
     private Part trumpet;
-    private boolean styleWalkingBass;
-    private boolean styleBebop;
 
     //User data
     private General general;
@@ -178,12 +176,21 @@ public class Composer implements JMC, Constants {
         score.addPart(piano);
         score.addPart(bass);
         score.addPart(drums_ride);
-        score.addPart(drums_snare);
+        //score.addPart(drums_snare);
         score.addPart(trumpet);
         score.setTempo(general.getTempo());
 
         //Write MIDI audio-file for listening compositions in GUI
         Write.midi(score, settings.getDefault_location() + runtimeFile);
+    }
+
+    //Returns randomly a style-type with a user-probability as input
+    //for example for bass style (walking-bass, normal) or trumpet style (bebop, normal)
+    public boolean randomStyle(double userProbability){
+        int rand = new Random().nextInt(100) + 1;
+        Range range = new Range(0, (int) userProbability);
+        if(range.isInRange(rand)) return true;
+        return false;
     }
 
     //Calculates random start-position for CPhrase-uses in bar considering the eighth-probabilities
@@ -301,18 +308,6 @@ public class Composer implements JMC, Constants {
         return value;
     }
 
-    //Returns a piano-melody-phrase of a full-bar-used chord
-    public Phrase generateMelody(Patternelement patternelement, int rootPitchOfNext){
-        Phrase bar = new Phrase();
-        int transpose = general.getTone().getPitch() + patternelement.getTranspose();
-        int length = patternelement.getChord().getUsage().size();
-        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
-        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
-        bar.addNote(getMelodyNote(patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose, QUARTER_NOTE));
-        bar.addNote(getMelodyNote(rootPitchOfNext - 1, QUARTER_NOTE));
-        return bar;
-    }
-
     //Returns a piano-melody-note (1 octave incremented)
     public Note getMelodyNote(int pitch, double duration){
         return new Note(pitch + 12, duration);
@@ -369,6 +364,32 @@ public class Composer implements JMC, Constants {
         return bar;
     }
 
+    //Calculates humanizer-tolerance (duration) in bass, drums or trumpet-bar
+    public Phrase calcHumanizerInBar(Phrase phrase, double possibleScope){
+
+        int length = phrase.length();
+        double savePossibleScope = possibleScope;
+        double rest = Math.abs(generateHumanizer(OV_HUMANIZER_PERCENTAGE) * (possibleScope / length) - (possibleScope / length));
+        Phrase newPhrase = new Phrase();
+        newPhrase.addNote(new Note(getRest()[0], rest));
+        possibleScope -= rest;
+        double duration;
+        for(int i=0; i<length; i++){
+            duration = phrase.getNote(i).getDuration() * generateHumanizer(OV_HUMANIZER_PERCENTAGE);
+            newPhrase.addNote(new Note(phrase.getNote(i).getPitch(), duration));
+            possibleScope -= duration;
+        }
+        if(possibleScope >= 0) {
+            rest = possibleScope;
+            newPhrase.addNote(new Note(getRest()[0], rest));
+        } else {
+            double difference = phrase.getEndTime() - savePossibleScope;
+            newPhrase.getNote(newPhrase.getSize() - 1).setDuration(newPhrase.getNote(newPhrase.getSize() - 1).getDuration() - difference);
+        }
+
+        return phrase;
+    }
+
     /************************************** PART GENERATION *********************************************************/
 
     //Generates piano part in score
@@ -392,16 +413,12 @@ public class Composer implements JMC, Constants {
     public void generateBassPart(){
         Phrase bar;
         for (int i=0; i<general.getRepeat(); i++){
-            //Changes the style between walking and normal bass randomly
-            styleWalkingBass = new Random().nextBoolean();
-            //p("################ " + String.valueOf(style) + " ######################");
             int lengthPattern = pattern.getSize();
             for (int j=1; j<lengthPattern; j++){
                 if(pattern.getPatternelement(j).getTactProportion().equals("Full")){
                     bar = generateBassBar(pattern.getPatternelement(j));
                 } else {
                     bar = generateBassBar(pattern.getPatternelement(j));
-                    //j++;
                 }
                 bass.addPhrase(bar);
             }
@@ -419,16 +436,24 @@ public class Composer implements JMC, Constants {
                 if(pattern.getPatternelement(j).getTactProportion().equals("Semi")) j++;
             }
             for(int j=0; j<length; j++){
+
                 bar = generateRide();
                 //Set dynamic of bar
                 int d = generateDynamic();
                 bar.setDynamic(d);
+
+                //Set humanizer-factor in bar
+                double possibleScope = WHOLE_NOTE;
+                if(pattern.getPatternelement(j).getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
+                bar = calcHumanizerInBar(bar, possibleScope);
+
                 drums_ride.addPhrase(bar);
+
                 //Set dynamic of bar
-                d = generateDynamic();
+                /*d = generateDynamic();
                 bar.setDynamic(d);
                 bar = generateSnare();
-                drums_snare.addPhrase(bar);
+                drums_snare.addPhrase(bar);*/
             }
         }
     }
@@ -440,15 +465,17 @@ public class Composer implements JMC, Constants {
             int lengthPattern = pattern.getSize();
             for (int j=0; j<lengthPattern; j++){
                 if (pattern.getPatternelement(j).getTactProportion().equals("Full")){
-                    bar = generateMelodyBar(pattern.getPatternelement(j));
+                    bar = generateTrumpetBar(pattern.getPatternelement(j));
                 } else {
-                    bar = generateMelodyBar(pattern.getPatternelement(j));
+                    bar = generateTrumpetBar(pattern.getPatternelement(j));
                     j++;
                 }
                 trumpet.addPhrase(bar);
             }
         }
     }
+
+
 
     /************************************** BAR GENERATION *********************************************************/
 
@@ -477,10 +504,10 @@ public class Composer implements JMC, Constants {
 
         //Add start-rest
         CPhrase bar = new CPhrase();
-        double humanizer = generateHumanizer(20);
+        double humanizer = generateHumanizer(OV_HUMANIZER_PERCENTAGE);
         bar.addChord(getRest(), humanizer * calcStartOfEighthInBarByPosition(startEighth));
         //double sum = humanizer * calcStartOfEighthInBarByPosition(startEighth);
-        //p(Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
+        //p("1. Rest: " + Double.toString(humanizer * calcStartOfEighthInBarByPosition(startEighth)));
 
         //Generate a for bar specific deviation between this chord and the last one
         int localDeviation = new Random().nextInt( backingtrack.getDeviation().getNormData() + 1);
@@ -495,7 +522,7 @@ public class Composer implements JMC, Constants {
 
         //Generate and add chords by nr of uses → First uses [duration: 1.0], Last use [duration: 0.66666]
         for(int i=0; i<barUses.getBarUses().size(); i++){
-            barUses.getBarUse(i).setDuration(barUses.getBarUse(i).getDuration() * generateHumanizer(5));
+            barUses.getBarUse(i).setDuration(barUses.getBarUse(i).getDuration() * generateHumanizer(OV_HUMANIZER_PERCENTAGE));
             bar.addChord(
                     getUsageInContext(
                             usage,general.getTone().getPitch() + currentPatternelement.getTranspose() + barUses.getBarUse(i).getProcedure()
@@ -503,14 +530,14 @@ public class Composer implements JMC, Constants {
                     barUses.getBarUse(i).getDuration()
             );
             //sum += barUses.getBarUse(i).getDuration();
-            //p(Double.toString(barUses.getBarUse(i).getDuration()));
+            //p("Use: " + Double.toString(barUses.getBarUse(i).getDuration()));
         }
 
         //Add end-rest
-        humanizer = generateHumanizer(5);
+        humanizer = generateHumanizer(OV_HUMANIZER_PERCENTAGE);
         bar.addChord(getRest(), humanizer * barUses.getEndRest());
-        //sum += humanizer * barUses.getEndRest();
-        //p(Double.toString(humanizer * barUses.getEndRest()));
+        //sum += humanizer * barUses.getEndRest()
+        //p("2. Rest: " + Double.toString(humanizer * barUses.getEndRest()));
         //p("SUM:   " + Double.toString(sum));
         //p("---------------------------------------------");
 
@@ -523,32 +550,26 @@ public class Composer implements JMC, Constants {
 
     //Generates a full bass-bar and returns result in a Phrase
     public Phrase generateBassBar(Patternelement patternelement){
-        //TODO Consider dynamics
-        //TODO Consider humanizer
-
         Phrase bar;
         int nextRootPitch;
-        int a, b, c;
+        Patternelement next;
         if(patternelement.getOrder() < pattern.getSize() - 1) {
-            Patternelement next = pattern.getPatternelement(patternelement.getOrder() + 1);
-            a = next.getChord().getUsage().get(0);
-            b = next.getTranspose();
-            c = general.getTone().getPitch();
-            nextRootPitch = a + b + c;
-        } else {
-            a = patternelement.getChord().getUsage().get(0);
-            b = patternelement.getTranspose();
-            c = general.getTone().getPitch();
-            nextRootPitch = a + b + c;
-        }
+            next = pattern.getPatternelement(patternelement.getOrder() + 1);
+        } else next = patternelement;
+        nextRootPitch = next.getChord().getUsage().get(0) + next.getTranspose() + general.getTone().getPitch();
         //View.internal(bar);
 
         //[TRUE] → Walking-Bass, [FALSE] → Standard-Bass
-        if(styleWalkingBass){
+        if(randomStyle(backingtrack.getWalkingBass())){
             bar = generateWalkingBass(patternelement, nextRootPitch);
         } else {
             bar = generateNormalBass(patternelement, nextRootPitch);
         }
+
+        //Set humanizer-factor in bar
+        double possibleScope = WHOLE_NOTE;
+        if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
+        bar = calcHumanizerInBar(bar, possibleScope);
 
         //Set dynamic of bar
         int d = generateDynamic();
@@ -558,28 +579,113 @@ public class Composer implements JMC, Constants {
     }
 
     //Generates a full piano-melody-bar and returns result as a Phrase
-    public Phrase generateMelodyBar(Patternelement patternelement){
-        Phrase bar = new Phrase();
-        int a,b,c;
-        int nextRootPitch;
-        if(patternelement.getOrder() < pattern.getSize() - 1) {
-            Patternelement next = pattern.getPatternelement(patternelement.getOrder() + 1);
-            a = next.getChord().getUsage().get(0);
-            b = next.getTranspose();
-            c = general.getTone().getPitch();
-            nextRootPitch = a + b + c;
+    public Phrase generateTrumpetBar(Patternelement patternelement){
+        Phrase bar;
+        Patternelement next;
+        int goalPitch;
+        if(patternelement.getOrder() < pattern.getSize() -1){
+             next = pattern.getPatternelement(patternelement.getOrder() + 1);
+        } else next = patternelement;
+        goalPitch = next.getChord().getUsage().get(0) + next.getTranspose() + general.getTone().getPitch();
+
+        if(randomStyle(melody.getBebop())){
+            bar = generateBebopTrumpet(patternelement, goalPitch);
         } else {
-            a = patternelement.getChord().getUsage().get(0);
-            b = patternelement.getTranspose();
-            c = general.getTone().getPitch();
-            nextRootPitch = a + b + c;
+            bar = generateBebopTrumpet(patternelement, goalPitch);
         }
-        bar = generateMelody(patternelement, nextRootPitch);
+
+        //Set humanizer-factor in bar
+        double possibleScope = WHOLE_NOTE;
+        if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
+        bar = calcHumanizerInBar(bar, possibleScope);
 
         //Set dynamic of bar
         int d = generateDynamic();
         bar.setDynamic(d);
 
+        return bar;
+    }
+
+    //Returns a trumpet-phrase of a bar in a bebop-trumpet style
+    public Phrase generateBebopTrumpet(Patternelement patternelement, int goalPitch){
+        Phrase bar = new Phrase();
+        double possibleScope = WHOLE_NOTE;
+        if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
+        int transpose = general.getTone().getPitch() + patternelement.getTranspose();
+        int length = patternelement.getChord().getUsage().size();
+
+        //Generate random eighth positions
+        int startEighth = calcStartEighth();
+
+        //Select matching patternelement considering the startEighth
+        Patternelement currentPatternelement;
+        if(possibleScope == HALF_NOTE && startEighth >= 4){
+            patternelement = pattern.getPatternelement(patternelement.getOrder() + 1);
+        }
+
+        //Add start-rest
+        double rest = calcStartOfEighthInBarByPosition(startEighth);
+        bar.add(new Note(getRest()[0], rest));
+        possibleScope -= rest;
+
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(EIGHTH_NOTE_TRIPLET);
+        durations.add(QUARTER_NOTE_TRIPLET);
+        durations.add(EIGHTH_NOTE);
+        durations.add(QUARTER_NOTE);
+
+        double duration;
+        int len = durations.size();
+        double duration_end = durations.get(new Random().nextInt(len));
+        possibleScope -= duration_end;
+        int pitch;
+
+        while(possibleScope >= QUARTER_NOTE) {
+            duration = durations.get(new Random().nextInt(len));
+            if (new Random().nextBoolean()){
+                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
+                bar.addNote(getMelodyNote(pitch, duration));
+            } else {
+                bar.addNote(new Note(getRest()[0], duration));
+            }
+            possibleScope -= duration;
+        }
+
+        if(possibleScope >= QUARTER_NOTE_TRIPLET){
+            if (new Random().nextBoolean()){
+                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
+                bar.addNote(getMelodyNote(pitch, QUARTER_NOTE_TRIPLET));
+            } else {
+                bar.addNote(new Note(getRest()[0], QUARTER_NOTE_TRIPLET));
+            }
+            possibleScope -= QUARTER_NOTE_TRIPLET;
+        } else if(possibleScope >= EIGHTH_NOTE){
+            if (new Random().nextBoolean()){
+                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
+                bar.addNote(getMelodyNote(pitch, EIGHTH_NOTE));
+            } else {
+                bar.addNote(new Note(getRest()[0], EIGHTH_NOTE));
+            }
+            possibleScope -= EIGHTH_NOTE;
+        } else if(possibleScope >= EIGHTH_NOTE_TRIPLET){
+            if (new Random().nextBoolean()){
+                pitch = patternelement.getChord().getUsage().get(new Random().nextInt(length)) + transpose;
+                bar.addNote(getMelodyNote(pitch, EIGHTH_NOTE_TRIPLET));
+            } else {
+                bar.addNote(new Note(getRest()[0], EIGHTH_NOTE_TRIPLET));
+            }
+            possibleScope -= EIGHTH_NOTE_TRIPLET;
+        }
+
+        bar.addNote(getMelodyNote(goalPitch - 1, duration_end));
+        bar.addNote(new Note(getRest()[0], possibleScope));
+
+        return bar;
+    }
+
+    //Returns a trumpet-phrase of a bar in a normal-trumpet style
+    public Phrase generateNormalTrumpet(Patternelement patternelement, int goalPitch){
+        Phrase bar = new Phrase();
         return bar;
     }
 }
