@@ -375,19 +375,22 @@ public class Composer implements JMC, Constants {
         possibleScope -= rest;
         double duration;
         for(int i=0; i<length; i++){
-            duration = phrase.getNote(i).getDuration() * generateHumanizer(OV_HUMANIZER_PERCENTAGE);
+            duration = phrase.getNote(i).getRhythmValue() * generateHumanizer(OV_HUMANIZER_PERCENTAGE);
+            if(possibleScope < duration){
+                duration = possibleScope;
+            }
             newPhrase.addNote(new Note(phrase.getNote(i).getPitch(), duration));
             possibleScope -= duration;
         }
-        if(possibleScope >= 0) {
+        if(possibleScope > 0) {
             rest = possibleScope;
             newPhrase.addNote(new Note(getRest()[0], rest));
         } else {
             double difference = phrase.getEndTime() - savePossibleScope;
-            newPhrase.getNote(newPhrase.getSize() - 1).setDuration(newPhrase.getNote(newPhrase.getSize() - 1).getDuration() - difference);
+            newPhrase.getNote(newPhrase.getSize() - 1).setRhythmValue(newPhrase.getNote(newPhrase.getSize() - 1).getRhythmValue() - difference);
         }
 
-        return phrase;
+        return newPhrase;
     }
 
     //Returns a trumpet-phrase of a bar in a bebop-trumpet style
@@ -502,7 +505,7 @@ public class Composer implements JMC, Constants {
         while(bar.length() > 0){
             note = bar.getNote(0);
             if(note.getPitch() == getRest()[0]){
-                newBar.addNote(new Note(note.getPitch(), note.getDuration()));
+                newBar.addNote(new Note(note.getPitch(), note.getRhythmValue()));
             } else {
                 lowest = 0;
                 length = bar.length();
@@ -511,9 +514,9 @@ public class Composer implements JMC, Constants {
                         lowest = i;
                     }
                 }
-                newBar.addNote(new Note(bar.getNote(lowest).getPitch(), bar.getNote(lowest).getDuration()));
+                newBar.addNote(new Note(bar.getNote(lowest).getPitch(), bar.getNote(lowest).getRhythmValue()));
                 bar.getNote(lowest).setPitch(note.getPitch());
-                bar.getNote(lowest).setDuration(note.getDuration());
+                bar.getNote(lowest).setRhythmValue(note.getRhythmValue());
             }
             bar.removeNote(0);
         }
@@ -526,6 +529,7 @@ public class Composer implements JMC, Constants {
     //Generates piano part in score
     public void generatePianoPart(){
         CPhrase bar;
+        p("PIANO------------------------");
         for (int i=0; i<general.getRepeat(); i++){
             int lengthPattern = pattern.getSize();
             for (int j=0; j<lengthPattern; j++){
@@ -535,6 +539,7 @@ public class Composer implements JMC, Constants {
                     bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.getPatternelement(j), pattern.getPatternelement(j+1))));
                     j++;
                 }
+                p(Double.toString(bar.getEndTime()));
                 piano.addCPhrase(bar);
             }
         }
@@ -543,14 +548,12 @@ public class Composer implements JMC, Constants {
     //Generates bass part in score
     public void generateBassPart(){
         Phrase bar;
+        p("BASS------------------------");
         for (int i=0; i<general.getRepeat(); i++){
             int lengthPattern = pattern.getSize();
             for (int j=1; j<lengthPattern; j++){
-                if(pattern.getPatternelement(j).getTactProportion().equals("Full")){
-                    bar = generateBassBar(pattern.getPatternelement(j));
-                } else {
-                    bar = generateBassBar(pattern.getPatternelement(j));
-                }
+                bar = generateBassBar(pattern.getPatternelement(j));
+                p(Double.toString(bar.getEndTime()));
                 bass.addPhrase(bar);
             }
         }
@@ -574,10 +577,7 @@ public class Composer implements JMC, Constants {
                 bar.setDynamic(d);
 
                 //Set humanizer-factor in bar
-                double possibleScope = WHOLE_NOTE;
-                if(pattern.getPatternelement(j).getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
-                bar = calcHumanizerInBar(bar, possibleScope);
-
+                bar = calcHumanizerInBar(bar, WHOLE_NOTE);
                 drums_ride.addPhrase(bar);
 
                 //Set dynamic of bar
@@ -585,7 +585,6 @@ public class Composer implements JMC, Constants {
                 bar.setDynamic(d);
                 bar = generateSnare();
                 drums_snare.addPhrase(bar);*/
-
             }
         }
     }
@@ -593,15 +592,12 @@ public class Composer implements JMC, Constants {
     //Generates melody part in score
     public void generateTrumpetPart(){
         Phrase bar;
+        p("TRUMPET------------------------");
         for(int i=0; i<general.getRepeat(); i++){
             int lengthPattern = pattern.getSize();
             for (int j=0; j<lengthPattern; j++){
-                if (pattern.getPatternelement(j).getTactProportion().equals("Full")){
-                    bar = generateTrumpetBar(pattern.getPatternelement(j));
-                } else {
-                    bar = generateTrumpetBar(pattern.getPatternelement(j));
-                    j++;
-                }
+                bar = generateTrumpetBar(pattern.getPatternelement(j));
+                p(Double.toString(bar.getEndTime()));
                 trumpet.addPhrase(bar);
             }
         }
@@ -699,9 +695,7 @@ public class Composer implements JMC, Constants {
         }
 
         //Set humanizer-factor in bar
-        double possibleScope = WHOLE_NOTE;
-        if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
-        bar = calcHumanizerInBar(bar, possibleScope);
+        bar = calcHumanizerInBar(bar, WHOLE_NOTE);
 
         //Set dynamic of bar
         int d = generateDynamic();
