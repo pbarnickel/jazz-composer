@@ -12,21 +12,21 @@ public class General {
     private int tempo;
     private int repeat;
     private double humanizerTolerance;
-    private double dynamic;
+    private double dynamics;
     private Tone tone;
 
-    public General(int tempo, int repeat, double humanizerTolerance, double dynamic, Tone tone){
+    public General(int tempo, int repeat, double humanizerTolerance, double dynamics, Tone tone){
         this.tempo = tempo;
         this.repeat = repeat;
         this.humanizerTolerance = humanizerTolerance;
-        this.dynamic = dynamic;
+        this.dynamics = dynamics;
         this.tone = tone;
     }
 
     public int getTempo() {return this.tempo;}
     public int getRepeat() {return this.repeat;}
     public double getHumanizerTolerance() {return this.humanizerTolerance;}
-    public double getDynamic() {return this.dynamic;}
+    public double getDynamics() {return this.dynamics;}
     public Tone getTone() {return this.tone;}
 
 }

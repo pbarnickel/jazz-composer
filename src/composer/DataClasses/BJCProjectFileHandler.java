@@ -39,25 +39,25 @@ public class BJCProjectFileHandler {
         jsonObjectGeneral.put("tone", jsonObjectGeneralTone);
         jsonObjectGeneral.put("repeat", composer.getGeneral().getRepeat());
         jsonObjectGeneral.put("humanizerTolerance", composer.getGeneral().getHumanizerTolerance());
-        jsonObjectGeneral.put("dynamic", composer.getGeneral().getDynamic());
+        jsonObjectGeneral.put("dynamics", composer.getGeneral().getDynamics());
         jsonObjectRoot.put("general", jsonObjectGeneral);
 
-        //Pattern
-        JSONArray jsonArrayPattern = new JSONArray();
-        int length = composer.getPattern().getSize();
+        //Chordprogression
+        JSONArray jsonArrayChordprogression = new JSONArray();
+        int length = composer.getChordprogression().getSize();
         for(int i=0; i<length; i++){
             JSONObject jsonObjectPatternelement = new JSONObject();
-            jsonObjectPatternelement.put("order", composer.getPattern().getPatternelement(i).getOrder());
-            jsonObjectPatternelement.put("transpose", composer.getPattern().getPatternelement(i).getTranspose());
-            jsonObjectPatternelement.put("mode", composer.getPattern().getPatternelement(i).getMode());
-            jsonObjectPatternelement.put("chordgroup", composer.getPattern().getPatternelement(i).getChordgroup().getName());
-            jsonObjectPatternelement.put("chord", composer.getPattern().getPatternelement(i).getChordName());
-            jsonObjectPatternelement.put("chordcomplexity", composer.getPattern().getPatternelement(i).getChordcomplexityName());
-            jsonObjectPatternelement.put("usage", composer.getPattern().getPatternelement(i).getUsage());
-            jsonObjectPatternelement.put("tactProportion", composer.getPattern().getPatternelement(i).getTactProportion());
-            jsonArrayPattern.add(jsonObjectPatternelement);
+            jsonObjectPatternelement.put("order", composer.getChordprogression().getPatternelement(i).getOrder());
+            jsonObjectPatternelement.put("transpose", composer.getChordprogression().getPatternelement(i).getTranspose());
+            jsonObjectPatternelement.put("mode", composer.getChordprogression().getPatternelement(i).getMode());
+            jsonObjectPatternelement.put("chordgroup", composer.getChordprogression().getPatternelement(i).getChordgroup().getName());
+            jsonObjectPatternelement.put("chord", composer.getChordprogression().getPatternelement(i).getChordName());
+            jsonObjectPatternelement.put("chordcomplexity", composer.getChordprogression().getPatternelement(i).getChordcomplexityName());
+            jsonObjectPatternelement.put("usage", composer.getChordprogression().getPatternelement(i).getUsage());
+            jsonObjectPatternelement.put("tactProportion", composer.getChordprogression().getPatternelement(i).getTactProportion());
+            jsonArrayChordprogression.add(jsonObjectPatternelement);
         }
-        jsonObjectRoot.put("pattern", jsonArrayPattern);
+        jsonObjectRoot.put("chordprogression", jsonArrayChordprogression);
 
         //Backingtrack
         JSONObject jsonObjectBackingtrack = new JSONObject();
@@ -128,19 +128,19 @@ public class BJCProjectFileHandler {
             int tempo = Integer.parseInt(jsonObjectGeneral.get("tempo").toString());
             int repeat = Integer.parseInt(jsonObjectGeneral.get("repeat").toString());
             double humanizerTolerance = Double.parseDouble(jsonObjectGeneral.get("humanizerTolerance").toString());
-            double dynamic = Double.parseDouble(jsonObjectGeneral.get("dynamic").toString());
+            double dynamics = Double.parseDouble(jsonObjectGeneral.get("dynamics").toString());
             JSONObject jsonObjectGeneralTone = (JSONObject) jsonObjectGeneral.get("tone");
             String toneName = (String) jsonObjectGeneralTone.get("name");
             int tonePitch = Integer.parseInt(jsonObjectGeneralTone.get("pitch").toString());
             Tone tone = new Tone(toneName, tonePitch);
-            General general = new General(tempo, repeat, humanizerTolerance, dynamic, tone);
+            General general = new General(tempo, repeat, humanizerTolerance, dynamics, tone);
 
-            //Pattern
-            JSONArray jsonArrayPattern = (JSONArray) jsonObjectRoot.get("pattern");
-            int length = jsonArrayPattern.size();
+            //Chordprogression
+            JSONArray jsonArrayChordprogression = (JSONArray) jsonObjectRoot.get("chordprogression");
+            int length = jsonArrayChordprogression.size();
             ArrayList<Patternelement> patternelements = new ArrayList<Patternelement>();
             for(int i=0; i<length; i++){
-                JSONObject jsonObjectPatternelement = (JSONObject) jsonArrayPattern.get(i);
+                JSONObject jsonObjectPatternelement = (JSONObject) jsonArrayChordprogression.get(i);
                 int order = Integer.parseInt(jsonObjectPatternelement.get("order").toString());
                 int transpose = Integer.parseInt(jsonObjectPatternelement.get("transpose").toString());
                 int indexChordgroup = settings.getIndexOfMusicElement(settings.getChordgroups(), (String) jsonObjectPatternelement.get("chordgroup"));
@@ -153,7 +153,7 @@ public class BJCProjectFileHandler {
                 Patternelement patternelement = new Patternelement(order, transpose, chordgroup, chord, chordcomplexity, tactProportion);
                 patternelements.add(patternelement);
             }
-            Pattern pattern = new Pattern(patternelements);
+            Chordprogression chordprogression = new Chordprogression(patternelements);
 
             //Backingtrack
             JSONObject jsonObjectBackingtrack = (JSONObject) jsonObjectRoot.get("backingtrack");
@@ -201,7 +201,7 @@ public class BJCProjectFileHandler {
             }
             Swing swing = new Swing(eighths);
 
-            composer = new Composer(general, pattern, backingtrack, melody, swing);
+            composer = new Composer(general, chordprogression, backingtrack, melody, swing);
 
         } catch (ParseException e) {
             e.printStackTrace();

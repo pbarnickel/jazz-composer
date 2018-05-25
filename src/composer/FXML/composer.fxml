@@ -67,48 +67,48 @@
                            <Label layoutX="468.0" layoutY="18.0" styleClass="lbl-static" text="Computer" AnchorPane.leftAnchor="464.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="1131.0" layoutY="18.0" styleClass="lbl-static" text="Human" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Slider fx:id="sldGeneralHumanizer" layoutX="578.0" layoutY="30.0" prefHeight="18.0" prefWidth="544.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
-                           <Label layoutX="350.0" layoutY="74.0" prefHeight="48.0" prefWidth="114.0" styleClass="lbl" text="Dynamic" AnchorPane.leftAnchor="350.0" />
+                           <Label layoutX="350.0" layoutY="74.0" prefHeight="48.0" prefWidth="114.0" styleClass="lbl" text="Dynamics" AnchorPane.leftAnchor="350.0" />
                            <Label layoutX="464.0" layoutY="74.0" prefHeight="48.0" prefWidth="105.0" styleClass="lbl-static" text="Soft" AnchorPane.leftAnchor="464.0" />
                            <Label layoutX="1130.0" layoutY="74.0" prefHeight="48.0" prefWidth="83.0" styleClass="lbl-static" text="Hard" AnchorPane.rightAnchor="15.0" />
-                           <Slider fx:id="sldGeneralDynamic" layoutX="580.0" layoutY="89.0" prefHeight="18.0" prefWidth="532.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
+                           <Slider fx:id="sldGeneralDynamics" layoutX="580.0" layoutY="89.0" prefHeight="18.0" prefWidth="532.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="110.0" />
                         </children>
                      </AnchorPane>
                </content>
              </Tab>
-             <Tab fx:id="tabPattern" text="Pattern">
+             <Tab fx:id="tabChordprogression" text="Chordprogression">
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="484.0" prefWidth="1228.0">
                         <children>
-                           <ChoiceBox fx:id="chbPatternChordcomplexity" layoutX="1010.0" layoutY="197.0" prefHeight="48.0" prefWidth="201.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
+                           <ChoiceBox fx:id="chbChordprogressionChordcomplexity" layoutX="1010.0" layoutY="197.0" prefHeight="48.0" prefWidth="201.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
                            <Label layoutX="842.0" layoutY="197.0" prefHeight="48.0" prefWidth="170.0" styleClass="lbl" text="Chordcomplexity" AnchorPane.topAnchor="197.0" />
                            <Label layoutX="841.0" layoutY="77.0" prefHeight="48.0" prefWidth="170.0" styleClass="lbl" text="Chordgroup" AnchorPane.topAnchor="77.0" />
-                           <ChoiceBox fx:id="chbPatternChordgroups" layoutX="1007.0" layoutY="77.0" prefHeight="48.0" prefWidth="202.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
-                           <TableView fx:id="tblPattern" layoutX="14.0" layoutY="14.0" prefHeight="405.0" prefWidth="813.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+                           <ChoiceBox fx:id="chbChordprogressionChordgroups" layoutX="1007.0" layoutY="77.0" prefHeight="48.0" prefWidth="202.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
+                           <TableView fx:id="tblChordprogression" layoutX="14.0" layoutY="14.0" prefHeight="405.0" prefWidth="813.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
                              <columns>
-                                 <TableColumn fx:id="colPatternOrder" onEditCommit="#changePatternOrderCellEvent" prefWidth="56.0" text="Order" />
-                               <TableColumn fx:id="colPatternTranspose" onEditCommit="#changePatternTransposeCellEvent" prefWidth="93.0" text="Transpose " />
-                               <TableColumn fx:id="colPatternMode" minWidth="0.0" prefWidth="98.0" styleClass="col_disable" text="Mode" />
-                                 <TableColumn fx:id="colPatternChordgroup" onEditCommit="#changePatternChordgroupCellEvent" prefWidth="105.0" text="Chordgroup" />
-                                 <TableColumn fx:id="colPatternChord" onEditCommit="#changePatternChordCellEvent" prefWidth="102.0" text="Chord" />
-                                 <TableColumn fx:id="colPatternChordcomplexity" onEditCommit="#changePatternChordcomplexityCellEvent" prefWidth="129.0" text="Chordcomplexity" />
-                                 <TableColumn fx:id="colPatternUsage" prefWidth="117.0" styleClass="col_disable" text="Usage" />
-                                 <TableColumn fx:id="colPatternTactProp" onEditCommit="#changePatternTactPropCellEvent" prefWidth="86.0" text="Tact-Prop." />
+                                 <TableColumn fx:id="colChordprogressionOrder" onEditCommit="#changeChordprogressionOrderCellEvent" prefWidth="56.0" text="Order" />
+                               <TableColumn fx:id="colChordprogressionTranspose" onEditCommit="#changeChordprogressionTransposeCellEvent" prefWidth="93.0" text="Transpose " />
+                               <TableColumn fx:id="colChordprogressionMode" minWidth="0.0" prefWidth="98.0" styleClass="col_disable" text="Mode" />
+                                 <TableColumn fx:id="colChordprogressionChordgroup" onEditCommit="#changeChordprogressionChordgroupCellEvent" prefWidth="105.0" text="Chordgroup" />
+                                 <TableColumn fx:id="colChordprogressionChord" onEditCommit="#changeChordprogressionChordCellEvent" prefWidth="102.0" text="Chord" />
+                                 <TableColumn fx:id="colChordprogressionChordcomplexity" onEditCommit="#changeChordprogressionChordcomplexityCellEvent" prefWidth="129.0" text="Chordcomplexity" />
+                                 <TableColumn fx:id="colChordprogressionUsage" prefWidth="117.0" styleClass="col_disable" text="Usage" />
+                                 <TableColumn fx:id="colChordprogressionTactProp" onEditCommit="#changeChordprogressionTactPropCellEvent" prefWidth="86.0" text="Tact-Prop." />
                              </columns>
                            </TableView>
                            <Label layoutX="839.0" layoutY="15.0" prefHeight="48.0" prefWidth="169.0" styleClass="lbl" text="Transpose" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="841.0" layoutY="137.0" prefHeight="48.0" prefWidth="172.0" styleClass="lbl" text="Chord" AnchorPane.topAnchor="137.0" />
-                           <ChoiceBox fx:id="chbPatternChord" layoutX="1013.0" layoutY="137.0" prefHeight="48.0" prefWidth="200.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
-                           <TextField fx:id="edtPatternTranspose" layoutX="1007.0" layoutY="14.0" prefHeight="48.0" prefWidth="205.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           <Button fx:id="btnPatternAdd" layoutX="844.0" layoutY="316.0" mnemonicParsing="false" onAction="#onPatternAdd" prefHeight="44.0" prefWidth="369.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
-                           <Button fx:id="btnPatternDelete" layoutX="816.0" layoutY="372.0" mnemonicParsing="false" onAction="#onPatternDelete" prefHeight="44.0" prefWidth="370.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
-                           <Button fx:id="btnPatternPlay" layoutX="15.0" layoutY="372.0" mnemonicParsing="false" onAction="#onPatternPlay" prefHeight="44.0" prefWidth="813.0" styleClass="btn" text="🎶" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" />
+                           <ChoiceBox fx:id="chbChordprogressionChord" layoutX="1013.0" layoutY="137.0" prefHeight="48.0" prefWidth="200.0" styleClass="chb" AnchorPane.rightAnchor="15.0" />
+                           <TextField fx:id="edtChordprogressionTranspose" layoutX="1007.0" layoutY="14.0" prefHeight="48.0" prefWidth="205.0" styleClass="edt" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Button fx:id="btnChordprogressionAdd" layoutX="844.0" layoutY="316.0" mnemonicParsing="false" onAction="#onChordprogressionAdd" prefHeight="44.0" prefWidth="369.0" styleClass="btn" text="Add" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnChordprogressionDelete" layoutX="816.0" layoutY="372.0" mnemonicParsing="false" onAction="#onChordprogressionDelete" prefHeight="44.0" prefWidth="370.0" styleClass="btn" text="Delete" AnchorPane.rightAnchor="15.0" />
+                           <Button fx:id="btnChordprogressionPlay" layoutX="15.0" layoutY="372.0" mnemonicParsing="false" onAction="#onChordprogressionPlay" prefHeight="44.0" prefWidth="813.0" styleClass="btn" text="🎶" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="400.0" />
                            <Label layoutX="844.0" layoutY="256.0" prefHeight="48.0" prefWidth="169.0" styleClass="lbl" text="Tact-Proportion" />
-                            <ToggleButton fx:id="tglBtnPatternTactPropSemi" layoutX="1013.0" layoutY="256.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="100.0" styleClass="tgl-switch" text="Semi" AnchorPane.leftAnchor="1013.0" AnchorPane.topAnchor="256.0">
+                            <ToggleButton fx:id="tglBtnChordprogressionTactPropSemi" layoutX="1013.0" layoutY="256.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="100.0" styleClass="tgl-switch" text="Semi" AnchorPane.leftAnchor="1013.0" AnchorPane.topAnchor="256.0">
                               <toggleGroup>
-                                 <ToggleGroup fx:id="tglGrpPatternTactProp" />
+                                 <ToggleGroup fx:id="tglGrpChordprogressionTactProp" />
                               </toggleGroup>
                             </ToggleButton>
-                            <ToggleButton fx:id="tglBtnPatternTactPropFull" layoutX="1119.0" layoutY="256.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="100.0" selected="true" styleClass="tgl-switch" text="Full" toggleGroup="$tglGrpPatternTactProp" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="256.0">
+                            <ToggleButton fx:id="tglBtnChordprogressionTactPropFull" layoutX="1119.0" layoutY="256.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="100.0" selected="true" styleClass="tgl-switch" text="Full" toggleGroup="$tglGrpChordprogressionTactProp" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="256.0">
                             </ToggleButton>
                         </children>
                      </AnchorPane>
@@ -170,7 +170,7 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                           <Label layoutX="15.0" layoutY="14.0" styleClass="lbl" text="Set the probability of each Eighth-Note as start-upbeat in a bar." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           <Label layoutX="15.0" layoutY="14.0" styleClass="lbl" text="Setting the probability of each eighth in 4/4 tact when the first note is played in the swing rhythm." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="63.0" styleClass="lbl-list-item" text="1st Eighth" AnchorPane.leftAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="107.0" prefWidth="120.0" styleClass="lbl-list-item" text="2nd Eighth" AnchorPane.leftAnchor="15.0" />
                            <Label layoutX="15.0" layoutY="151.0" prefHeight="24.0" styleClass="lbl-list-item" text="3rd Eighth" AnchorPane.leftAnchor="15.0" />

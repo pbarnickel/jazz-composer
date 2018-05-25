@@ -42,7 +42,7 @@ public class Composer implements JMC, Constants {
 
     //User data
     private General general;
-    private Pattern pattern;
+    private Chordprogression chordprogression;
     private Backingtrack backingtrack;
     private Melody melody;
     private Swing swing;
@@ -52,13 +52,13 @@ public class Composer implements JMC, Constants {
         settings.loadSettings();
     }
 
-    public Composer(General general, Pattern pattern, Backingtrack backingtrack, Melody melody, Swing swing) throws MidiUnavailableException {
+    public Composer(General general, Chordprogression chordprogression, Backingtrack backingtrack, Melody melody, Swing swing) throws MidiUnavailableException {
         //Loading settings
         settings.loadSettings();
 
         //Taking over user data
         this.general = general;
-        this.pattern = pattern;
+        this.chordprogression = chordprogression;
         this.backingtrack = backingtrack;
         this.melody = melody;
         this.swing = swing;
@@ -143,7 +143,7 @@ public class Composer implements JMC, Constants {
         Composer composer = bjcProjectFileHandler.readBJC(path);
         if(composer != null) {
             this.general = composer.general;
-            this.pattern = composer.pattern;
+            this.chordprogression = composer.chordprogression;
             this.backingtrack = composer.backingtrack;
             this.melody = composer.melody;
             this.swing = composer.swing;
@@ -151,12 +151,12 @@ public class Composer implements JMC, Constants {
     }
 
     public General getGeneral() {return general;}
-    public Pattern getPattern() {return pattern;}
+    public Chordprogression getChordprogression() {return chordprogression;}
     public Backingtrack getBackingtrack() {return backingtrack;}
     public Melody getMelody() {return melody;}
     public Swing getSwing() {return swing;}
     public void setGeneral(General general) {this.general = general;}
-    public void setPattern(Pattern pattern) {this.pattern = pattern;}
+    public void setChordprogression(Chordprogression chordprogression) {this.chordprogression = chordprogression;}
     public void setBackingtrack(Backingtrack backingtrack) {this.backingtrack = backingtrack;}
     public void setMelody(Melody melody) {this.melody = melody;}
     public void setSwing(Swing swing) {this.swing = swing;}
@@ -296,13 +296,13 @@ public class Composer implements JMC, Constants {
         return usage;
     }
 
-    //Returns a random dynamic-value
-    public int generateDynamic(){
+    //Returns a random dynamics-value
+    public int generateDynamics(){
         int tolerance = new Random().nextInt(10) + 10;
         double toleranceFactor = tolerance / 100.0;
         if(new Random().nextBoolean()) toleranceFactor += 1.0;
         else toleranceFactor = 1.0 - toleranceFactor;
-        toleranceFactor *= generateHumanizer(100) * general.getDynamic() / 100.0;
+        toleranceFactor *= generateHumanizer(100) * general.getDynamics() / 100.0;
         int value = (int) (toleranceFactor * 127);
         if(value > 127) value = 127;
         return value;
@@ -531,12 +531,12 @@ public class Composer implements JMC, Constants {
         CPhrase bar;
         p("PIANO------------------------");
         for (int i=0; i<general.getRepeat(); i++){
-            int lengthPattern = pattern.getSize();
+            int lengthPattern = chordprogression.getSize();
             for (int j=0; j<lengthPattern; j++){
-                if (pattern.getPatternelement(j).getTactProportion().equals("Full")){
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.getPatternelement(j))));
+                if (chordprogression.getPatternelement(j).getTactProportion().equals("Full")){
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(chordprogression.getPatternelement(j))));
                 } else {
-                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(pattern.getPatternelement(j), pattern.getPatternelement(j+1))));
+                    bar = generatePianoBar(new ArrayList<Patternelement>(Arrays.asList(chordprogression.getPatternelement(j), chordprogression.getPatternelement(j+1))));
                     j++;
                 }
                 p(Double.toString(bar.getEndTime()));
@@ -550,9 +550,9 @@ public class Composer implements JMC, Constants {
         Phrase bar;
         p("BASS------------------------");
         for (int i=0; i<general.getRepeat(); i++){
-            int lengthPattern = pattern.getSize();
+            int lengthPattern = chordprogression.getSize();
             for (int j=1; j<lengthPattern; j++){
-                bar = generateBassBar(pattern.getPatternelement(j));
+                bar = generateBassBar(chordprogression.getPatternelement(j));
                 p(Double.toString(bar.getEndTime()));
                 bass.addPhrase(bar);
             }
@@ -564,24 +564,24 @@ public class Composer implements JMC, Constants {
         Phrase bar;
         for(int i=0; i<general.getRepeat(); i++){
             int length = 0;
-            int lengthPattern = pattern.getSize();
+            int lengthPattern = chordprogression.getSize();
             for(int j=0; j<lengthPattern; j++){
                 length++;
-                if(pattern.getPatternelement(j).getTactProportion().equals("Semi")) j++;
+                if(chordprogression.getPatternelement(j).getTactProportion().equals("Semi")) j++;
             }
             for(int j=0; j<length; j++){
 
                 bar = generateRide();
-                //Set dynamic of bar
-                int d = generateDynamic();
+                //Set dynamics of bar
+                int d = generateDynamics();
                 bar.setDynamic(d);
 
                 //Set humanizer-factor in bar
                 bar = calcHumanizerInBar(bar, WHOLE_NOTE);
                 drums_ride.addPhrase(bar);
 
-                //Set dynamic of bar
-                /*d = generateDynamic();
+                //Set dynamics of bar
+                /*d = generateDynamics();
                 bar.setDynamic(d);
                 bar = generateSnare();
                 drums_snare.addPhrase(bar);*/
@@ -594,9 +594,9 @@ public class Composer implements JMC, Constants {
         Phrase bar;
         p("TRUMPET------------------------");
         for(int i=0; i<general.getRepeat(); i++){
-            int lengthPattern = pattern.getSize();
+            int lengthPattern = chordprogression.getSize();
             for (int j=0; j<lengthPattern; j++){
-                bar = generateTrumpetBar(pattern.getPatternelement(j));
+                bar = generateTrumpetBar(chordprogression.getPatternelement(j));
                 p(Double.toString(bar.getEndTime()));
                 trumpet.addPhrase(bar);
             }
@@ -612,8 +612,8 @@ public class Composer implements JMC, Constants {
 
         //Calculates pre-patternelement
         Patternelement prePatternelement;
-        if(patternpart.get(0).getOrder()>0) prePatternelement = pattern.getPatternelement(patternpart.get(0).getOrder() - 1);
-        else prePatternelement = pattern.getPatternelement(0);
+        if(patternpart.get(0).getOrder()>0) prePatternelement = chordprogression.getPatternelement(patternpart.get(0).getOrder() - 1);
+        else prePatternelement = chordprogression.getPatternelement(0);
 
         //Generate random eighth positions
         int startEighth = calcStartEighth();
@@ -669,8 +669,8 @@ public class Composer implements JMC, Constants {
         //p("SUM:   " + Double.toString(sum));
         //p("---------------------------------------------");
 
-        //Set dynamic of bar
-        int d = generateDynamic();
+        //Set dynamics of bar
+        int d = generateDynamics();
         bar.setDynamic(d);
 
         return bar;
@@ -681,8 +681,8 @@ public class Composer implements JMC, Constants {
         Phrase bar;
         int nextRootPitch;
         Patternelement next;
-        if(patternelement.getOrder() < pattern.getSize() - 1) {
-            next = pattern.getPatternelement(patternelement.getOrder() + 1);
+        if(patternelement.getOrder() < chordprogression.getSize() - 1) {
+            next = chordprogression.getPatternelement(patternelement.getOrder() + 1);
         } else next = patternelement;
         nextRootPitch = next.getChord().getUsage().get(0) + next.getTranspose() + general.getTone().getPitch();
         //View.internal(bar);
@@ -697,8 +697,8 @@ public class Composer implements JMC, Constants {
         //Set humanizer-factor in bar
         bar = calcHumanizerInBar(bar, WHOLE_NOTE);
 
-        //Set dynamic of bar
-        int d = generateDynamic();
+        //Set dynamics of bar
+        int d = generateDynamics();
         bar.setDynamic(d);
 
         return bar;
@@ -709,8 +709,8 @@ public class Composer implements JMC, Constants {
         Phrase bar;
         Patternelement next;
         int goalPitch;
-        if(patternelement.getOrder() < pattern.getSize() -1){
-             next = pattern.getPatternelement(patternelement.getOrder() + 1);
+        if(patternelement.getOrder() < chordprogression.getSize() -1){
+             next = chordprogression.getPatternelement(patternelement.getOrder() + 1);
         } else next = patternelement;
         goalPitch = next.getChord().getUsage().get(0) + next.getTranspose() + general.getTone().getPitch();
 
@@ -730,8 +730,8 @@ public class Composer implements JMC, Constants {
         if(patternelement.getTactProportion().equals("Semi")) possibleScope = HALF_NOTE;
         bar = calcHumanizerInBar(bar, possibleScope);
 
-        //Set dynamic of bar
-        int d = generateDynamic();
+        //Set dynamics of bar
+        int d = generateDynamics();
         bar.setDynamic(d);
 
         return bar;
