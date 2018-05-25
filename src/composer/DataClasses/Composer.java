@@ -28,7 +28,7 @@ public class Composer implements JMC, Constants {
 
     //Common data
     private Settings settings = new Settings();
-    private String runtimeFile = "/runtime.mid";
+    private String fileRuntime = "runtime/runtime.mid";
     private Sequencer sequencer = MidiSystem.getSequencer();
     private BJCProjectFileHandler bjcProjectFileHandler = new BJCProjectFileHandler();
 
@@ -111,7 +111,7 @@ public class Composer implements JMC, Constants {
             sequencer.start();
         } else {
             sequencer.open();
-            InputStream is = new BufferedInputStream(new FileInputStream(new File(settings.getDefault_location() + runtimeFile)));
+            InputStream is = new BufferedInputStream(new FileInputStream(fileRuntime));
             sequencer.setSequence(is);
             sequencer.start();
         }
@@ -181,7 +181,7 @@ public class Composer implements JMC, Constants {
         score.setTempo(general.getTempo());
 
         //Write MIDI audio-file for listening compositions in GUI
-        Write.midi(score, settings.getDefault_location() + runtimeFile);
+        Write.midi(score, fileRuntime);
     }
 
     //Returns randomly a style-type with a user-probability as input

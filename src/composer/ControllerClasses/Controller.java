@@ -9,6 +9,7 @@ package composer.ControllerClasses;
 
 import composer.DataClasses.*;
 import composer.Interfaces.Constants;
+import composer.DataClasses.Settings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -78,7 +79,7 @@ public abstract class Controller implements JMC, Constants {
 
     //Changes the scene
     public void changeScene(String sceneKey, ActionEvent actionEvent) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("../../FXML/" + sceneKey + ".fxml"));
+        Parent parent = FXMLLoader.load(getClass().getResource(sceneKey + ".fxml"));
         Scene scene = new Scene(parent);
         Stage window = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         window.setScene(scene);

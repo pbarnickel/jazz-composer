@@ -10,6 +10,7 @@ package composer.ControllerClasses.sub;
 import composer.DataClasses.Composer;
 import composer.ControllerClasses.Controller;
 import composer.DataClasses.*;
+import composer.DataClasses.Settings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -224,7 +225,7 @@ public class ComposerController extends Controller {
 
     //Returns to menu
     public void gotoMenu(ActionEvent actionEvent) throws IOException {
-        if(composer != null && composer.getSequencer().isRunning()){
+        if(composer != null){
             composer.getSequencer().stop();
             composer.getSequencer().close();
         }

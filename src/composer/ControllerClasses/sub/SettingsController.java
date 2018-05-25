@@ -11,6 +11,7 @@ import composer.ControllerClasses.Controller;
 import composer.DataClasses.*;
 import composer.DataClasses.Response;
 
+import composer.DataClasses.Settings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

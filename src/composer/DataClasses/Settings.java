@@ -7,6 +7,8 @@
 
 package composer.DataClasses;
 
+import composer.DataClasses.*;
+
 import jm.JMC;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,9 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import static java.lang.System.in;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static jm.constants.Pitches.C4;
 
 public class Settings implements JMC{
 
@@ -57,9 +57,11 @@ public class Settings implements JMC{
 
     //Returns paths for JSON-Settings-File and JSON-Default-Settings-File---------------------------------------------------------
     public String getPathForSettings(){
-        return new File("").getAbsolutePath() +  "/src/composer/JSON/settings.json";
+        return new File("").getAbsolutePath() +  "/settings/settings.json";
     }
-    public String getPathForDefaultSettings(){return new File("").getAbsolutePath() + "/src/composer/JSON/default.json";}
+    public String getPathForDefaultSettings(){
+        return new File("").getAbsolutePath() + "/settings/default.json";
+    }
     //----------------------------------------------------------------------------------------------------------------------------
 
     //Returns index of MusicElement-Name in MusicElement-List
