@@ -7,6 +7,16 @@ Java application to compose jazz music.
 
 ## 2. Getting started
 
+### 2.1 Install the application
+
+Download the ZIP-file under 'release' and unzip it.
+
+### 2.1 Start the application
+
+For the most error-free use of the application, you should have a structure with directories (yellow) and files (white) as shown in Figure 1.
+![the menu](src/composer/Documentation/figure_1.PNG)
+*Test*
+
 ### 2.1 The menu
 
 By starting the _jazz-composer_, you'll reach at first the menu. From here you have different options:

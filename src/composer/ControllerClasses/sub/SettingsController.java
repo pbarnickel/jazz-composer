@@ -8,10 +8,10 @@
 package composer.ControllerClasses.sub;
 
 import composer.ControllerClasses.Controller;
-import composer.DataClasses.*;
-import composer.DataClasses.Response;
+import composer.Model.*;
+import composer.Model.Response;
 
-import composer.DataClasses.Settings;
+import composer.Settings.Settings;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -305,7 +305,7 @@ public class SettingsController extends Controller {
     //Plays a usage as a chord -> play(asChord = true)
     public void onChordsPlay(ActionEvent actionEvent) {
         MusicStructure chord = tblChords.getSelectionModel().getSelectedItem();
-        if(chord != null)chord.play(C4, true);
+        if(chord != null)chord.play(OV_C4, true);
         else msg("No chord selected.",MSG_E);
     }
 
@@ -491,7 +491,7 @@ public class SettingsController extends Controller {
     //Plays a usage as scale -> play(asChord = false)
     public void onScalesPlay(ActionEvent actionEvent) {
         MusicStructure scale = tblScales.getSelectionModel().getSelectedItem();
-        if(scale != null)scale.play(C4,false);
+        if(scale != null)scale.play(OV_C4,false);
         else msg("No scale selected",MSG_E);
     }
 

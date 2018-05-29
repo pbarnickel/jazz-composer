@@ -7,10 +7,10 @@
 
 package composer.ControllerClasses.sub;
 
-import composer.DataClasses.Composer;
+import composer.ComposerClasses.Composer;
 import composer.ControllerClasses.Controller;
-import composer.DataClasses.*;
-import composer.DataClasses.Settings;
+import composer.Model.*;
+import composer.Settings.Settings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -232,7 +232,7 @@ public class ComposerController extends Controller {
         changeScene("menu", actionEvent);
     }
 
-    //Updates Composer-UI after reading a BJC-Project-File
+    //Updates ComposerClasses-UI after reading a BJC-Project-File
     public void updateComposerUI(){
         //General
         edtGeneralTempo.setText(Integer.toString(composer.getGeneral().getTempo()));

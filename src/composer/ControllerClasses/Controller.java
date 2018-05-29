@@ -7,9 +7,9 @@
 
 package composer.ControllerClasses;
 
-import composer.DataClasses.*;
+import composer.Model.*;
 import composer.Interfaces.Constants;
-import composer.DataClasses.Settings;
+import composer.Settings.Settings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -19,13 +19,12 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import jm.JMC;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class Controller implements JMC, Constants {
+public abstract class Controller implements Constants {
 
     //Response-Object for output-messages in UI
     protected Response r;

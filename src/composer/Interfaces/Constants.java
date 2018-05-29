@@ -7,7 +7,7 @@
 
 package composer.Interfaces;
 
-import composer.DataClasses.Range;
+import composer.Model.Range;
 
 public interface Constants {
 
@@ -37,4 +37,8 @@ public interface Constants {
     int OV_PROBABILITY_OF_REST_IN_BEBOP_TRUMPET = 15;
     Range OV_RANGE_USES_IN_NORMAL_TRUMPET = new Range(1,5);
     Range OV_RANGE_USES_IN_BEBOP_TRUMPET = new Range(5,10);
+    int OV_C4 = 60;
+    int OV_PIANO = 0;
+    double OV_QUARTER_NOTE = 1.0D;
+    double OV_SIXTEENTH_NOTE = 0.25D;
 }
