@@ -41,7 +41,7 @@ Save the settings by clicking on `💾` or pressing `Ctrl` + `S`.
 Load the default-settings by clicking on `🔃`.
 Set the default folder for project-files by clicking on `📂`. Initially this is the directory 'projects'.
 
-![settings](src/composer/Documentation/figure_2.PNG  "The settings")
+![settings](src/composer/Documentation/figure_2.png  "The settings")
 
 *Figure 3 - The settings*
 
@@ -64,13 +64,13 @@ Clear the current composition by clicking on `❌`.
 Click on Compose Jazz in the menu to automatically compose jazz music. For this you have to make different settings. These include general settings (Figure 4) in which you set the tempo (Tempo), the tone (Tone) and the number of repetitions of the later set pattern (Repeat). You can also set the humanity factor (Humanizer) and the dynamics (Dynamics).
 The composition will be composed in *Swing* and *4/4*-Tact.
 
-![general](src/composer/Documentation/figure_3.PNG  "General settings")
+![general](src/composer/Documentation/figure_3.png  "General settings")
 
 *Figure 4 - General settings*
 
 In the Chord Progression section (Figure 5), you can specify a chord progression. Here you can select your own harmony groups (chord group) and a chord available in it. The Transpose key (transpose) allows you to specify the chord in relation to the root in semitone steps. The chord complexity (Chord Complexity) indicates in which complexity range the chord should be generated.
 
-![chordprogression](src/composer/Documentation/figure_4.PNG  "Chordprogression settings")
+![chordprogression](src/composer/Documentation/figure_4.png  "Chordprogression settings")
 
 *Figure 5 - Chordprogression settings*
 
@@ -78,19 +78,19 @@ Also, the clock proportion (Tact Proportion) can be set between Semi and Full. S
 
 In the Backing Track section (Figure 6) settings can be adjusted for accompaniment of the composition. This includes the selection of the appropriate instruments (piano, bass and drums). With the help of the Slider Deviation it can be set to what extent the smallest possible difference of the fundamental tone should be generated with successive chords. The walking-bass slider adjusts the likelihood of a bar being played in the walking-bass style with respect to the bass instrument.
 
-![backingtrack](src/composer/Documentation/figure_5.PNG  "Chordprogression settings")
+![backingtrack](src/composer/Documentation/figure_5.png  "Chordprogression settings")
 
 *Figure 6 - Backingtrack settings*
 
 In the Melody section (Figure 7) melody-specific settings can be made. For this you can activate the melody first. With the slider Sort of Pitches you can set the probability, whether the pitches are played in one bar up or down. The likelihood of a bebop playing style can also be adjusted with the slider bebop. With the activation of Melody by Scale you can set whether the melody should be generated on the chord progression or on scales defined here. Here, a distinction is made between the setting of major and minor scales. The melody is played by a trumpet.
 
-![melody](src/composer/Documentation/figure_6.PNG  "Melody settings")
+![melody](src/composer/Documentation/figure_6.png  "Melody settings")
 
 *Figure 7 - Melody settings*
 
 In the last section, Swing (Figure 8), the likelihoods of each eighth can be set in the swing rhythm as a start to the measure. These effects apply to both the piano and the trumpet (Melody).
 
-![swing](src/composer/Documentation/figure_7.PNG  "Melody settings")
+![swing](src/composer/Documentation/figure_7.png  "Melody settings")
 
 *Figure 8 - Swing settings*
 
