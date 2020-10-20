@@ -103,9 +103,3 @@ Create Backingtrack by clicking on `Compose`.
 ## 4. Loading a test composition
 
 The projects directory contains a BJC project file sample_jazz_c_major.bjc. This can be loaded in Composer top left by clicking on the button with the folders. Then you can generate a composition by clicking on Compose.
-
-## 5. About
-
-Development: Philipp Barnickel
-
-Review: Prof. Dr. Eckhard Kruse
